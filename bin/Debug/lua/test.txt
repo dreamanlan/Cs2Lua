@@ -201,10 +201,15 @@ Test = {
 		if stringisequal(v, "yes") then vv.x = 123 else if stringisequal(v, "no") then vv.x = 456 else vv.x = 789 end end;
 		local iv;
 		if stringisequal(v, "yes") then iv = 123 else if stringisequal(v, "no") then iv = 456 else iv = 789 end end;
-		callinterface(list, System.Collections.Generic.ICollection_T, "Add", (function() if stringisequal(v, "yes") then return 123 else if stringisequal(v, "no") then return 456 else return 789 end end end)());
+		callinterface(list, System.Collections.Generic.ICollection_T, "Add", Test.condexp_282_17_282_57(this, __cs2lua_func_info, v));
 		local statusA;
 		statusA = 3;
 		if (statusA == 1) then statusA = 2 else if (statusA == 2) then statusA = 1 else if (statusA == 3) then statusA = 0 else statusA = (function() statusA = (statusA + 1); return statusA; end)() end end end;
+	end,
+	condexp_282_17_282_57 = function(this, __cs2lua_func_info, v)
+		local retval_282_17_282_57 = nil;
+		if stringisequal(v, "yes") then retval_282_17_282_57 = 123 else if stringisequal(v, "no") then retval_282_17_282_57 = 456 else retval_282_17_282_57 = 789 end end;
+		return retval_282_17_282_57;
 	end,
 
 	testcall = function(this)

@@ -425,7 +425,7 @@ namespace Generator
                                     }
                                 }
                             }
-                            //检查是否有拆分出来的函数
+                            //检查是否有拆分出来的Try/Using函数
                             while (s_TryUsingFuncs.Count > 0) {
                                 var fdef = s_TryUsingFuncs.Dequeue();
                                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
@@ -453,6 +453,43 @@ namespace Generator
                                         sb.AppendLine(")");
                                         ++indent;
                                         GenerateStatements(first, sb, indent, funcOpts, calculator);
+                                        --indent;
+                                        sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                    }
+                                }
+                            }
+                            //检查是否有拆分出来的CondExp函数
+                            while (s_CondExpFuncs.Count > 0) {
+                                var fdef = s_CondExpFuncs.Dequeue();
+                                if (null != fdef && fdef.GetFunctionNum() >= 2) {
+                                    var first = fdef.First;
+                                    var second = fdef.Second;
+                                    var funcOpts = new FunctionOptions();
+                                    ParseFunctionOptions(second, funcOpts);
+                                    if (first.HaveStatement()) {
+                                        var fcall = first;
+                                        if (first.IsHighOrder)
+                                            fcall = first.LowerOrderFunction;
+                                        var retval = fcall.GetParam(1);
+                                        var mname = fcall.GetParamId(2);
+                                        bool isStatic = fcall.GetParamId(4) == "true";
+                                        System.Diagnostics.Debug.Assert(isStatic);
+                                        sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                        sb.Append("function(");
+                                        if (funcOpts.NeedFuncInfo) {
+                                            sb.Append("__cs2lua_func_info");
+                                            if (fcall.GetParamNum() > 5)
+                                                sb.Append(", ");
+                                        }
+                                        GenerateFunctionParams(fcall, sb, 5);
+                                        sb.AppendLine(")");
+                                        ++indent;
+                                        var retvalName = retval.GetId();
+                                        sb.AppendFormatLine("{0}local {1} = nil;", GetIndentString(indent), retvalName);
+                                        var condExp = first.GetParam(0) as Dsl.FunctionData;
+                                        GenerateAssignmentCondExp(retval, condExp, sb, indent, true, funcOpts, calculator);
+                                        sb.AppendLine(";");
+                                        sb.AppendFormatLine("{0}return {1};", GetIndentString(indent), retvalName);
                                         --indent;
                                         sb.AppendFormatLine("{0}end,", GetIndentString(indent));
                                     }
@@ -640,7 +677,7 @@ namespace Generator
                                     }
                                 }
                             }
-                            //检查是否有拆分出来的函数
+                            //检查是否有拆分出来的Try/Using函数
                             while (s_TryUsingFuncs.Count > 0) {
                                 var fdef = s_TryUsingFuncs.Dequeue();
                                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
@@ -670,6 +707,45 @@ namespace Generator
                                         sb.AppendLine(")");
                                         ++indent;
                                         GenerateStatements(first, sb, indent, funcOpts, calculator);
+                                        --indent;
+                                        sb.AppendFormatLine("{0}end,", GetIndentString(indent));
+                                    }
+                                }
+                            }
+                            //检查是否有拆分出来的CondExp函数
+                            while (s_CondExpFuncs.Count > 0) {
+                                var fdef = s_CondExpFuncs.Dequeue();
+                                if (null != fdef && fdef.GetFunctionNum() >= 2) {
+                                    var first = fdef.First;
+                                    var second = fdef.Second;
+                                    var funcOpts = new FunctionOptions();
+                                    ParseFunctionOptions(second, funcOpts);
+                                    if (first.HaveStatement()) {
+                                        var fcall = first;
+                                        if (first.IsHighOrder)
+                                            fcall = first.LowerOrderFunction;
+                                        var retval = fcall.GetParam(1);
+                                        var mname = fcall.GetParamId(2);
+                                        bool isInstance = fcall.GetParamId(4) == "false";
+                                        System.Diagnostics.Debug.Assert(isInstance);
+                                        //instMethodNames.Add(mname);
+                                        sb.AppendFormat("{0}{1} = ", GetIndentString(indent), mname);
+                                        sb.Append("function(this");
+                                        if (funcOpts.NeedFuncInfo) {
+                                            sb.Append(", ");
+                                            sb.Append("__cs2lua_func_info");
+                                        }
+                                        if (fcall.GetParamNum() > 5)
+                                            sb.Append(", ");
+                                        bool haveParams = GenerateFunctionParams(fcall, sb, 5);
+                                        sb.AppendLine(")");
+                                        ++indent;
+                                        var retvalName = retval.GetId();
+                                        sb.AppendFormatLine("{0}local {1} = nil;", GetIndentString(indent), retvalName);
+                                        var condExp = first.GetParam(0) as Dsl.FunctionData;
+                                        GenerateAssignmentCondExp(retval, condExp, sb, indent, true, funcOpts, calculator);
+                                        sb.AppendLine(";");
+                                        sb.AppendFormatLine("{0}return {1};", GetIndentString(indent), retvalName);
                                         --indent;
                                         sb.AppendFormatLine("{0}end,", GetIndentString(indent));
                                     }
@@ -1113,7 +1189,7 @@ namespace Generator
             else {
                 id = data.GetId();
             }
-            Dsl.ISyntaxComponent condExpParam = null;
+            Dsl.ISyntaxComponent condExpFuncParam = null;
             if (data.GetParamClass() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR) {
                 id = ConvertOperator(id);
                 int paramNum = data.GetParamNum();
@@ -1358,8 +1434,9 @@ namespace Generator
                             }
                         }
                     }
-                    else if (id == "=" && rightParamId == "condexp" && null != fd2) {
-                        GenerateAssignmentCondExp(param1, fd2, sb, indent, firstLineUseIndent, funcOpts, calculator);
+                    else if (id == "=" && rightParamId == "condexpfunc" && null != sd2) {
+                        var condExp = sd2.First.GetParam(0) as Dsl.FunctionData;
+                        GenerateAssignmentCondExp(param1, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
                         handled = true;
                     }
                     if (!handled) {
@@ -1381,14 +1458,16 @@ namespace Generator
                     }
                 }
             }
-            else if ((id == "setstatic" || id == "setexternstatic") && GetParamIdAfterRemoveParenthesis(data, 3, out condExpParam) == "condexp") {
+            else if ((id == "setstatic" || id == "setexternstatic") && GetParamIdAfterRemoveParenthesis(data, 3, out condExpFuncParam) == "condexpfunc") {
                 int condIx = 3;
-                var condExp = condExpParam as Dsl.FunctionData;
+                var condExpFunc = condExpFuncParam as Dsl.StatementData;
+                var condExp = condExpFunc.First.GetParam(0) as Dsl.FunctionData;
                 GenerateMemberAssignmentCondExp(data, condIx, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
             }
-            else if ((id == "setinstance" || id == "setexterninstance") && GetParamIdAfterRemoveParenthesis(data, 4, out condExpParam) == "condexp") {
+            else if ((id == "setinstance" || id == "setexterninstance") && GetParamIdAfterRemoveParenthesis(data, 4, out condExpFuncParam) == "condexpfunc") {
                 int condIx = 4;
-                var condExp = condExpParam as Dsl.FunctionData;
+                var condExpFunc = condExpFuncParam as Dsl.StatementData;
+                var condExp = condExpFunc.First.GetParam(0) as Dsl.FunctionData;
                 GenerateMemberAssignmentCondExp(data, condIx, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
             }
             else {
@@ -1401,29 +1480,7 @@ namespace Generator
                 }
                 //这里对委托到syslib的翻译提供一个基于dsl脚本翻译的机会，理论上可以提升运行效率                
                 if (!CallDslCoroutineHook(calculator, id, data, funcOpts, sb, indent) && !CallDslHook(calculator, id, data, funcOpts, sb, indent)) {
-                    if (id == "condexp") {
-                        var p1 = data.GetParam(0);
-                        var p2 = data.GetParamId(1);
-                        var p3 = data.GetParam(2);
-                        var p4 = data.GetParamId(3);
-                        var p5 = data.GetParam(4);
-
-                        if (p2 == "true" && p4 == "true") {
-                            sb.Append("simplecondexp(");
-                            GenerateSyntaxComponent(p1, sb, indent, false, funcOpts, calculator);
-                            sb.Append(", ");
-                            GenerateSyntaxComponent(p3, sb, indent, false, funcOpts, calculator);
-                            sb.Append(", ");
-                            GenerateSyntaxComponent(p5, sb, indent, false, funcOpts, calculator);
-                            sb.Append(")");
-                        }
-                        else {
-                            sb.Append("(function() ");
-                            GenerateOtherCondExp(data, sb, indent, funcOpts, calculator);
-                            sb.Append(" end)()");
-                        }
-                    }
-                    else if (id == "condaccess") {
+                    if (id == "condaccess") {
                         var p1 = data.GetParam(0);
                         var p2 = data.GetParam(1);
                         var p2Func = p2 as Dsl.FunctionData;
@@ -3507,6 +3564,7 @@ namespace Generator
                 else
                     sb.Append("luatry");
                 var first = data.First;
+                var second = data.Second;
                 var fcall = first;
                 var fbody = first;
                 if (first.IsHighOrder) {
@@ -3662,7 +3720,8 @@ namespace Generator
                         sb.Append(prestr);
                         sb.Append("this");
                     }
-                    if (funcOpts.NeedFuncInfo) {
+                    bool needFuncInfo = ParseNeedFuncInfo(second);
+                    if (needFuncInfo) {
                         sb.Append(prestr);
                         sb.Append("__cs2lua_func_info");
                     }
@@ -3670,6 +3729,65 @@ namespace Generator
                         sb.Append(prestr);
                     bool haveParams = GenerateFunctionParams(fcall, sb, 6);
                     sb.Append(")");
+                }
+            }
+            else if (id == "condexpfunc") {
+                var first = data.First;
+                var second = data.Second;
+                var fcall = first;
+                if (first.IsHighOrder) {
+                    fcall = first.LowerOrderFunction;
+                }
+                bool canSplit = fcall.GetParamId(0) == "true";
+                if (canSplit) {
+                    //将要生成的condexpfunc的信息放到队列，等当前函数生成完毕后生成
+                    s_CondExpFuncs.Enqueue(data);
+                    //生成调用condexpfunc的代码
+                    var mname = fcall.GetParamId(2);
+                    string className = CalcTypeString(fcall.GetParam(3));
+                    bool isStatic = fcall.GetParamId(4) == "true";
+                    string prestr = string.Empty;
+                    sb.AppendFormat("{0}.{1}", className, mname);
+                    sb.Append("(");
+                    if (!isStatic) {
+                        sb.Append(prestr);
+                        prestr = ", ";
+                        sb.Append("this");
+                    }
+                    bool needFuncInfo = ParseNeedFuncInfo(second);
+                    if (needFuncInfo) {
+                        sb.Append(prestr);
+                        prestr = ", ";
+                        sb.Append("__cs2lua_func_info");
+                    }
+                    if (fcall.GetParamNum() > 5) {
+                        sb.Append(prestr);
+                    }
+                    bool haveParams = GenerateFunctionParams(fcall, sb, 5);
+                    sb.Append(")");
+                }
+                else {
+                    var condExp = data.First.GetParam(0) as Dsl.FunctionData;
+                    var p1 = condExp.GetParam(0);
+                    var p2 = condExp.GetParamId(1);
+                    var p3 = condExp.GetParam(2);
+                    var p4 = condExp.GetParamId(3);
+                    var p5 = condExp.GetParam(4);
+
+                    if (p2 == "true" && p4 == "true") {
+                        sb.Append("simplecondexp(");
+                        GenerateSyntaxComponent(p1, sb, indent, false, funcOpts, calculator);
+                        sb.Append(", ");
+                        GenerateSyntaxComponent(p3, sb, indent, false, funcOpts, calculator);
+                        sb.Append(", ");
+                        GenerateSyntaxComponent(p5, sb, indent, false, funcOpts, calculator);
+                        sb.Append(")");
+                    }
+                    else {
+                        sb.Append("(function() ");
+                        GenerateOtherCondExp(condExp, sb, indent, funcOpts, calculator);
+                        sb.Append(" end)()");
+                    }
                 }
             }
             else {
@@ -3699,17 +3817,20 @@ namespace Generator
             var p2 = data.GetParamId(1);
             var p3 = RemoveParenthesis(data.GetParam(2));
             var p3Func = p3 as Dsl.FunctionData;
+            var p3Stm = p3 as Dsl.StatementData;
             var p4 = data.GetParamId(3);
             var p5 = RemoveParenthesis(data.GetParam(4));
             var p5Func = p5 as Dsl.FunctionData;
+            var p5Stm = p5 as Dsl.StatementData;
             string p2n = p2;
             var p3n = p3;
             string p4n = p4;
             var p5n = p5;
             bool p3IsCondExp = false;
             bool p5IsCondExp = false;
-            if (p2 == "false" && null != p3Func && p3Func.GetId() == "condexp") {
+            if (p2 == "false" && null != p3Stm && p3Stm.GetId() == "condexpfunc") {
                 p3IsCondExp = true;
+                p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
             }
             else if (p2 == "false" && null != p3Func) {
                 var func = p3Func.GetParam(0) as Dsl.FunctionData;
@@ -3718,8 +3839,9 @@ namespace Generator
                 }
                 if (null != func && func.GetId() == "funcobjret") {
                     var tp3n = RemoveParenthesis(func.GetParam(0));
-                    if (tp3n.GetId() == "condexp") {
-                        p3Func = tp3n as Dsl.FunctionData;
+                    if (tp3n.GetId() == "condexpfunc") {
+                        p3Stm = tp3n as Dsl.StatementData;
+                        p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
                         p3IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p3Func)) {
@@ -3728,8 +3850,9 @@ namespace Generator
                     }
                 }
             }
-            if (p4 == "false" && null != p5Func && p5Func.GetId() == "condexp") {
+            if (p4 == "false" && null != p5Stm && p5Stm.GetId() == "condexpfunc") {
                 p5IsCondExp = true;
+                p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
             }
             else if (p4 == "false" && null != p5Func) {
                 var func = p5Func.GetParam(0) as Dsl.FunctionData;
@@ -3738,8 +3861,9 @@ namespace Generator
                 }
                 if (null != func && func.GetId() == "funcobjret") {
                     var tp5n = RemoveParenthesis(func.GetParam(0));
-                    if (tp5n.GetId() == "condexp") {
-                        p5Func = tp5n as Dsl.FunctionData;
+                    if (tp5n.GetId() == "condexpfunc") {
+                        p5Stm = tp5n as Dsl.StatementData;
+                        p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
                         p5IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p5Func)) {
@@ -3792,17 +3916,20 @@ namespace Generator
             var p2 = condExp.GetParamId(1);
             var p3 = RemoveParenthesis(condExp.GetParam(2));
             var p3Func = p3 as Dsl.FunctionData;
+            var p3Stm = p3 as Dsl.StatementData;
             var p4 = condExp.GetParamId(3);
             var p5 = RemoveParenthesis(condExp.GetParam(4));
             var p5Func = p5 as Dsl.FunctionData;
+            var p5Stm = p5 as Dsl.StatementData;
             string p2n = p2;
             var p3n = p3;
             string p4n = p4;
             var p5n = p5;
             bool p3IsCondExp = false;
             bool p5IsCondExp = false;
-            if (p2 == "false" && null != p3Func && p3Func.GetId() == "condexp") {
+            if (p2 == "false" && null != p3Stm && p3Stm.GetId() == "condexpfunc") {
                 p3IsCondExp = true;
+                p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
             }
             else if (p2 == "false" && null != p3Func) {
                 var func = p3Func.GetParam(0) as Dsl.FunctionData;
@@ -3811,8 +3938,9 @@ namespace Generator
                 }
                 if (null != func && func.GetId() == "funcobjret") {
                     var tp3n = RemoveParenthesis(func.GetParam(0));
-                    if (tp3n.GetId() == "condexp") {
-                        p3Func = tp3n as Dsl.FunctionData;
+                    if (tp3n.GetId() == "condexpfunc") {
+                        p3Stm = tp3n as Dsl.StatementData;
+                        p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
                         p3IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p3Func)) {
@@ -3821,8 +3949,9 @@ namespace Generator
                     }
                 }
             }
-            if (p4 == "false" && null != p5Func && p5Func.GetId() == "condexp") {
+            if (p4 == "false" && null != p5Stm && p5Stm.GetId() == "condexpfunc") {
                 p5IsCondExp = true;
+                p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
             }
             else if (p4 == "false" && null != p5Func) {
                 var func = p5Func.GetParam(0) as Dsl.FunctionData;
@@ -3831,8 +3960,9 @@ namespace Generator
                 }
                 if (null != func && func.GetId() == "funcobjret") {
                     var tp5n = RemoveParenthesis(func.GetParam(0));
-                    if (tp5n.GetId() == "condexp") {
-                        p5Func = tp5n as Dsl.FunctionData;
+                    if (tp5n.GetId() == "condexpfunc") {
+                        p5Stm = tp5n as Dsl.StatementData;
+                        p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
                         p5IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p5Func)) {
@@ -3891,17 +4021,20 @@ namespace Generator
             var p2 = data.GetParamId(1);
             var p3 = RemoveParenthesis(data.GetParam(2));
             var p3Func = p3 as Dsl.FunctionData;
+            var p3Stm = p3 as Dsl.StatementData;
             var p4 = data.GetParamId(3);
             var p5 = RemoveParenthesis(data.GetParam(4));
             var p5Func = p5 as Dsl.FunctionData;
+            var p5Stm = p5 as Dsl.StatementData;
             string p2n = p2;
             var p3n = p3;
             string p4n = p4;
             var p5n = p5;
             bool p3IsCondExp = false;
             bool p5IsCondExp = false;
-            if (p2 == "false" && null != p3Func && p3Func.GetId() == "condexp") {
+            if (p2 == "false" && null != p3Stm && p3Stm.GetId() == "condexpfunc") {
                 p3IsCondExp = true;
+                p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
             }
             else if (p2 == "false" && null != p3Func) {
                 var func = p3Func.GetParam(0) as Dsl.FunctionData;
@@ -3910,8 +4043,9 @@ namespace Generator
                 }
                 if (null != func && func.GetId() == "funcobjret") {
                     var tp3n = RemoveParenthesis(func.GetParam(0));
-                    if (tp3n.GetId() == "condexp") {
-                        p3Func = tp3n as Dsl.FunctionData;
+                    if (tp3n.GetId() == "condexpfunc") {
+                        p3Stm = tp3n as Dsl.StatementData;
+                        p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
                         p3IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p3Func)) {
@@ -3920,8 +4054,9 @@ namespace Generator
                     }
                 }
             }
-            if (p4 == "false" && null != p5Func && p5Func.GetId() == "condexp") {
+            if (p4 == "false" && null != p5Stm && p5Stm.GetId() == "condexpfunc") {
                 p5IsCondExp = true;
+                p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
             }
             else if (p4 == "false" && null != p5Func) {
                 var func = p5Func.GetParam(0) as Dsl.FunctionData;
@@ -3930,8 +4065,9 @@ namespace Generator
                 }
                 if (null != func && func.GetId() == "funcobjret") {
                     var tp5n = RemoveParenthesis(func.GetParam(0));
-                    if (tp5n.GetId() == "condexp") {
-                        p5Func = tp5n as Dsl.FunctionData;
+                    if (tp5n.GetId() == "condexpfunc") {
+                        p5Stm = tp5n as Dsl.StatementData;
+                        p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
                         p5IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p5Func)) {

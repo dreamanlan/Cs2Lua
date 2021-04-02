@@ -554,6 +554,15 @@ namespace RoslynTool.CsToDsl
             else
                 return null;
         }
+        internal MethodInfo GetCurMemberMethodInfo()
+        {
+            foreach(var mi in m_MethodInfoStack) {
+                if (!mi.IsAnonymousOrLambdaMethod) {
+                    return mi;
+                }
+            }
+            return null;
+        }
         internal IMethodSymbol GetCurMethodSemanticInfo()
         {
             if (m_MethodInfoStack.Count > 0) {

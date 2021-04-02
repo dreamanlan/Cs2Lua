@@ -395,5 +395,118 @@ namespace RoslynTool.CsToDsl
             }
             return sb.ToString();
         }
+
+        internal static string CalcCondExpFuncInfo(DataFlowAnalysis dataFlow, out List<string> inputs, out List<string> outputs)
+        {
+            var sbIn = new StringBuilder();
+            inputs = new List<string>();
+            outputs = new List<string>();
+            string prestrIn = string.Empty;
+            foreach (var v in dataFlow.DataFlowsIn) {
+                if (v.Name == "this")
+                    continue;
+                inputs.Add(v.Name);
+                sbIn.Append(prestrIn);
+                sbIn.Append(v.Name);
+                prestrIn = ", ";
+            }
+            foreach (var v in dataFlow.DataFlowsOut) {
+                outputs.Add(v.Name);
+                if (!inputs.Contains(v.Name)) {
+                    sbIn.Append(prestrIn);
+                    sbIn.Append(v.Name);
+                    prestrIn = ", ";
+                }
+            }
+            return sbIn.ToString();
+        }
+
+        internal static string CalcCondExpFuncOptions(DataFlowAnalysis dataFlow, ITypeSymbol typeSym, List<string> inputs, List<string> outputs, bool needFuncInfo)
+        {
+            string returnType = ClassInfo.GetFullName(typeSym);
+            string returnTypeKind = "TypeKind." + typeSym.TypeKind;
+            bool returnTypeIsExtern = !SymbolTable.Instance.IsCs2DslSymbol(typeSym);
+
+            var sb = new StringBuilder();
+            sb.AppendFormat("needfuncinfo({0}), rettype(return, {1}, {2}, 0, {3})", needFuncInfo ? "true" : "false", returnType, returnTypeKind, returnTypeIsExtern ? "true" : "false");
+            foreach (var v in dataFlow.DataFlowsOut) {
+                sb.Append(", ");
+                int refOrOut = 2;
+                if (inputs.Contains(v.Name)) {
+                    refOrOut = 1;
+                }
+                var psym = v as IParameterSymbol;
+                var lsym = v as ILocalSymbol;
+                if (null != psym) {
+                    var type = ClassInfo.GetFullName(psym.Type);
+                    var typeKind = psym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(psym.Type);
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("rettype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
+                }
+                else if (null != lsym) {
+                    var type = ClassInfo.GetFullName(lsym.Type);
+                    var typeKind = lsym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(lsym.Type);
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("rettype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
+                }
+            }
+            foreach (var v in dataFlow.DataFlowsIn) {
+                if (v.Name == "this")
+                    continue;
+                sb.Append(", ");
+                int refOrOut = 0;
+                if (outputs.Contains(v.Name)) {
+                    refOrOut = 1;
+                }
+                var psym = v as IParameterSymbol;
+                var lsym = v as ILocalSymbol;
+                if (null != psym) {
+                    var type = ClassInfo.GetFullName(psym.Type);
+                    var typeKind = psym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(psym.Type);
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
+                }
+                else if (null != lsym) {
+                    var type = ClassInfo.GetFullName(lsym.Type);
+                    var typeKind = lsym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(lsym.Type);
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
+                }
+            }
+            foreach (var v in dataFlow.DataFlowsOut) {
+                sb.Append(", ");
+                int refOrOut = 2;
+                if (inputs.Contains(v.Name)) {
+                    refOrOut = 1;
+                }
+                var psym = v as IParameterSymbol;
+                var lsym = v as ILocalSymbol;
+                if (null != psym) {
+                    var type = ClassInfo.GetFullName(psym.Type);
+                    var typeKind = psym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(psym.Type);
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
+                }
+                else if (null != lsym) {
+                    var type = ClassInfo.GetFullName(lsym.Type);
+                    var typeKind = lsym.Type.TypeKind.ToString();
+                    bool isExtern = !SymbolTable.Instance.IsCs2DslSymbol(lsym.Type);
+                    if (string.IsNullOrEmpty(type))
+                        type = "null";
+                    sb.AppendFormat("paramtype({0}, {1}, {2}, {3}, {4})", v.Name, type, typeKind, refOrOut, isExtern ? "true" : "false");
+                }
+            }
+            return sb.ToString();
+        }
     }
 }

@@ -67,8 +67,7 @@ class(Test) {
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
 			local(args); args = params(System.Nullable_T, TypeKind.Struct);
 			local(value); value = paramsremove(args);
-			arraysetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 2, 1, wrapstruct(value, System.Nullable_T)
-);
+			arraysetstruct(false, SymbolKind.Parameter, System.Nullable_T, args, 2, 1, wrapstruct(value, System.Nullable_T));
 		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(..., System.Nullable_T, TypeKind.Array, 0, true)];
 		Init = deffunc(0)args(this){
 			local(a); a = 2;
@@ -108,11 +107,11 @@ class(Test) {
 				},postcode{
 				})varlist(__invoke_277_33_277_64, v) = callexterninstance(dict, System.Collections.Generic.Dictionary_TKey_TValue, "TryGetValue", dslstrtocsstr("abc2"), __cs2dsl_out); }, System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct));
 			local(vv); vv = getexternstaticstructmember(SymbolKind.Property, UnityEngine.Vector3, "zero");
-			setexterninstance(SymbolKind.Field, vv, UnityEngine.Vector3, "x", condexp(execbinary("==", v, "yes", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 123, false, function(){ funcobjret(condexp(execbinary("==", v, "no", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 456, true, 789)); }));
-			local(iv); iv = condexp(execbinary("==", v, "yes", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 123, false, function(){ funcobjret(condexp(execbinary("==", v, "no", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 456, true, 789)); });
-			callinterface(list, System.Collections.Generic.ICollection_T, "Add", condexp(execbinary("==", v, "yes", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 123, false, function(){ funcobjret(condexp(execbinary("==", v, "no", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 456, true, 789)); }));
+			setexterninstance(SymbolKind.Field, vv, UnityEngine.Vector3, "x", condexpfunc(true, retval_280_15_280_55, condexp_280_15_280_55, Test, false, v){condexp(execbinary("==", v, "yes", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 123, false, function(){ funcobjret(condexpfunc(true, retval_280_34_280_55, condexp_280_34_280_55, Test, false, v){condexp(execbinary("==", v, "no", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 456, true, 789);}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(v, System.String, Class, 0, true)]); });}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(v, System.String, Class, 0, true)]);
+			local(iv); iv = condexpfunc(true, retval_281_17_281_57, condexp_281_17_281_57, Test, false, v){condexp(execbinary("==", v, "yes", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 123, false, function(){ funcobjret(condexpfunc(true, retval_281_36_281_57, condexp_281_36_281_57, Test, false, v){condexp(execbinary("==", v, "no", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 456, true, 789);}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(v, System.String, Class, 0, true)]); });}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(v, System.String, Class, 0, true)];
+			callinterface(list, System.Collections.Generic.ICollection_T, "Add", condexpfunc(true, retval_282_17_282_57, condexp_282_17_282_57, Test, false, v){condexp(execbinary("==", v, "yes", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 123, false, function(){ funcobjret(condexpfunc(true, retval_282_36_282_57, condexp_282_36_282_57, Test, false, v){condexp(execbinary("==", v, "no", System.String, System.String, TypeKind.Class, TypeKind.Class), true, 456, true, 789);}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(v, System.String, Class, 0, true)]); });}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(v, System.String, Class, 0, true)]);
 			local(statusA); statusA = 3;
-			statusA = condexp(execbinary("==", statusA, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), true, 2, false, function(){ funcobjret(condexp(execbinary("==", statusA, 2, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), true, 1, false, function(){ funcobjret(condexp(execbinary("==", statusA, 3, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), true, 0, false, function(){ funcobjret(prefixoperator(true, statusA, execbinary("+", statusA, 1, null, null, null, null))); })); })); });
+			statusA = condexpfunc(true, retval_284_18_284_84, condexp_284_18_284_84, Test, false, statusA){condexp(execbinary("==", statusA, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), true, 2, false, function(){ funcobjret(condexpfunc(true, retval_284_37_284_84, condexp_284_37_284_84, Test, false, statusA){condexp(execbinary("==", statusA, 2, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), true, 1, false, function(){ funcobjret(condexpfunc(true, retval_284_56_284_84, condexp_284_56_284_84, Test, false, statusA){condexp(execbinary("==", statusA, 3, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), true, 0, false, function(){ funcobjret(prefixoperator(true, statusA, execbinary("+", statusA, 1, null, null, null, null))); });}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(statusA, System.Int32, Struct, 0, true)]); });}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(statusA, System.Int32, Struct, 0, true)]); });}options[needfuncinfo(true), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(statusA, System.Int32, Struct, 0, true)];
 		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(pos, UnityEngine.Vector2, TypeKind.Struct, 0, true)];
 		testcall = deffunc(1)args(this){
 			local(__method_ret_286_4_298_5);
@@ -219,7 +218,7 @@ class(Test) {
 			local(__catch_handled_326_8_336_9, __catch_retval_326_8_336_9); __catch_handled_326_8_336_9 = false;
 			__catch_retval_326_8_336_9 = dslcatch(__catch_handled_326_8_336_9, __try_retval_326_8_336_9, __try_ret_326_8_336_9,
 				function(e){
-if(typeis(e, System.ArgumentException, TypeKind.Class)){
+					if(typeis(e, System.ArgumentException, TypeKind.Class)){
 						__catch_handled_326_8_336_9 = true;
 						callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("ex:{0} {1} {2}"), a, b, c);
 						dslthrow(a);
@@ -239,7 +238,7 @@ if(typeis(e, System.ArgumentException, TypeKind.Class)){
 			if(! __try_ret_326_8_336_9){
 				callexternstatic(System.Console, "WriteLine__String__Object__Object__Object", dslstrtocsstr("{0} {1} {2}"), a, b, c);
 			};
-			setinstance(SymbolKind.Field, this, Test, "m_IntVal", condexp(execbinary(">", a, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), false, function(){ funcobjret(callexterndelegation(aa, "System.Func_TResult.Invoke")); }, false, function(){ funcobjret(c); }));
+			setinstance(SymbolKind.Field, this, Test, "m_IntVal", condexpfunc(true, retval_338_24_338_40, condexp_338_24_338_40, Test, false){condexp(execbinary(">", a, 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), false, function(){ funcobjret(callexterndelegation(aa, "System.Func_TResult.Invoke")); }, false, function(){ funcobjret(c); });}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)]);
 			return(__method_ret_301_4_339_5);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		LoadStartupView_FGUI = deffunc(0)args(this, className, comName, packageName, grp, ForceShow){

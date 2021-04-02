@@ -1499,12 +1499,10 @@ namespace RoslynTool.CsToDsl
                     if (needWrapStruct) {
                         if (isCs2Dsl) {
                             CodeBuilder.AppendFormat(", {0})", fn);
-                            CodeBuilder.AppendLine();
                         }
                         else {
                             if (ns != "System") {
                                 CodeBuilder.AppendFormat(", {0})", fn);
-                                CodeBuilder.AppendLine();
                             }
                         }
                     }
@@ -1757,12 +1755,10 @@ namespace RoslynTool.CsToDsl
                         if (needWrapStruct) {
                             if (isCs2Dsl) {
                                 CodeBuilder.AppendFormat(", {0})", fn);
-                                CodeBuilder.AppendLine();
                             }
                             else {
                                 if (ns != "System") {
                                     CodeBuilder.AppendFormat(", {0})", fn);
-                                    CodeBuilder.AppendLine();
                                 }
                             }
                         }

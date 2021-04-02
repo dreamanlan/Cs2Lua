@@ -250,6 +250,16 @@ OperationKind = {
 g_LuaStr2CsStrCaches = {}
 g_CsStr2LuaStrCaches = {}
 
+function forwardtocsstr(str)
+    if str==nil then
+        return nil        
+    elseif type(str) == "string" then
+        return System.String.ctor__A_Char(str)
+    else
+        return str
+    end
+end
+
 function csstrtoluastr(str)
     if str==nil then
         return nil        
@@ -275,7 +285,7 @@ function luastrtocsstr(str)
     elseif type(str) == "string" then
         local v = g_LuaStr2CsStrCaches[str]
         if v==nil then
-            local s = System.String.ctor__A_Char(str)
+            local s = forwardtocsstr(str)
             g_LuaStr2CsStrCaches[str] = s
             return s
         else
@@ -917,7 +927,7 @@ function callbasicvalue(obj, isEnum, class, method, ...)
         elseif class == System.String then
             local csstr = obj
             if type(obj) == "string" then
-                csstr = System.String.ctor__A_Char(obj)
+                csstr = forwardtocsstr(obj)
             end
             if method == "Split__A_Char__StringSplitOptions" then
                 local arg1, arg2 = ...
@@ -992,7 +1002,7 @@ function getbasicvalue(obj, isEnum, class, property)
     local meta = getmetatable(obj)
     if property then
         if type(obj) == "string" then
-            local csstr = System.String.ctor__A_Char(obj)
+            local csstr = forwardtocsstr(obj)
             return csstr[property]
         elseif meta then
             return obj[property]
@@ -1013,7 +1023,7 @@ function setbasicvalue(obj, isEnum, class, property, value)
     local meta = getmetatable(obj)
     if property then
         if type(obj) == "string" then
-            local csstr = System.String.ctor__A_Char(obj)
+            local csstr = forwardtocsstr(obj)
             csstr[property] = value
         elseif meta then
             obj[property] = value

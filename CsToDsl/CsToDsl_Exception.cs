@@ -47,7 +47,7 @@ namespace RoslynTool.CsToDsl
                 mi.TempReturnAnalysisStack.Push(returnAnalysis0);
 
                 if (mi.IsAnonymousOrLambdaMethod) {
-                    //嵌入函数里的try块不能拆分成方法
+                    //嵌入函数里的try块不能拆分成方法（挂外层类上涉及嵌入方法信息与外层成员函数信息的混用，不好评估）
                     CodeBuilder.AppendFormat("{0}local({1}, {2}); multiassign({1}, {2}) = dsltry({3}, {1}){{", GetIndentString(), retVar, retValVar, returnAnalysis0.ExistReturnInLoopOrSwitch ? "true" : "false");
                     CodeBuilder.AppendLine();
                     ++m_Indent;
@@ -224,7 +224,7 @@ namespace RoslynTool.CsToDsl
             CodeBuilder.AppendLine();
             ++m_Indent;
             if (null != node.Filter) {
-                CodeBuilder.Append("if(");
+                CodeBuilder.AppendFormat("{0}if(", GetIndentString());
                 var oper = m_Model.GetOperationEx(node) as ICatchClauseOperation;
                 IConversionOperation opd = null;
                 if (null != oper) {

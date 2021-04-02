@@ -46,6 +46,7 @@ namespace Generator
                     s_IsInCoroutine = false;
                     s_NestedFunctionCount = 0;
                     s_TryUsingFuncs = new Queue<Dsl.StatementData>();
+                    s_CondExpFuncs = new Queue<Dsl.StatementData>();
 
                     string fileName = Path.GetFileNameWithoutExtension(file);
 
@@ -195,6 +196,18 @@ namespace Generator
             }
             param = null;
             return string.Empty;
+        }
+        internal static bool ParseNeedFuncInfo(Dsl.FunctionData opts)
+        {
+            foreach (var opt in opts.Params) {
+                var optFd = opt as Dsl.FunctionData;
+                if (null != optFd) {
+                    if (optFd.GetId() == "needfuncinfo") {
+                        return optFd.GetParamId(0) == "true";
+                    }
+                }
+            }
+            return false;
         }
         internal static void ParseFunctionOptions(Dsl.FunctionData opts, FunctionOptions funcOpts)
         {
@@ -743,6 +756,8 @@ namespace Generator
         private static int s_NestedFunctionCount = 0;
         [ThreadStatic]
         private static Queue<Dsl.StatementData> s_TryUsingFuncs = null;
+        [ThreadStatic]
+        private static Queue<Dsl.StatementData> s_CondExpFuncs = null;
         [ThreadStatic]
         private static Dsl.ISyntaxComponent s_CurSyntax = null;
 

@@ -141,7 +141,11 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitConditionalExpression(ConditionalExpressionSyntax node)
         {
+            ClassInfo ci = GetCurClassInfo();
+            MethodInfo mi = GetCurMemberMethodInfo();
+
             IConversionOperation opd = null;
+            var tsym = m_Model.GetTypeInfoEx(node).Type;
             var oper = m_Model.GetOperationEx(node) as IConditionalOperation;
             if (null != oper) {
                 opd = oper.Condition as IConversionOperation;
@@ -150,7 +154,33 @@ namespace RoslynTool.CsToDsl
             var fOper = m_Model.GetOperationEx(node.WhenFalse);
             bool trueIsConst = null != tOper && tOper.ConstantValue.HasValue;
             bool falseIsConst = null != fOper && fOper.ConstantValue.HasValue;
+            //条件表达式拆分成方法
+            var dataFlow = m_Model.AnalyzeDataFlow(node);
+            List<string> inputs, outputs;
+            string paramsStr = MethodInfo.CalcCondExpFuncInfo(dataFlow, out inputs, out outputs);
 
+            string postfix = GetSourcePosForVar(node);
+            CodeBuilder.Append("condexpfunc(");
+            if (outputs.Count <= 0 && null != mi)
+                CodeBuilder.Append("true");
+            else
+                CodeBuilder.Append("false");
+            CodeBuilder.Append(", retval_");
+            CodeBuilder.Append(postfix);
+            CodeBuilder.Append(", condexp_");
+            CodeBuilder.Append(postfix);
+            CodeBuilder.Append(", ");
+            CodeBuilder.Append(ci.Key);
+            CodeBuilder.Append(", ");
+            if (null != mi)
+                CodeBuilder.Append(mi.SemanticInfo.IsStatic ? "true" : "false");
+            else
+                CodeBuilder.Append("false");
+            if (!string.IsNullOrEmpty(paramsStr)) {
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(paramsStr);
+            }
+            CodeBuilder.Append("){");
             CodeBuilder.Append("condexp(");
             OutputExpressionSyntax(node.Condition, opd);
             if (trueIsConst) {
@@ -174,11 +204,18 @@ namespace RoslynTool.CsToDsl
             }
             OutputExpressionSyntax(node.WhenFalse);
             if (falseIsConst) {
-                CodeBuilder.Append(")");
+                CodeBuilder.Append(");");
             }
             else {
-                CodeBuilder.Append("); })");
+                CodeBuilder.Append("); });");
             }
+            CodeBuilder.Append("}options[");
+            bool needFuncInfo = false;
+            if (null != mi) {
+                needFuncInfo = mi.NeedFuncInfo;
+            }
+            CodeBuilder.Append(MethodInfo.CalcCondExpFuncOptions(dataFlow, tsym, inputs, outputs, needFuncInfo));
+            CodeBuilder.Append("]");
         }
         public override void VisitThisExpression(ThisExpressionSyntax node)
         {
