@@ -11,7 +11,6 @@ local sub = string.sub
 local find = string.find
 local gsub = string.gsub
 local tconcat = table.concat
-local unpack = table.unpack
 
 local function escape(s)
     return gsub(s, "([%%%^%.])", "%%%1")
