@@ -925,27 +925,14 @@ function callbasicvalue(obj, isEnum, class, method, ...)
                 return 0
             end
         elseif class == System.String then
-            local csstr = obj
-            if type(obj) == "string" then
-                csstr = forwardtocsstr(obj)
-            end
-            if method == "Split__A_Char__StringSplitOptions" then
-                local arg1, arg2 = ...
-                return csstr[method](csstr, arg1, arg2)
-            elseif method == "Split" or 1 == string.find(method, "Split__") then
-                local result1, result2 = _get_first_untable_from_pack_args(...)
-                if result2 then
-                    return csstr[method](csstr, result1, result2)
-                else
-                    return csstr[method](csstr, result1)
-                end
-            elseif method == "TrimStart" then
-                local result = _get_first_untable_from_pack_args(...)
-                if type(result) == "number" then
-                    result = Utility.CharToString(result)
-                end
-                return csstr[method](csstr, result)
+            local f = LuaSystemString[method]
+            if f then
+                return f(obj, ...) 
             else
+                local csstr = obj
+                if type(obj) == "string" then
+                    csstr = System.String.ctor__A_Char(obj)
+                end
                 return csstr[method](csstr, ...)
             end
         elseif class == System.Single and method == "ToString__String" then
@@ -1002,8 +989,8 @@ function getbasicvalue(obj, isEnum, class, property)
     local meta = getmetatable(obj)
     if property then
         if type(obj) == "string" then
-            local csstr = forwardtocsstr(obj)
-            return csstr[property]
+            return LuaSystemString.GetProperty(obj, property)
+
         elseif meta then
             return obj[property]
         else
@@ -1035,55 +1022,14 @@ function setbasicvalue(obj, isEnum, class, property, value)
     end
     return nil
 end
+
 function callarraystaticmethod(firstArray, secondArray, method, ...)
     if nil ~= firstArray and nil ~= method then
         local arg1,arg2 = ...
         local meta = getmetatable(firstArray)
         if meta and rawget(meta, "__cs2lua_defined") then
-            if method == "IndexOf" or 1 == string.find(method, "IndexOf__", 1, true) then
-                return firstArray:IndexOf(arg2)
-            elseif method == "Sort" or 1 == string.find(method, "Sort__", 1, true) then
-                return table.sort(
-                    firstArray,
-                    function(a, b)
-                        return arg2(a, b) < 0
-                    end
-                )
-            elseif method == "Reverse__Array" then
-                firstArray = table.sort(
-                    firstArray,
-                    function(a,b)
-                        return 1
-                    end
-                )
-                return nil
-            elseif method == "Find" then
-                local ct = __get_array_count(arg1)
-                for i = 1, ct do
-                    local v = rawget(arg1, i)
-                    if arg2(v) then
-                        return v
-                    end
-                end
-                return nil
-            elseif method == "FindIndex" then
-                local ct = __get_array_count(arg1)
-                for i = 1, ct do
-                    local v = rawget(arg1, i)
-                    if arg2(v) then
-                        return i-1
-                    end
-                end
-                return -1
-            elseif method == "Copy__Array__Int32__Array__Int32__Int32" then
-                local __,__,arg3 ,arg4, arg5 = ...
-                local ct = __get_array_count(arg1)
-                for i = arg2 + 1, arg2 + arg5 do
-                    local v = rawget(arg1, i)
-                    rawset(arg3 , arg4 + 1 , v)
-                    arg4 = arg4 + 1;
-                end
-                return nil
+            if ArrayStaticMethods[method] ~= nil then
+                return ArrayStaticMethods[method](firstArray, secondArray, method, ...)
             else
                 translationlog("need add handler for callarraystaticmethod Array.{0}", method)
                 return nil
@@ -2169,6 +2115,7 @@ __mt_index_of_array_table = {
             if start==nil then
                 start = 0
             end
+            p = __unwrap_if_string(p)
             for i = start+1, ct do
                 local v = rawget(obj, i)
                 if rawequal(v,p) then
@@ -4032,4 +3979,5 @@ function defaultvalue(t, typename, isExtern)
 end
 
 require "lualib_valuetypescript"
+require "lualib_basic"
 require "lualib_special"

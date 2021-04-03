@@ -57,7 +57,7 @@ internal static class Cs2LuaLibrary
     }
 }
 
-[Cs2Dsl.Require("lualib_valuetypescript")]
+[Cs2Dsl.Require("lualib_valuetypescript", "lualib_basic")]
 [Cs2Dsl.Entry]
 public static class Program
 {

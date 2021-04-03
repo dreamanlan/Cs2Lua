@@ -3586,6 +3586,7 @@ script(get_globalvariables_instance)args($funcData, $funcOpts, $sb, $indent)
 
 script(coroutinehook)args($funcData, $funcOpts, $sb, $indent, $curFile, $curMember, $curId)
 {
+    return(false);
     if(stringcontains($curId, ["call"])){
         $a = getargument($funcData, 0);
         $b = getargument($funcData, 1);

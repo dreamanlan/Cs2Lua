@@ -262,7 +262,7 @@ namespace RoslynTool.CsToDsl
                     else if (i < ct - 1) {
                         if (needWrapStruct && null == opd) {
                             CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
-                            OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                            OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, ii.MethodSymbol);
                             CodeBuilder.Append(", ");
                             CodeBuilder.Append(argTypeName);
                             CodeBuilder.Append(", ");
@@ -272,7 +272,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append(")");
                         }
                         else {
-                            OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                            OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, ii.MethodSymbol);
                         }
                     }
                     else {
@@ -280,7 +280,7 @@ namespace RoslynTool.CsToDsl
                             CodeBuilder.Append("dslunpack(");
                             if (needWrapStruct && null == opd) {
                                 CodeBuilder.AppendFormat("wrap{0}structarguments(", externFlag);
-                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, ii.MethodSymbol);
                                 CodeBuilder.Append(", ");
                                 CodeBuilder.Append(argTypeName);
                                 CodeBuilder.Append(", ");
@@ -290,14 +290,14 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append(")");
                             }
                             else {
-                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, ii.MethodSymbol);
                             }
                             CodeBuilder.Append(")");
                         }
                         else {
                             if (needWrapStruct && null == opd) {
                                 CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
-                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, ii.MethodSymbol);
                                 CodeBuilder.Append(", ");
                                 CodeBuilder.Append(argTypeName);
                                 CodeBuilder.Append(", ");
@@ -307,7 +307,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append(")");
                             }
                             else {
-                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                                OutputExpressionSyntax(exp, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, ii.MethodSymbol);
                             }
                         }
                     }
@@ -345,7 +345,7 @@ namespace RoslynTool.CsToDsl
                         if (null != info.Expression) {
                             if (needWrapStruct && null == opd) {
                                 CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
-                                OutputExpressionSyntax(info.Expression, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                                OutputExpressionSyntax(info.Expression, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, ii.MethodSymbol);
                                 CodeBuilder.Append(", ");
                                 CodeBuilder.Append(argTypeName);
                                 CodeBuilder.Append(", ");
@@ -355,7 +355,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.Append(")");
                             }
                             else {
-                                OutputExpressionSyntax(info.Expression, opd, dslToObject, ii.IsExternMethod, ii.MethodSymbol);
+                                OutputExpressionSyntax(info.Expression, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, ii.MethodSymbol);
                             }
                         }
                         else {
@@ -363,7 +363,7 @@ namespace RoslynTool.CsToDsl
                                 CodeBuilder.AppendFormat("wrap{0}structargument(", externFlag);
                                 if (dslToObject)
                                     OutputDslToObjectPrefix(ii.MethodSymbol);
-                                OutputArgumentDefaultValue(info.Value, info.Operation, ii.IsExternMethod, opd, node);
+                                OutputArgumentDefaultValue(info.Value, info.Operation, ii.IsExternMethod && !ii.IsBasicValueMethod, opd, node);
                                 if (dslToObject)
                                     CodeBuilder.Append(")");
                                 CodeBuilder.Append(", ");
@@ -377,7 +377,7 @@ namespace RoslynTool.CsToDsl
                             else {
                                 if (dslToObject)
                                     OutputDslToObjectPrefix(ii.MethodSymbol);
-                                OutputArgumentDefaultValue(info.Value, info.Operation, ii.IsExternMethod, opd, node);
+                                OutputArgumentDefaultValue(info.Value, info.Operation, ii.IsExternMethod && !ii.IsBasicValueMethod, opd, node);
                                 if (dslToObject)
                                     CodeBuilder.Append(")");
                             }

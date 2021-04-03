@@ -1436,11 +1436,11 @@ namespace RoslynTool.CsToDsl
 
                 if (op != "=") {
                     CompoundAssignBegin(baseOp, assign, lopd);
-                    OutputExpressionSyntax(assign.Right, ropd, dslToObject, ii.IsExternMethod, leftSym);
+                    OutputExpressionSyntax(assign.Right, ropd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, leftSym);
                     CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
                 }
                 else {
-                    OutputExpressionSyntax(assign.Right, opd, dslToObject, ii.IsExternMethod, leftSym);
+                    OutputExpressionSyntax(assign.Right, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, leftSym);
                 }
                 CodeBuilder.Append(")");
             }
@@ -1692,11 +1692,11 @@ namespace RoslynTool.CsToDsl
 
                     if (op != "=") {
                         CompoundAssignBegin(baseOp, assign, lopd);
-                        OutputExpressionSyntax(assign.Right, ropd, dslToObject, ii.IsExternMethod, leftSym);
+                        OutputExpressionSyntax(assign.Right, ropd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, leftSym);
                         CompoundAssignEnd(leftType, rightType, leftTypeKind, rightTypeKind);
                     }
                     else {
-                        OutputExpressionSyntax(assign.Right, opd, dslToObject, ii.IsExternMethod, leftSym);
+                        OutputExpressionSyntax(assign.Right, opd, dslToObject, ii.IsExternMethod && !ii.IsBasicValueMethod, leftSym);
                     }
                     CodeBuilder.Append(")");
                 }

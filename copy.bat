@@ -10,10 +10,12 @@ copy /y bin\Debug\rewriter.dsl Test\Tools\rewriter.dsl
 copy /y bin\Debug\generator.dsl Test\Tools\generator.dsl
 copy /y bin\Debug\lualib\cs2luatypeimpl.lua Test\Tools\lualib\cs2luatypeimpl.lua
 copy /y bin\Debug\lualib\lualib_valuetypescript.lua Test\Tools\lualib\lualib_valuetypescript.lua
+copy /y bin\Debug\lualib\lualib_basic.lua Test\Tools\lualib\lualib_basic.lua
 copy /y bin\Debug\lualib\syslib.lua Test\Tools\lualib\syslib.lua
 
 copy /y bin\Debug\lualib\cs2luatypeimpl.lua ..\Cs2Dsl\bin\Debug\lualib\cs2luatypeimpl.lua
 copy /y bin\Debug\lualib\lualib_valuetypescript.lua ..\Cs2Dsl\bin\Debug\lualib\lualib_valuetypescript.lua
+copy /y bin\Debug\lualib\lualib_basic.lua ..\Cs2Dsl\bin\Debug\lualib\lualib_basic.lua
 copy /y bin\Debug\lualib\syslib.lua ..\Cs2Dsl\bin\Debug\lualib\syslib.lua
 
 copy /y bin\Debug\cs2dsl.dsl ..\Cs2Dsl\bin\Debug\cs2dsl.dsl
