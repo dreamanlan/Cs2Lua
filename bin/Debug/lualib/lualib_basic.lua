@@ -12,6 +12,60 @@ local find = string.find
 local gsub = string.gsub
 local tconcat = table.concat
 
+local function charsize(ch)
+    if not ch then return 0
+    elseif ch >=252 then return 6
+    elseif ch >= 248 and ch < 252 then return 5
+    elseif ch >= 240 and ch < 248 then return 4
+    elseif ch >= 224 and ch < 240 then return 3
+    elseif ch >= 192 and ch < 224 then return 2
+    elseif ch < 192 then return 1
+    end
+end
+
+-- 计算utf8字符串字符数, 各种字符都按一个字符计算
+-- 例如utf8len("1你好") => 3
+local function utf8len(str)
+    local len = 0
+    local aNum = 0 --字母个数
+    local hNum = 0 --汉字个数
+    local currentIndex = 1
+    while currentIndex <= #str do
+        local char = string.byte(str, currentIndex)
+        local cs = charsize(char)
+        currentIndex = currentIndex + cs
+        len = len +1
+        if cs == 1 then 
+            aNum = aNum + 1
+        elseif cs >= 2 then 
+            hNum = hNum + 1
+        end
+    end
+    return len, aNum, hNum
+end
+
+-- 截取utf8 字符串
+-- str:            要截取的字符串
+-- startChar:    开始字符下标,从1开始
+-- numChars:    要截取的字符长度
+local function utf8sub(str, startChar, numChars)
+    local startIndex = 1
+    while startChar > 1 do
+        local char = string.byte(str, startIndex)
+        startIndex = startIndex + charsize(char)
+        startChar = startChar - 1
+    end
+
+    local currentIndex = startIndex
+
+    while numChars > 0 and currentIndex <= #str do
+        local char = string.byte(str, currentIndex)
+        currentIndex = currentIndex + charsize(char)
+        numChars = numChars -1
+    end
+    return string.sub(str, startIndex, currentIndex - 1)
+end
+
 local function escape(s)
     return gsub(s, "([%%%^%.])", "%%%1")
 end
@@ -68,6 +122,8 @@ local function compare(strA, strB, ignoreCase)
 end
 
 local function replace(this, a, b)
+	a = csstrtoluastr(a)
+	b = csstrtoluastr(b)
     if type(a) == "number" then
       a, b = char(a), char(b)
     end
@@ -190,6 +246,7 @@ end
 LuaSystemString = {
     CompareTo__String = function (this, v)
         if v == nil then return 1 end
+        v = csstrtoluastr(v)
         if type(v) ~= "string" then
             error("Arg must be string")
         end
@@ -199,37 +256,47 @@ LuaSystemString = {
         if value == nil then
             error("value is nil")
         end
+        value = csstrtoluastr(value)
         return find(this, escape(value)) ~= nil
     end,
     EndsWith__String = function (this, suffix)
+        suffix = csstrtoluastr(suffix)
         return suffix == "" or sub(this, -#suffix) == suffix
     end,
     Equals__String = function (this, v)
+		v = csstrtoluastr(v)
         if type(v) == "string" then
           return this == v
         end
         return false
     end,
     IndexOf__Char = function (this, value)
+		value = csstrtoluastr(value)
         return indexOf(this, value, 0, #this, 0)
     end,
     IndexOf__String = function (this, value)
+		value = csstrtoluastr(value)
         return indexOf(this, value, 0, #this, 0)
     end,
     IndexOf__String__StringComparison = function (this, value, strComparison)
+		value = csstrtoluastr(value)
         return indexOf(this, value, 0, #this, strComparison)
     end,
     Insert = function (this, startIndex, value)
+		value = csstrtoluastr(value)
         if startIndex < 0 or startIndex > #this then error("startIndex out of range") end
         return sub(this, 1, startIndex) .. value .. sub(this, startIndex + 1)
     end,
     LastIndexOf__Char = function (this, value)
+		value = csstrtoluastr(value)
         return lastIndexOf(this, value, #this-1, #this, 0)
     end,
     LastIndexOf__String = function (this, value)
+		value = csstrtoluastr(value)
         return lastIndexOf(this, value, #this-1, #this, 0)
     end,
     LastIndexOf__String__StringComparison = function (this, value, strComparison)
+		value = csstrtoluastr(value)
         return lastIndexOf(this, value, #this-1, #this, strComparison)
     end,
     PadLeft__Int32__Char = function (this, totalWidth, paddingChar) 
@@ -261,22 +328,24 @@ LuaSystemString = {
     Replace__Char__Char = replace,
     Replace__String__String = replace,
     Split__A_Char = function (this, str)
+		str = csstrtoluastr(str)
         return split(this, str, 0x7fffffff, 0)
     end,
     Split__A_Char__StringSplitOptions = function (this, str, options)
+		str = csstrtoluastr(str)
         return split(this, str, 0x7fffffff, options)
     end,
     StartsWith__String = function (this, prefix)
-        local prefix = csstrtoluastr(prefix)
+        prefix = csstrtoluastr(prefix)
         return sub(this, 1, #prefix) == prefix
     end,
     Substring__Int32 = function (this, startIndex)
         startIndex, length = onlycheckIndex(this, startIndex)
-        return sub(this, startIndex + 1, length)
+        return utf8sub(this, startIndex + 1, length)
     end,
     Substring__Int32__Int32 = function (this, startIndex, count)
         startIndex, count = checkIndex(this, startIndex, count)
-        return sub(this, startIndex + 1, startIndex + count)
+        return utf8sub(this, startIndex + 1, startIndex + count)
     end,
     ToCharArray = function (str, startIndex, count)
         startIndex, count = checkIndex(str, startIndex, count)
@@ -292,6 +361,7 @@ LuaSystemString = {
     ToString = tostring,
     ToUpper = upper,
     Trim = function (this, chars, ...)
+		chars = csstrtoluastr(chars)
         if not chars then
             chars = "^%s*(.-)%s*$"
           else
@@ -306,6 +376,7 @@ LuaSystemString = {
           return (gsub(this, chars, "%1"))
     end,
     TrimEnd = function (this, chars, ...)
+		chars = csstrtoluastr(chars)
         if not chars then
           chars = "(.-)%s*$"
         else
@@ -320,6 +391,7 @@ LuaSystemString = {
         return (gsub(this, chars, "%1"))
     end,  
     TrimStart = function(this, chars, ...)
+		chars = csstrtoluastr(chars)
         if not chars then
           chars = "^%s*(.-)"
         else
@@ -340,7 +412,7 @@ LuaSystemString = {
     -- get = get
     GetProperty = function(obj, name)
         if name == "Length" then
-            return #obj
+            return utf8len(obj)
         elseif name == "Empty" then
             return ""
         end

@@ -253,7 +253,7 @@ g_CsStr2LuaStrCaches = {}
 function forwardtocsstr(str)
     if str==nil then
         return nil        
-    elseif type(str) == "string" then
+    elseif type(str)=="string" then
         return System.String.ctor__A_Char(str)
     else
         return str
@@ -262,17 +262,20 @@ end
 
 function csstrtoluastr(str)
     if str==nil then
-        return nil        
-    elseif type(str) == "string" then
-        return str
-    elseif type(str) == "userdata" then
-        local v = g_CsStr2LuaStrCaches[str]
-        if v==nil then
-            local s = tostring(str)
-            g_CsStr2LuaStrCaches[str] = s
-            return s
+        return nil
+    elseif type(str)=="userdata" then
+        local meta = getmetatable(str)
+        if meta and rawget(meta, "__typename")=="String" then
+            local v = g_CsStr2LuaStrCaches[str]
+            if v==nil then
+                local s = tostring(str)
+                g_CsStr2LuaStrCaches[str] = s
+                return s
+            else
+                return v
+            end
         else
-            return v
+            return str
         end
     else
         return str
@@ -282,7 +285,7 @@ end
 function luastrtocsstr(str)
     if str==nil then
         return nil
-    elseif type(str) == "string" then
+    elseif type(str)=="string" then
         local v = g_LuaStr2CsStrCaches[str]
         if v==nil then
             local s = forwardtocsstr(str)
@@ -291,8 +294,6 @@ function luastrtocsstr(str)
         else
             return v
         end
-    elseif type(str) == "userdata" then
-        return str
     else
         return str
     end
@@ -553,7 +554,12 @@ function getexterninstanceindexer(elementType, elementTypeKind, callerClass, obj
             elseif typename == "LuaVarObject" then
                 return obj[index]
             elseif name == "get_Chars" then
-                return Utility.StringGetChar(obj, index)
+                --return Utility.StringGetChar(obj, index)
+                local c = string.byte(obj, index + 1)
+                if not c then
+                    error("index out of range")
+                end
+                return c
             else
                 return obj:getItem(index)
             end
@@ -908,22 +914,6 @@ function callbasicvalue(obj, isEnum, class, method, ...)
     if method then
         if class == System.Char and (method == "ToString" or 1 == string.find(method, "ToString__")) then
             return Utility.CharToString(obj)
-        elseif class == System.String and (method == "CompareTo" or 1 == string.find(method, "CompareTo__")) then
-            local a = obj
-            local b = arg1
-            if type(a) ~= "string" then
-                a = tostring(a)
-            end
-            if type(b) ~= "string" then
-                b = tostring(b)
-            end
-            if a<b then
-                return -1
-            elseif a>b then
-                return 1
-            else
-                return 0
-            end
         elseif class == System.String then
             local f = LuaSystemString[method]
             if f then
@@ -931,7 +921,7 @@ function callbasicvalue(obj, isEnum, class, method, ...)
             else
                 local csstr = obj
                 if type(obj) == "string" then
-                    csstr = System.String.ctor__A_Char(obj)
+                    csstr = forwardtocsstr(obj)
                 end
                 return csstr[method](csstr, ...)
             end
@@ -990,7 +980,8 @@ function getbasicvalue(obj, isEnum, class, property)
     if property then
         if type(obj) == "string" then
             return LuaSystemString.GetProperty(obj, property)
-
+            -- local csstr = System.String.ctor__A_Char(obj)
+            -- return csstr[property]
         elseif meta then
             return obj[property]
         else
@@ -1380,7 +1371,12 @@ function getinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, c
             elseif typename == "LuaVarObject" then
                 return obj[index]
             elseif name == "get_Chars" then
-                return Utility.StringGetChar(obj, index)
+                --return Utility.StringGetChar(obj, index)
+                local c = string.byte(obj, index + 1)
+                if not c then
+                    error("index out of range")
+                end
+                return c
             else
                 return obj:getItem(index)
             end
@@ -2439,6 +2435,17 @@ __mt_index_of_hashset_table = {
             __inc_table_count(obj)
             return true
         end,
+    AddRange = function(obj, coll)
+            local data = __get_table_data(obj)    
+            local iter = newiterator(nil, coll)
+            for v in getiterator(iter) do
+                v = __unwrap_if_string(v)
+                v = __get_hash_code_if_integer64(v)
+                rawset(data, v, true)
+                __inc_array_count(obj)
+            end
+            recycleiterator(nil, iter)
+        end,    
     Remove = function(obj, p)
             up = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
@@ -2460,7 +2467,6 @@ __mt_index_of_hashset_table = {
     CopyTo = function(obj, arr) 
             local data = __get_table_data(obj)     
             for k, v in pairs(data) do
-                k = __wrap_if_string(k)
                 table.insert(arr, k)
                 __inc_array_count(arr)
             end
@@ -2498,8 +2504,7 @@ __mt_index_of_keycollection_table = {
         local t = obj.dict
         local data = __get_table_data(t)     
         for k, v in pairs(data) do
-            wk = __wrap_if_string(k)
-            table.insert(arr, wk)
+            table.insert(arr, k)
             __inc_array_count(arr)
         end
     end,
@@ -2644,7 +2649,7 @@ function GetDictKeyEnumerator(tb)
                 local v = nil 
                 local data = __get_table_data(ltb)     
                 this.key, v = next(data, this.key)
-                this.current = __wrap_if_string(this.key)
+                this.current = this.key
                 if this.key then
                     return true
                 else
@@ -2706,7 +2711,7 @@ function GetDictValueEnumerator(tb)
 end
 
 function GetHashsetEnumerator(tb)
-    local function __get_Current(obj) return __wrap_if_string(obj.Key) end
+    local function __get_Current(obj) return obj.Key end
     return setmetatable(
         {
             Reset = function(this)
@@ -2729,7 +2734,7 @@ function GetHashsetEnumerator(tb)
         {
             __index = function(t, k)
                 if k == "Current" then
-                    return __wrap_if_string(t.key)
+                    return t.key
                 elseif k == "get_Current" then
                     return __get_Current
                 end
@@ -3607,21 +3612,8 @@ function stringisequal(v1, v2)
     end
 end
 
-function __wrap_if_string(val)
-    if type(val) == "string" then
-        return luastrtocsstr(val)
-    else
-        return val
-    end
-end
-
 function __unwrap_if_string(val)
-    local meta = getmetatable(val)
-    if type(val) == "userdata" and rawget(meta, "__typename") == "String" then
-        return csstrtoluastr(val)
-    else
-        return val
-    end
+    return csstrtoluastr(val)
 end
 
 function __find_extern_class_or_obj_key(k, obj)
