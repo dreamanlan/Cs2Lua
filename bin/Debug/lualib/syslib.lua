@@ -554,8 +554,7 @@ function getexterninstanceindexer(elementType, elementTypeKind, callerClass, obj
             elseif typename == "LuaVarObject" then
                 return obj[index]
             elseif name == "get_Chars" then
-                --return Utility.StringGetChar(obj, index)
-                local c = string.byte(obj, index + 1)
+                local c = LuaSystemString.GetChar(obj, index)
                 if not c then
                     error("index out of range")
                 end
@@ -1371,8 +1370,7 @@ function getinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, c
             elseif typename == "LuaVarObject" then
                 return obj[index]
             elseif name == "get_Chars" then
-                --return Utility.StringGetChar(obj, index)
-                local c = string.byte(obj, index + 1)
+                local c = LuaSystemString.GetChar(obj, index)
                 if not c then
                     error("index out of range")
                 end
