@@ -156,7 +156,7 @@ local function escape(s)
     return gsub(s, "([%%%^%.])", "%%%1")
 end
 local function escapeRepl(s)
-    return gsub(s, "(%%)", "%%%1")
+    return gsub(s, "([%%%#])", "%%%1")
 end
 local function findAny(s, strings, startIndex)
     local findBegin, findEnd
@@ -239,18 +239,57 @@ local function compare(strA, strB, ignoreCase)
     return 0
 end
 
-local function replace(this, a, b)
+local function replace(thisStr, a, b)
+    thisStr = csstrtoluastr(thisStr)
     a = csstrtoluastr(a)
     b = csstrtoluastr(b)
     if type(a) == "number" then
         a, b = char(a), char(b)
     end
-    return gsub(this, escape(a), escapeRepl(b))
+    local tb = {}
+    local tbIx = 1
+    local len = #thisStr
+    local alen = #a    
+    local ix = 1
+    while ix <= len do
+        local nix = find(thisStr, a, ix, true)
+        if nix then
+            local ss = sub(thisStr, ix, nix - 1)
+            tb[tbIx] = ss
+            tbIx = tbIx + 1
+            ix = nix + alen
+            if ix > len then
+                tb[tbIx] = ""
+            end
+        else
+            local ss = sub(thisStr, ix)
+            tb[tbIx] = ss
+            break
+        end
+    end
+    return tconcat(tb, b)
+    --return gsub(thisStr, escape(a), escapeRepl(b))
 end
 
-local function split(this, strings, count, options)
+local function tolower(thisStr)
+    thisStr = csstrtoluastr(thisStr)
+    return lower(thisStr)
+end
+
+local function toupper(thisStr)
+    thisStr = csstrtoluastr(thisStr)
+    return upper(thisStr)
+end
+
+local function mytostring(thisStr)
+    thisStr = csstrtoluastr(thisStr)
+    return thisStr
+end
+
+local function split(thisStr, strings, count, options)
     local t = {}
     local find = find
+    local isPlain = true
     if type(strings) == "table" then
         if #strings == 0 then
             return wraparray(t)
@@ -261,6 +300,7 @@ local function split(this, strings, count, options)
         else
             strings = char(unpack(strings))
             strings = "[" .. strings .. "]"
+            isPlain = false
         end
     elseif type(strings) == "string" then
     else
@@ -270,9 +310,9 @@ local function split(this, strings, count, options)
     local len = 1
     local startIndex = 1
     while true do
-        local posBegin, posEnd = find(this, strings, startIndex, true)
+        local posBegin, posEnd = find(thisStr, strings, startIndex, isPlain)
         posBegin = posBegin or 0
-        local subStr = sub(this, startIndex, posBegin - 1)
+        local subStr = sub(thisStr, startIndex, posBegin - 1)
         if options ~= 1 or #subStr > 0 then
             t[len] = subStr
             len = len + 1
@@ -280,7 +320,7 @@ local function split(this, strings, count, options)
                 count = count - 1
                 if count == 0 then
                     if posBegin ~= 0 then
-                        t[len - 1] = sub(this, startIndex)
+                        t[len - 1] = sub(thisStr, startIndex)
                     end
                     break
                 end
@@ -325,23 +365,23 @@ local function checkLastIndexOf(value, startIndex, count)
     return startIndex, count, len
 end
 
-local function lastIndexOf(this, value, charIndex, numChars, comparisonType)
-    charIndex, numChars = checkLastIndexOf(this, charIndex, numChars)
-    local len = utf8len(this)
-    local startIndex, count = utf8CharIndexCountToByteIndexCount(this, len - charIndex, numChars)
+local function lastIndexOf(thisStr, value, charIndex, numChars, comparisonType)
+    charIndex, numChars = checkLastIndexOf(thisStr, charIndex, numChars)
+    local len = utf8len(thisStr)
+    local startIndex, count = utf8CharIndexCountToByteIndexCount(thisStr, len - charIndex, numChars)
     startIndex = startIndex - 1
     if type(value) == "number" then
         value = char(value)
     end
     local ignoreCase = comparisonType and comparisonType % 2 ~= 0
     if ignoreCase then
-        this, value = lower(this), lower(value)
+        thisStr, value = lower(thisStr), lower(value)
     end
     local e = startIndex + 1
     local f = e - count + 1
     local index = -1
     while true do
-        local i, j = find(this, value, f, true)
+        local i, j = find(thisStr, value, f, true)
         if not i or j > e then
             break
         end
@@ -349,27 +389,27 @@ local function lastIndexOf(this, value, charIndex, numChars, comparisonType)
         f = j + 1
     end
     if index >= 0 then
-        index = utf8len(this, 1, index + 1) - 1
+        index = utf8len(thisStr, 1, index + 1) - 1
     end
     return index
 end
 
-local function indexOf(this, value, charIndex, numChars, comparisonType)
-    charIndex, numChars = checkIndex(this, charIndex, numChars)
-    local startIndex, count = utf8CharIndexCountToByteIndexCount(this, charIndex + 1, numChars)
+local function indexOf(thisStr, value, charIndex, numChars, comparisonType)
+    charIndex, numChars = checkIndex(thisStr, charIndex, numChars)
+    local startIndex, count = utf8CharIndexCountToByteIndexCount(thisStr, charIndex + 1, numChars)
     startIndex = startIndex - 1
     if type(value) == "number" then
         value = char(value)
     end
     local ignoreCase = comparisonType and comparisonType % 2 ~= 0
     if ignoreCase then
-        this, value = lower(this), lower(value)
+        thisStr, value = lower(thisStr), lower(value)
     end
-    local i, j = find(this, value, startIndex + 1, true)
+    local i, j = find(thisStr, value, startIndex + 1, true)
     if i then
         local e = startIndex + count
         if j <= e then
-            return utf8len(this, 1, i) - 1
+            return utf8len(thisStr, 1, i) - 1
         --return i - 1
         end
         return -1
@@ -378,135 +418,157 @@ local function indexOf(this, value, charIndex, numChars, comparisonType)
 end
 -- LuaSystemString[method](obj, ...)
 LuaSystemString = {
-    CompareTo__String = function(this, v)
+    CompareTo__String = function(thisStr, v)
         if v == nil then
             return 1
         end
+        thisStr = csstrtoluastr(thisStr)
         v = csstrtoluastr(v)
         if type(v) ~= "string" then
             error("Arg must be string")
         end
-        return compare(this, v)
+        return compare(thisStr, v)
     end, -- 不确定是哪一种比较方式？忽略大小写？全字匹配？
-    Contains = function(this, value)
+    Contains = function(thisStr, value)
         if value == nil then
             error("value is nil")
         end
+        thisStr = csstrtoluastr(thisStr)
         value = csstrtoluastr(value)
-        return find(this, value, 1, true) ~= nil
+        return find(thisStr, value, 1, true) ~= nil
     end,
-    EndsWith__String = function(this, suffix)
+    EndsWith__String = function(thisStr, suffix)
+        thisStr = csstrtoluastr(thisStr)
         suffix = csstrtoluastr(suffix)
-        return suffix == "" or sub(this, -(#suffix)) == suffix
+        return suffix == "" or sub(thisStr, -(#suffix)) == suffix
     end,
-    Equals__String = function(this, v)
+    Equals__String = function(thisStr, v)
+        thisStr = csstrtoluastr(thisStr)
         v = csstrtoluastr(v)
         if type(v) == "string" then
-            return this == v
+            return thisStr == v
         end
         return false
     end,
-    IndexOf__Char = function(this, value)
+    IndexOf__Char = function(thisStr, value)
+        thisStr = csstrtoluastr(thisStr)
         value = csstrtoluastr(value)
-        return indexOf(this, value, 0, 0, 0)
+        return indexOf(thisStr, value, 0, 0, 0)
     end,
-    IndexOf__String = function(this, value)
+    IndexOf__String = function(thisStr, value)
+        thisStr = csstrtoluastr(thisStr)
         value = csstrtoluastr(value)
-        return indexOf(this, value, 0, 0, 0)
+        return indexOf(thisStr, value, 0, 0, 0)
     end,
-    IndexOf__String__StringComparison = function(this, value, strComparison)
+    IndexOf__String__StringComparison = function(thisStr, value, strComparison)
+        thisStr = csstrtoluastr(thisStr)
         value = csstrtoluastr(value)
-        return indexOf(this, value, 0, 0, strComparison)
+        return indexOf(thisStr, value, 0, 0, strComparison)
     end,
-    Insert = function(this, charIndex, value)
-        charIndex = onlycheckIndex(this, charIndex)
-        local startIndex = utf8CharIndexToByteIndex(this, charIndex + 1) - 1
+    Insert = function(thisStr, charIndex, value)
+        thisStr = csstrtoluastr(thisStr)
+        charIndex = onlycheckIndex(thisStr, charIndex)
+        local startIndex = utf8CharIndexToByteIndex(thisStr, charIndex + 1) - 1
         value = csstrtoluastr(value)
-        return sub(this, 1, startIndex) .. value .. sub(this, startIndex + 1)
+        return sub(thisStr, 1, startIndex) .. value .. sub(thisStr, startIndex + 1)
     end,
-    LastIndexOf__Char = function(this, value)
+    LastIndexOf__Char = function(thisStr, value)
+        thisStr = csstrtoluastr(thisStr)
         value = csstrtoluastr(value)
-        return lastIndexOf(this, value, 0, 0, 0)
+        return lastIndexOf(thisStr, value, 0, 0, 0)
     end,
-    LastIndexOf__String = function(this, value)
+    LastIndexOf__String = function(thisStr, value)
+        thisStr = csstrtoluastr(thisStr)
         value = csstrtoluastr(value)
-        return lastIndexOf(this, value, 0, 0, 0)
+        return lastIndexOf(thisStr, value, 0, 0, 0)
     end,
-    LastIndexOf__String__StringComparison = function(this, value, strComparison)
+    LastIndexOf__String__StringComparison = function(thisStr, value, strComparison)
+        thisStr = csstrtoluastr(thisStr)
         value = csstrtoluastr(value)
-        return lastIndexOf(this, value, 0, 0, strComparison)
+        return lastIndexOf(thisStr, value, 0, 0, strComparison)
     end,
-    PadLeft__Int32__Char = function(this, totalWidth, paddingChar)
-        local len = #this
+    PadLeft__Int32__Char = function(thisStr, totalWidth, paddingChar)
+        thisStr = csstrtoluastr(thisStr)
+        local len = #thisStr
         if len >= totalWidth then
-            return this
+            return thisStr
         else
             paddingChar = paddingChar or 0x20
-            return rep(char(paddingChar), totalWidth - len) .. this
+            return rep(char(paddingChar), totalWidth - len) .. thisStr
         end
     end,
-    PadRight__Int32__Char = function(this, totalWidth, paddingChar)
-        local len = #this
+    PadRight__Int32__Char = function(thisStr, totalWidth, paddingChar)
+        thisStr = csstrtoluastr(thisStr)
+        local len = #thisStr
         if len >= totalWidth then
-            return this
+            return thisStr
         else
             paddingChar = paddingChar or 0x20
-            return this .. rep(char(paddingChar), totalWidth - len)
+            return thisStr .. rep(char(paddingChar), totalWidth - len)
         end
     end,
-    Remove__Int32 = function(this, charIndex)
-        charIndex = onlycheckIndex(this, charIndex)
-        local startIndex = utf8CharIndexToByteIndex(this, charIndex + 1) - 1
-        return sub(this, 1, startIndex)
+    Remove__Int32 = function(thisStr, charIndex)
+        thisStr = csstrtoluastr(thisStr)
+        charIndex = onlycheckIndex(thisStr, charIndex)
+        local startIndex = utf8CharIndexToByteIndex(thisStr, charIndex + 1) - 1
+        return sub(thisStr, 1, startIndex)
     end,
-    Remove__Int32__Int32 = function(this, charIndex, numChars)
-        charIndex, numChars = checkIndex(this, charIndex, numChars)
-        local startIndex, count = utf8CharIndexCountToByteIndexCount(this, charIndex + 1, numChars)
+    Remove__Int32__Int32 = function(thisStr, charIndex, numChars)
+        thisStr = csstrtoluastr(thisStr)
+        charIndex, numChars = checkIndex(thisStr, charIndex, numChars)
+        local startIndex, count = utf8CharIndexCountToByteIndexCount(thisStr, charIndex + 1, numChars)
         startIndex = startIndex - 1
-        return sub(this, 1, startIndex) .. sub(this, startIndex + 1 + count)
+        return sub(thisStr, 1, startIndex) .. sub(thisStr, startIndex + 1 + count)
     end,
     Replace__Char__Char = replace,
     Replace__String__String = replace,
-    Split__A_Char = function(this, str)
+    Split__A_Char = function(thisStr, str)
+        thisStr = csstrtoluastr(thisStr)
         str = csstrtoluastr(str)
-        return split(this, str, 0x7fffffff, 0)
+        return split(thisStr, str, 0x7fffffff, 0)
     end,
-    Split__A_Char__StringSplitOptions = function(this, str, options)
+    Split__A_Char__StringSplitOptions = function(thisStr, str, options)
+        thisStr = csstrtoluastr(thisStr)
         str = csstrtoluastr(str)
-        return split(this, str, 0x7fffffff, options)
+        return split(thisStr, str, 0x7fffffff, options)
     end,
-    StartsWith__String = function(this, prefix)
+    StartsWith__String = function(thisStr, prefix)
+        thisStr = csstrtoluastr(thisStr)
         prefix = csstrtoluastr(prefix)
-        return sub(this, 1, #prefix) == prefix
+        return sub(thisStr, 1, #prefix) == prefix
     end,
-    Substring__Int32 = function(this, charIndex)
-        local len = utf8len(this)
+    Substring__Int32 = function(thisStr, charIndex)
+        thisStr = csstrtoluastr(thisStr)
+        local len = utf8len(thisStr)
         if charIndex < 0 or charIndex > len then
-            error("charIndex " .. tostring(charIndex) .. " out of range [0.." .. tostring(len - 1) .. "] str: " .. this)
+            error("charIndex " .. tostring(charIndex) .. " out of range [0.." .. tostring(len - 1) .. "] str: " .. thisStr)
         end
-        return utf8sub(this, charIndex + 1, len)
+        return utf8sub(thisStr, charIndex + 1, len)
     end,
-    Substring__Int32__Int32 = function(this, charIndex, numChars)
-        local len = utf8len(this)
+    Substring__Int32__Int32 = function(thisStr, charIndex, numChars)
+        thisStr = csstrtoluastr(thisStr)
+        local len = utf8len(thisStr)
         if charIndex < 0 or charIndex > len then
-            error("charIndex " .. tostring(charIndex) .. " out of range [0.." .. tostring(len - 1) .. "] str: " .. this)
+            error("charIndex " .. tostring(charIndex) .. " out of range [0.." .. tostring(len - 1) .. "] str: " .. thisStr)
         end
         if numChars < 0 or charIndex + numChars > len then
             error(
                 "numChars " ..
-                    tostring(numChars) .. " out of range [0.." .. tostring(len - charIndex) .. "] str: " .. this
+                    tostring(numChars) .. " out of range [0.." .. tostring(len - charIndex) .. "] str: " .. thisStr
             )
         end
-        return utf8sub(this, charIndex + 1, numChars)
+        return utf8sub(thisStr, charIndex + 1, numChars)
     end,
-    ToCharArray = function(str, charIndex, numChars)
-        charIndex, numChars = checkIndex(str, charIndex, numChars)
-        return getUtf8CharArray(str, charIndex + 1, numChars)
+    ToCharArray = function(thisStr, charIndex, numChars)
+        thisStr = csstrtoluastr(thisStr)
+        charIndex, numChars = checkIndex(thisStr, charIndex, numChars)
+        return getUtf8CharArray(thisStr, charIndex + 1, numChars)
     end,
-    ToLower = lower,
-    ToString = tostring,
-    ToUpper = upper,
-    Trim = function(this, chars, ...)
+    ToLower = tolower,
+    ToString = mytostring,
+    ToUpper = toupper,
+    Trim = function(thisStr, chars, ...)
+        thisStr = csstrtoluastr(thisStr)
         chars = csstrtoluastr(chars)
         if not chars then
             chars = "^%s*(.-)%s*$"
@@ -519,9 +581,10 @@ LuaSystemString = {
             chars = escape(chars)
             chars = "^[" .. chars .. "]*(.-)[" .. chars .. "]*$"
         end
-        return (gsub(this, chars, "%1"))
+        return (gsub(thisStr, chars, "%1"))
     end,
-    TrimEnd = function(this, chars, ...)
+    TrimEnd = function(thisStr, chars, ...)
+        thisStr = csstrtoluastr(thisStr)
         chars = csstrtoluastr(chars)
         if not chars then
             chars = "(.-)%s*$"
@@ -534,9 +597,10 @@ LuaSystemString = {
             chars = escape(chars)
             chars = "(.-)[" .. chars .. "]*$"
         end
-        return (gsub(this, chars, "%1"))
+        return (gsub(thisStr, chars, "%1"))
     end,
-    TrimStart = function(this, chars, ...)
+    TrimStart = function(thisStr, chars, ...)
+        thisStr = csstrtoluastr(thisStr)
         chars = csstrtoluastr(chars)
         if not chars then
             chars = "^%s*(.-)"
@@ -549,14 +613,16 @@ LuaSystemString = {
             chars = escape(chars)
             chars = "^[" .. chars .. "]*(.-)"
         end
-        return (gsub(this, chars, "%1"))
+        return (gsub(thisStr, chars, "%1"))
     end,
-    GetChar = function(obj, index)
-        return getUtf8Char(obj, index + 1)
+    GetChar = function(thisStr, index)
+        thisStr = csstrtoluastr(thisStr)
+        return getUtf8Char(thisStr, index + 1)
     end,
-    GetProperty = function(obj, name)
+    GetProperty = function(thisStr, name)
+        thisStr = csstrtoluastr(thisStr)
         if name == "Length" then
-            return utf8len(obj)
+            return utf8len(thisStr)
         elseif name == "Empty" then
             return ""
         end

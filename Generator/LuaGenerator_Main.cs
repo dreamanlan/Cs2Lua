@@ -2746,9 +2746,13 @@ namespace Generator
                     else {
                         if (id == "if") {
                             sb.Append("if ");
+                            if (data.GetParamNum() > 1)
+                                data.Params.RemoveAt(1);
                         }
                         else if (id == "elseif") {
                             sb.Append("elseif ");
+                            if (data.GetParamNum() > 1)
+                                data.Params.RemoveAt(1);
                         }
                         else if (id == "while") {
                             sb.Append("while ");
@@ -3071,6 +3075,8 @@ namespace Generator
             }
             else if (id == "if") {
                 var condExp = fcall.GetParam(0);
+                if (fcall.GetParamNum() > 1)
+                    fcall.Params.RemoveAt(1);
                 Dsl.FunctionData closure1 = null;
                 Dsl.FunctionData closure2 = null;
                 Dsl.FunctionData oper = null;
@@ -3425,21 +3431,32 @@ namespace Generator
                 var fdata = data.First;
                 var fcall = fdata.LowerOrderFunction;
                 var condExp = fcall.GetParam(0);
+                var postfix = string.Empty;
+                if (fcall.GetParamNum() > 1) {
+                    postfix = fcall.GetParamId(1);
+                    fcall.Params.RemoveAt(1);
+                }
                 Dsl.FunctionData closure1 = null;
                 Dsl.FunctionData closure2 = null;
                 Dsl.FunctionData oper = null;
                 string closure2VarName = string.Empty;
                 bool prefix = false;
                 if (CanRemoveClosure(condExp, out closure1, out closure2) || CanSplitPrefixPostfixOperator(condExp, out oper, out prefix)) {
+                    sb.AppendLine("--");
+                    if (null != closure2) {
+                        sb.Append(GetIndentString(indent));
+                        sb.Append("local __if_handled_");
+                        sb.Append(postfix);
+                        sb.Append(" = false;");
+                        sb.AppendLine();
+                    }
                     //TryGetValue这样的单一条件表达式可以提到if语句外面
                     if (null != closure1) {
-                        sb.AppendLine("--");
                         GenerateClosure(closure1, sb, indent, true, funcOpts, calculator);
                         var p = closure1.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                         p.SetId("false");
                     }
                     if (null != closure2) {
-                        sb.AppendLine("--");
                         var p1 = closure2.LowerOrderFunction.GetParam(0) as Dsl.ValueData;
                         var p2 = closure2.LowerOrderFunction.GetParam(1) as Dsl.ValueData;
                         closure2VarName = p2.GetId();
@@ -3447,8 +3464,7 @@ namespace Generator
                         p2.SetId("true");
                     }
                     if (null != oper) {
-                        sb.AppendLine("--");
-                        sb.AppendFormat("{0}", GetIndentString(indent));
+                        sb.Append(GetIndentString(indent));
                         GeneratePrefixPostfixOperator(oper, sb, true, funcOpts, calculator);
                         sb.AppendLine(";");
                         var p = oper.GetParam(0) as Dsl.ValueData;
@@ -3472,6 +3488,11 @@ namespace Generator
 
                         sb.AppendFormatLine("{0}if {1} then", GetIndentString(indent), closure2VarName);
                         ++indent;
+                        sb.Append(GetIndentString(indent));
+                        sb.Append("__if_handled_");
+                        sb.Append(postfix);
+                        sb.Append(" = true;");
+                        sb.AppendLine();
                     }
                     GenerateStatements(fdata, sb, indent, funcOpts, calculator);
                     if (null != closure2) {
@@ -3490,12 +3511,18 @@ namespace Generator
                         if (funcData.IsHighOrder) {
                             fcd = funcData.LowerOrderFunction;
                             var elseCondExp = fcd.GetParam(0);
-                            if (CanRemoveClosure(elseCondExp) || CanSplitPrefixPostfixOperator(elseCondExp)) {
+                            if (null != closure2 || CanRemoveClosure(elseCondExp) || CanSplitPrefixPostfixOperator(elseCondExp)) {
                                 for (int i = 0; i < ix; ++i) {
                                     data.Functions.RemoveAt(0);
                                 }
-                                data.First.LowerOrderFunction.Name.SetId("if");
-                                sb.AppendFormatLine("{0}else", GetIndentString(indent));
+                                if (null != closure2) {
+                                    sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                                    sb.AppendFormatLine("{0}if not __if_handled_{1} then", GetIndentString(indent), postfix);
+                                }
+                                else {
+                                    sb.AppendFormatLine("{0}else", GetIndentString(indent));
+                                }
+                                fcd.Name.SetId("if");
                                 ++indent;
                                 GenerateConcreteSyntax(data, sb, indent, true, funcOpts, calculator);
                                 --indent;
@@ -3503,6 +3530,18 @@ namespace Generator
                                 sb.AppendFormat("{0}end", GetIndentString(indent));
                                 break;
                             }
+                        }
+                        else if (null != closure2) {
+                            for (int i = 0; i < ix; ++i) {
+                                data.Functions.RemoveAt(0);
+                            }
+                            sb.AppendFormatLine("{0}end;", GetIndentString(indent));
+                            sb.AppendFormatLine("{0}if not __if_handled_{1} then", GetIndentString(indent), postfix);
+                            ++indent;
+                            GenerateStatements(funcData, sb, indent, funcOpts, calculator);
+                            --indent;
+                            sb.AppendFormat("{0}end", GetIndentString(indent));
+                            break;
                         }
                         GenerateConcreteSyntaxForCall(fcd, sb, indent, funcData == data.First ? false : true, funcOpts, calculator);
                         if (funcData.HaveStatement()) {

@@ -495,6 +495,7 @@ namespace RoslynTool.CsToDsl
         }
         public override void VisitIfStatement(IfStatementSyntax node)
         {
+            string postfix = GetSourcePosForVar(node);
             CodeBuilder.AppendFormat("{0}if( ", GetIndentString());
             var oper = m_Model.GetOperationEx(node) as IConditionalOperation;
             IConversionOperation opd = null;
@@ -502,6 +503,8 @@ namespace RoslynTool.CsToDsl
                 opd = oper.Condition as IConversionOperation;
             }
             OutputExpressionSyntax(node.Condition, opd);
+            CodeBuilder.Append(", ");
+            CodeBuilder.Append(postfix);
             CodeBuilder.AppendLine(" ){");
             ++m_Indent;
             node.Statement.Accept(this);
@@ -518,6 +521,7 @@ namespace RoslynTool.CsToDsl
         {
             IfStatementSyntax ifNode = node.Statement as IfStatementSyntax;
             if (null != ifNode) {
+                string postfix = GetSourcePosForVar(node);
                 CodeBuilder.AppendFormat("{0}}}elseif( ", GetIndentString());
                 var oper = m_Model.GetOperationEx(node) as IConditionalOperation;
                 IConversionOperation opd = null;
@@ -525,6 +529,8 @@ namespace RoslynTool.CsToDsl
                     opd = oper.Condition as IConversionOperation;
                 }
                 OutputExpressionSyntax(ifNode.Condition, opd);
+                CodeBuilder.Append(", ");
+                CodeBuilder.Append(postfix);
                 CodeBuilder.AppendLine(" ){");
                 ++m_Indent;
                 ifNode.Statement.Accept(this);
