@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- reference:https://github.com/yanghuan/CSharp.lua/blob/master/CSharp.lua/CoreSystem.Lua/CoreSystem/String.lua
+-- reference:https://my.oschina.net/u/1175660/blog/1796629
+-- reference:https://github.com/britzl/gooey/blob/master/gooey/internal/utf8.lua
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 local char = string.char
@@ -111,6 +113,75 @@ local function utf8CharIndexCountToByteIndexCount(str, charIndex, numChars)
     return byteIndex, currentIndex - byteIndex
 end
 
+local c_shift_6  = 2^6
+local c_shift_12 = 2^12
+local c_shift_18 = 2^18
+local function getUnicodeCharFromUtf8Str(str, charIndex)
+    local len = utf8len(str)
+    if charIndex < 1 or charIndex > len then
+        return 0
+    end
+    local byteIndex = utf8CharIndexToByteIndex(str, charIndex)
+    local ch = byte(str, byteIndex)
+    local bytes = utf8charsize(ch)
+	local unicode = 0
+
+	if bytes == 1 then 
+        unicode = ch
+    end
+	if bytes == 2 then
+		local byte0, byte1 = byte(str, byteIndex, byteIndex + 1)
+		local code0,code1 = byte0-0xC0,byte1-0x80
+		unicode = code0*c_shift_6 + code1
+	end
+	if bytes == 3 then
+		local byte0,byte1,byte2 = byte(str, byteIndex, byteIndex + 2)
+		local code0,code1,code2 = byte0-0xE0,byte1-0x80,byte2-0x80
+		unicode = code0*c_shift_12 + code1*c_shift_6 + code2
+	end
+	if bytes == 4 then
+		local byte0,byte1,byte2,byte3 = byte(str, byteIndex, byteIndex + 3)
+		local code0,code1,code2,code3 = byte0-0xF0,byte1-0x80,byte2-0x80,byte3-0x80
+		unicode = code0*c_shift_18 + code1*c_shift_12 + code2*c_shift_6 + code3
+	end
+	return unicode
+end
+
+local function getUnicodeCharArrayFromUtf8Str(str, charIndex, numChars)
+    local byteIndex, byteCount = utf8CharIndexCountToByteIndexCount(str, charIndex, numChars)
+    local t = {}
+    local len = 1
+    while len <= numChars do
+        local ch = byte(str, byteIndex)
+        local ct = utf8charsize(ch)
+
+        local unicode = 0    
+        if ct == 1 then 
+            unicode = ch
+        end
+        if ct == 2 then
+            local byte0, byte1 = byte(str, byteIndex, byteIndex + 1)
+            local code0, code1 = byte0-0xC0, byte1-0x80
+            unicode = code0*c_shift_6 + code1
+        end
+        if ct == 3 then
+            local byte0, byte1, byte2 = byte(str, byteIndex, byteIndex + 2)
+            local code0, code1, code2 = byte0-0xE0, byte1-0x80, byte2-0x80
+            unicode = code0*c_shift_12 + code1*c_shift_6 + code2
+        end
+        if ct == 4 then
+            local byte0, byte1, byte2, byte3 = byte(str, byteIndex, byteIndex + 3)
+            local code0, code1, code2, code3 = byte0-0xF0, byte1-0x80, byte2-0x80, byte3-0x80
+            unicode = code0*c_shift_18 + code1*c_shift_12 + code2*c_shift_6 + code3
+        end
+        
+        t[len] = unicode
+        byteIndex = byteIndex + ct
+        len = len + 1
+    end
+    return wraparray(t)
+end
+
 local function getUtf8Char(str, charIndex)
     local len = utf8len(str)
     if charIndex < 1 or charIndex > len then
@@ -146,6 +217,40 @@ local function getUtf8CharArray(str, charIndex, numChars)
         len = len + 1
     end
     return wraparray(t)
+end
+
+local function unicodeChar2Utf8Char(unicode)
+    local unival = unicode
+    if type(unicode)=="string" then
+        return getUtf8Char(unicode, 1)
+    end
+    if unival <= 0x7F then
+        return unival
+    end
+    if (unival <= 0x7FF) then
+        local byte0 = 0xC0 + math.floor(unival / 0x40);
+        local byte1 = 0x80 + (unival % 0x40);
+        return byte0 + byte1*256;
+    end
+    if (unival <= 0xFFFF) then
+        local byte0 = 0xE0 +  math.floor(unival / 0x1000);
+        local byte1 = 0x80 + (math.floor(unival / 0x40) % 0x40);
+        local byte2 = 0x80 + (unival % 0x40);
+        return byte0 + byte1 * 256 + byte2 * 256 * 256;
+    end
+    if (unival <= 0x10FFFF) then
+        local code = unival
+        local byte3= 0x80 + (code % 0x40);
+        code       = math.floor(code / 0x40)
+        local byte2= 0x80 + (code % 0x40);
+        code       = math.floor(code / 0x40)
+        local byte1= 0x80 + (code % 0x40);
+        code       = math.floor(code / 0x40)
+        local byte0= 0xF0 + code;
+
+        return byte0 + byte1 * 256 + byte2 * 256 * 256 + byte3 * 256 * 256 * 256;
+    end
+    error('Unicode cannot be greater than U+10FFFF!')
 end
 
 --上面的index与lua保持一致，即从1开始
@@ -562,62 +667,137 @@ LuaSystemString = {
     ToCharArray = function(thisStr, charIndex, numChars)
         thisStr = csstrtoluastr(thisStr)
         charIndex, numChars = checkIndex(thisStr, charIndex, numChars)
-        return getUtf8CharArray(thisStr, charIndex + 1, numChars)
+        return getUnicodeCharArrayFromUtf8Str(thisStr, charIndex + 1, numChars)
     end,
     ToLower = tolower,
     ToString = mytostring,
     ToUpper = toupper,
     Trim = function(thisStr, chars, ...)
         thisStr = csstrtoluastr(thisStr)
-        chars = csstrtoluastr(chars)
         if not chars then
             chars = "^%s*(.-)%s*$"
+            return (gsub(thisStr, chars, "%1"))
         else
+            local hash = {}
             if type(chars) == "table" then
-                chars = char(unpack(chars))
+                for i,v in ipairs(chars) do
+                    v = unicodeChar2Utf8Char(v)
+                    hash[v] = true
+                end
             else
-                chars = char(chars, ...)
+                chars = unicodeChar2Utf8Char(chars)
+                hash[chars] = true
+                local argnum = select("#", ...)
+                for i = 1, argnum do
+                    local v = select(i, ...)
+                    v = unicodeChar2Utf8Char(v)
+                    hash[v] = true
+                end
             end
-            chars = escape(chars)
-            chars = "^[" .. chars .. "]*(.-)[" .. chars .. "]*$"
+            local len = utf8len(thisStr)
+            local st = len
+            for i = 1,len do
+                local u8char = getUtf8Char(thisStr, i)
+                if not hash[u8char] then
+                    st = i
+                    break
+                end
+            end
+            local ed = st-1
+            for i = len,st-1,-1 do
+                local u8char = getUtf8Char(thisStr, i)
+                if not hash[u8char] then
+                    ed = i
+                    break
+                end
+            end
+            if st<=ed then
+                return utf8sub(thisStr, st, ed-st+1)
+            else
+                return ""
+            end
         end
-        return (gsub(thisStr, chars, "%1"))
     end,
     TrimEnd = function(thisStr, chars, ...)
         thisStr = csstrtoluastr(thisStr)
-        chars = csstrtoluastr(chars)
         if not chars then
             chars = "(.-)%s*$"
+            return (gsub(thisStr, chars, "%1"))
         else
+            local hash = {}
             if type(chars) == "table" then
-                chars = char(unpack(chars))
+                for i,v in ipairs(chars) do
+                    v = unicodeChar2Utf8Char(v)
+                    hash[v] = true
+                end
             else
-                chars = char(chars, ...)
+                chars = unicodeChar2Utf8Char(chars)
+                hash[chars] = true
+                local argnum = select("#", ...)
+                for i = 1, argnum do
+                    local v = select(i, ...)
+                    v = unicodeChar2Utf8Char(v)
+                    hash[v] = true
+                end
             end
-            chars = escape(chars)
-            chars = "(.-)[" .. chars .. "]*$"
+            local len = utf8len(thisStr)
+            local ed = 0
+            for i = len,0,-1 do
+                local u8char = getUtf8Char(thisStr, i)
+                if not hash[u8char] then
+                    ed = i
+                    break
+                end
+            end
+            if 1<=ed then
+                return utf8sub(thisStr, 1, ed)
+            else
+                return ""
+            end
         end
-        return (gsub(thisStr, chars, "%1"))
     end,
     TrimStart = function(thisStr, chars, ...)
         thisStr = csstrtoluastr(thisStr)
         chars = csstrtoluastr(chars)
         if not chars then
             chars = "^%s*(.-)"
+            return (gsub(thisStr, chars, "%1"))
         else
+            local hash = {}
             if type(chars) == "table" then
-                chars = char(unpack(chars))
+                for i,v in ipairs(chars) do
+                    v = unicodeChar2Utf8Char(v)
+                    hash[v] = true
+                end
             else
-                chars = char(chars, ...)
+                chars = unicodeChar2Utf8Char(chars)
+                hash[chars] = true
+                local argnum = select("#", ...)
+                for i = 1, argnum do
+                    local v = select(i, ...)
+                    v = unicodeChar2Utf8Char(v)
+                    hash[v] = true
+                end
             end
-            chars = escape(chars)
-            chars = "^[" .. chars .. "]*(.-)"
+            local len = utf8len(thisStr)
+            local st = len+1
+            for i = 1,len+1 do
+                local u8char = getUtf8Char(thisStr, i)
+                if not hash[u8char] then
+                    st = i
+                    break
+                end
+            end
+            if st<=len then
+                return utf8sub(thisStr, st, len-st+1)
+            else
+                return ""
+            end
         end
-        return (gsub(thisStr, chars, "%1"))
     end,
     GetChar = function(thisStr, index)
         thisStr = csstrtoluastr(thisStr)
-        return getUtf8Char(thisStr, index + 1)
+        return getUnicodeCharFromUtf8Str(thisStr, index + 1)
     end,
     GetProperty = function(thisStr, name)
         thisStr = csstrtoluastr(thisStr)
