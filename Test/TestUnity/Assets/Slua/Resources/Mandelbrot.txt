@@ -80,7 +80,10 @@ Mandelbrot = {
 						end;
 					end;
 					i = (i - 1);
-				until not (i > 0) ;
+					if not (i > 0) then
+						break;
+					end;
+				until false ;
 				if isInside then 
 					Mandelbrot.DrawCube(this, x, y, width, height);
 				end;
@@ -141,25 +144,14 @@ Mandelbrot = {
 
 		local class = Mandelbrot;
 		local obj_methods = {
-			__self__Init = rawget(class, "__self__Init");
 			Init = rawget(class, "Init"),
-			__self__Call = rawget(class, "__self__Call");
 			Call = rawget(class, "Call"),
 			Exec = rawget(class, "Exec"),
 			DrawCube = rawget(class, "DrawCube"),
-			__ori_DrawCube = rawget(class, "__ori_DrawCube"),
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
-			__ori___ctor = rawget(class, "__ori___ctor"),
 		};
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "Init");
-		rawset(class, "__self__Init", tmp_obj_method);
-		tmp_obj_method = rawget(class, "Call");
-		rawset(class, "__self__Call", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
 
 		local __defineclass_return = defineclass(nil, "Mandelbrot", "Mandelbrot", class, obj_methods, false, false);
 		Utility.Warn("Mandelbrot::__define_class end");

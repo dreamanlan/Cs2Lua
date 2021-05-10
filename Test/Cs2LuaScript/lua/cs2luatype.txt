@@ -10,6 +10,12 @@ Cs2LuaType = {
 		return __method_ret_7_4_11_5;
 	end,
 
+	GetName = function(type)
+		local __method_ret_12_4_16_5;
+		__method_ret_12_4_16_5 = Cs2LuaTypeImpl.GetName(type);
+		return __method_ret_12_4_16_5;
+	end,
+
 	cctor = function()
 		Cs2LuaType.__cctor();
 	end,

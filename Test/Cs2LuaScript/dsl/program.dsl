@@ -4,6 +4,7 @@ require("cs2dsl__namespaces");
 require("cs2dsl__externenums");
 require("cs2dsl__interfaces");
 require("lualib_valuetypescript");
+require("lualib_basic");
 
 class(Program) {
 	static_methods {

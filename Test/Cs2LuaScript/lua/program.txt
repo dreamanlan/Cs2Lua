@@ -67,5 +67,6 @@ require "cs2lua__attributes";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 require "lualib_valuetypescript";
+require "lualib_basic";
 settempmetatable(Program);
 defineentry(Program);

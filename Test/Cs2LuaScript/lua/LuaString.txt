@@ -74,13 +74,10 @@ LuaString = {
 
 		local class = LuaString;
 		local obj_methods = {
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
 
 		local __defineclass_return = defineclass(nil, "LuaString", "LuaString", class, obj_methods, false, false);
 		Utility.Warn("LuaString::__define_class end");

@@ -2226,7 +2226,7 @@ namespace RoslynTool.CsToDsl
                         Log(memberAccess, "Unsupported -> member access !");
                     }
 
-                    if (!sym.ReturnsVoid && ct > 0 || ct > 1) {
+                    if (!sym.ReturnsVoid && ct > 0 || ct > 1 || !string.IsNullOrEmpty(preCodeBlock) || !string.IsNullOrEmpty(postCodeBlock)) {
                         if (!toplevel) {
                             CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}, ", localName, preCodeBlock, postCodeBlock);
                         }
@@ -2263,7 +2263,7 @@ namespace RoslynTool.CsToDsl
                         CodeBuilder.AppendLine();
                 }
                 else {
-                    if (!sym.ReturnsVoid && ct > 0 || ct > 1) {
+                    if (!sym.ReturnsVoid && ct > 0 || ct > 1 || !string.IsNullOrEmpty(preCodeBlock) || !string.IsNullOrEmpty(postCodeBlock)) {
                         if (!toplevel) {
                             CodeBuilder.AppendFormat("execclosure(true, {0}, true){{ multiassign(precode{{{1}}},postcode{{{2}}})varlist({0}, ", localName, preCodeBlock, postCodeBlock);
                         }

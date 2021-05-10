@@ -250,19 +250,32 @@ OperationKind = {
 g_LuaStr2CsStrCaches = {}
 g_CsStr2LuaStrCaches = {}
 
-function csstrtoluastr(str)
+function forwardtocsstr(str)
     if str==nil then
         return nil        
-    elseif type(str) == "string" then
+    elseif type(str)=="string" then
+        return System.String.ctor__A_Char(str)
+    else
         return str
-    elseif type(str) == "userdata" then
-        local v = g_CsStr2LuaStrCaches[str]
-        if v==nil then
-            local s = tostring(str)
-            g_CsStr2LuaStrCaches[str] = s
-            return s
+    end
+end
+
+function csstrtoluastr(str)
+    if str==nil then
+        return nil
+    elseif type(str)=="userdata" then
+        local meta = getmetatable(str)
+        if meta and rawget(meta, "__typename")=="String" then
+            local v = g_CsStr2LuaStrCaches[str]
+            if v==nil then
+                local s = tostring(str)
+                g_CsStr2LuaStrCaches[str] = s
+                return s
+            else
+                return v
+            end
         else
-            return v
+            return str
         end
     else
         return str
@@ -272,17 +285,15 @@ end
 function luastrtocsstr(str)
     if str==nil then
         return nil
-    elseif type(str) == "string" then
+    elseif type(str)=="string" then
         local v = g_LuaStr2CsStrCaches[str]
         if v==nil then
-            local s = System.String.ctor__A_Char(str)
+            local s = forwardtocsstr(str)
             g_LuaStr2CsStrCaches[str] = s
             return s
         else
             return v
         end
-    elseif type(str) == "userdata" then
-        return str
     else
         return str
     end
@@ -543,7 +554,11 @@ function getexterninstanceindexer(elementType, elementTypeKind, callerClass, obj
             elseif typename == "LuaVarObject" then
                 return obj[index]
             elseif name == "get_Chars" then
-                return Utility.StringGetChar(obj, index)
+                local c = LuaSystemString.GetChar(obj, index)
+                if not c then
+                    error("index out of range")
+                end
+                return c
             else
                 return obj:getItem(index)
             end
@@ -898,44 +913,15 @@ function callbasicvalue(obj, isEnum, class, method, ...)
     if method then
         if class == System.Char and (method == "ToString" or 1 == string.find(method, "ToString__")) then
             return Utility.CharToString(obj)
-        elseif class == System.String and (method == "CompareTo" or 1 == string.find(method, "CompareTo__")) then
-            local a = obj
-            local b = arg1
-            if type(a) ~= "string" then
-                a = tostring(a)
-            end
-            if type(b) ~= "string" then
-                b = tostring(b)
-            end
-            if a<b then
-                return -1
-            elseif a>b then
-                return 1
-            else
-                return 0
-            end
         elseif class == System.String then
-            local csstr = obj
-            if type(obj) == "string" then
-                csstr = System.String.ctor__A_Char(obj)
-            end
-            if method == "Split__A_Char__StringSplitOptions" then
-                local arg1, arg2 = ...
-                return csstr[method](csstr, arg1, arg2)
-            elseif method == "Split" or 1 == string.find(method, "Split__") then
-                local result1, result2 = _get_first_untable_from_pack_args(...)
-                if result2 then
-                    return csstr[method](csstr, result1, result2)
-                else
-                    return csstr[method](csstr, result1)
-                end
-            elseif method == "TrimStart" then
-                local result = _get_first_untable_from_pack_args(...)
-                if type(result) == "number" then
-                    result = Utility.CharToString(result)
-                end
-                return csstr[method](csstr, result)
+            local f = LuaSystemString[method]
+            if f then
+                return f(obj, ...) 
             else
+                local csstr = obj
+                if type(obj) == "string" then
+                    csstr = forwardtocsstr(obj)
+                end
                 return csstr[method](csstr, ...)
             end
         elseif class == System.Single and method == "ToString__String" then
@@ -992,8 +978,9 @@ function getbasicvalue(obj, isEnum, class, property)
     local meta = getmetatable(obj)
     if property then
         if type(obj) == "string" then
-            local csstr = System.String.ctor__A_Char(obj)
-            return csstr[property]
+            return LuaSystemString.GetProperty(obj, property)
+            -- local csstr = System.String.ctor__A_Char(obj)
+            -- return csstr[property]
         elseif meta then
             return obj[property]
         else
@@ -1013,7 +1000,7 @@ function setbasicvalue(obj, isEnum, class, property, value)
     local meta = getmetatable(obj)
     if property then
         if type(obj) == "string" then
-            local csstr = System.String.ctor__A_Char(obj)
+            local csstr = forwardtocsstr(obj)
             csstr[property] = value
         elseif meta then
             obj[property] = value
@@ -1025,20 +1012,14 @@ function setbasicvalue(obj, isEnum, class, property, value)
     end
     return nil
 end
+
 function callarraystaticmethod(firstArray, secondArray, method, ...)
     if nil ~= firstArray and nil ~= method then
         local arg1,arg2 = ...
         local meta = getmetatable(firstArray)
         if meta and rawget(meta, "__cs2lua_defined") then
-            if method == "IndexOf" or 1 == string.find(method, "IndexOf__", 1, true) then
-                return firstArray:IndexOf(arg2)
-            elseif method == "Sort" or 1 == string.find(method, "Sort__", 1, true) then
-                return table.sort(
-                    firstArray,
-                    function(a, b)
-                        return arg2(a, b) < 0
-                    end
-                )
+            if ArrayStaticMethods[method] ~= nil then
+                return ArrayStaticMethods[method](firstArray, secondArray, method, ...)
             else
                 translationlog("need add handler for callarraystaticmethod Array.{0}", method)
                 return nil
@@ -1223,8 +1204,9 @@ RectPool = createpool("Rect",
     function()
         return UnityEngine.Rect.ctor()
     end)
-    
-function wrapenumerable(func)
+
+--slua机制（不支持c# StopCoroutine）
+function wrapenumerable0(func)
     return function(...)
         local args = {...}
         return UnityEngine.WrapEnumerator(
@@ -1237,8 +1219,27 @@ function wrapenumerable(func)
     end
 end
 
-function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
+function wrapyield0(yieldVal, isEnumerableOrEnumerator, isUnityYield)
     UnityEngine.Yield(yieldVal)
+end
+
+--xlua协程机制（支持c# StopCoroutine）
+function wrapenumerable(func)
+    return function(...)
+        local args = {...}
+        return UnityEngine.WrapEnumerator2(
+            coroutine.wrap(
+                function()
+                    func(unpack(args))
+                    return Slua.yieldbreak
+                end
+            )
+        )
+    end
+end
+
+function wrapyield(yieldVal, isEnumerableOrEnumerator, isUnityYield)
+    coroutine.yield(yieldVal)
 end
 
 function wrapconst(t, name)
@@ -1287,20 +1288,20 @@ function wrapexternstruct(v, classObj)
     return v
 end
 
-function wrapstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+function wrapstructargument(v, argType, argOperKind, argSymKind)
     return v
 end
 
-function wrapexternstructargument(v, argType, argOperKind, argSymKind, class, callerClass)
+function wrapexternstructargument(v, argType, argOperKind, argSymKind)
     translationlog("need add handler for wrapexternstructargument {0}", getclasstypename(argType))
     return v
 end
 
-function wrapstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+function wrapstructarguments(arr, argType, argOperKind, argSymKind)
     return arr
 end
 
-function wrapexternstructarguments(arr, argType, argOperKind, argSymKind, class, callerClass)
+function wrapexternstructarguments(arr, argType, argOperKind, argSymKind)
     translationlog("need add handler for wrapexternstructarguments {0}", getclasstypename(argType))
     return arr
 end
@@ -1369,7 +1370,11 @@ function getinstanceindexerstructimpl(isExtern, elementType, callerClass, obj, c
             elseif typename == "LuaVarObject" then
                 return obj[index]
             elseif name == "get_Chars" then
-                return Utility.StringGetChar(obj, index)
+                local c = LuaSystemString.GetChar(obj, index)
+                if not c then
+                    error("index out of range")
+                end
+                return c
             else
                 return obj:getItem(index)
             end
@@ -1984,6 +1989,7 @@ __mt_index_of_array_table = {
             return ret
         end,
     Add = function(obj, v)
+            v = __unwrap_if_string(v)
             table.insert(obj, v)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj);
@@ -1994,6 +2000,7 @@ __mt_index_of_array_table = {
             local ct = __get_array_count(obj)
             for i = 1, ct do
                 local v = rawget(obj, i)
+                p = __unwrap_if_string(p)
                 if isequal(v, p) then
                     pos = i
                     ret = v
@@ -2001,15 +2008,39 @@ __mt_index_of_array_table = {
                 end
             end
             if ret then
-                table.remove(obj, pos)
+                if pos == ct then
+                    rawset(obj , pos , nil);
+                else 
+                    for j = pos + 1, ct , 1 do
+                        local vj = rawget(obj , j)
+                        rawset(obj , j-1 , vj);
+                    end
+                    rawset(obj , ct , nil);
+                end
+                -- table.remove(obj, pos)
                 __dec_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
             return ret
         end,
     RemoveAt = function(obj, ix)
-            table.remove(obj, ix + 1)
-            __dec_array_count(obj)
+            local ct = __get_array_count(obj)
+            if ix + 1 == ct then
+               rawset(obj , ct ,nil) 
+            else
+                for j = ix + 2, ct , 1 do
+                    local vj = rawget(obj , j)
+                    rawset(obj , j-1 , vj);
+                end
+                if ix + 1 <= ct then
+                    rawset(obj , ct , nil);
+                end
+            end
+            
+            if ix + 1 <= ct then
+                __dec_array_count(obj)
+            end
+            -- table.remove(obj, ix + 1)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     RemoveAll = function(obj, pred)
@@ -2021,7 +2052,8 @@ __mt_index_of_array_table = {
                 end
             end
             for i, v in ipairs(deletes) do
-                table.remove(obj, v)
+                rawset(obj , i , nil)
+                --table.remove(obj, v)
                 __dec_array_count(obj)
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
@@ -2029,6 +2061,7 @@ __mt_index_of_array_table = {
     AddRange = function(obj, coll)
             local iter = newiterator(nil, coll)
             for v in getiterator(iter) do
+                v = __unwrap_if_string(v)
                 table.insert(obj, v)
                 __inc_array_count(obj)
             end
@@ -2036,6 +2069,7 @@ __mt_index_of_array_table = {
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     Insert = function(obj, ix, p)
+            p = __unwrap_if_string(p)
             table.insert(obj, ix + 1, p)
             __inc_array_count(obj)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
@@ -2051,9 +2085,19 @@ __mt_index_of_array_table = {
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
     RemoveRange = function(obj, ix, ct)
-            for i=1,ct do                
-                table.remove(obj, ix + 1)
-                __dec_array_count(obj)
+            for i=1,ct do
+                local curCount = __get_array_count(obj)
+                if ix + 1 == curCount then
+                    rawset(obj , curCount ,nil) 
+                else
+                    for j = ix + 2, curCount , 1 do
+                        local vj = rawget(obj , j)
+                        rawset(obj , j-1 , vj);
+                    end
+                end
+                if ix + 1 <= curCount then
+                    __dec_array_count(obj)
+                end
             end
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
         end,
@@ -2065,6 +2109,7 @@ __mt_index_of_array_table = {
             if start==nil then
                 start = 0
             end
+            p = __unwrap_if_string(p)
             for i = start+1, ct do
                 local v = rawget(obj, i)
                 if rawequal(v,p) then
@@ -2125,6 +2170,7 @@ __mt_index_of_array_table = {
             local ct = __get_array_count(obj)
             for i = 1, ct do
                 local v = rawget(obj, i)
+                p = __unwrap_if_string(p)
                 if rawequal(v,p) then
                     ret = true
                     break
@@ -2144,7 +2190,8 @@ __mt_index_of_array_table = {
     Dequeue = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
-            table.remove(obj, ct)
+            rawset(obj , ct ,nil)
+            -- table.remove(obj, ct)
             __dec_array_count(obj)
             return v
         end,
@@ -2155,7 +2202,8 @@ __mt_index_of_array_table = {
     Pop = function(obj)
             local ct = __get_array_count(obj)
             local v = rawget(obj, ct)
-            table.remove(obj, num)
+            rawset(obj , ct ,nil)
+            -- table.remove(obj, num)
             __dec_array_count(obj)
             return v
         end,
@@ -2176,7 +2224,8 @@ __mt_index_of_array_table = {
     Clear = function(obj)
             local ct = __get_array_count(obj)
             for i = ct, 1, -1 do
-                table.remove(obj, i)
+                rawset(obj , i , nil)
+                -- table.remove(obj, i)
             end
             __set_array_count(obj, 0)
             -- assert(__get_array_count(obj) == #obj,"not match length count:"..__get_array_count(obj).." #len:"..#obj)
@@ -2185,6 +2234,17 @@ __mt_index_of_array_table = {
             return GetArrayEnumerator(obj)
         end,
     Sort = function(obj, predicate)
+            local ct = __get_array_count(obj)
+            for i = 1, ct, 1 do
+                local v = rawget(obj, i)
+                if(isequal(v , nil)) then
+                    for j = i + 1, ct , 1 do
+                        local vj = rawget(obj , j)
+                        rawset(obj , j-1 , vj);
+                    end
+                    rawset(obj , ct , nil);
+                end
+            end
             table.sort(
                 obj,
                 function(a, b)
@@ -2220,6 +2280,10 @@ rawset(__mt_index_of_array_table, "Reverse__Int32__Int32", rawget(__mt_index_of_
 rawset(__mt_index_of_array_table, "Sort__IComparer_1_T", rawget(__mt_index_of_array_table, "Sort"))
 rawset(__mt_index_of_array_table, "Sort__Comparison_1_T", rawget(__mt_index_of_array_table, "Sort"))
 rawset(__mt_index_of_array_table, "Sort__Int32__Int32__IComparer_1_T", rawget(__mt_index_of_array_table, "Sort"))
+
+for k,v in pairs(__mt_index_of_array_table) do
+    rawset(System.Collections.Generic.List_T, k, v)
+end
 
 __mt_index_of_array = function(t, k)
     if k == "Length" or k == "Count" then
@@ -2311,6 +2375,10 @@ __mt_index_of_dictionary_table = {
 
 rawset(__mt_index_of_dictionary_table, "Remove__TKey", rawget(__mt_index_of_dictionary_table, "Remove"))
 
+for k,v in pairs(__mt_index_of_dictionary_table) do
+    rawset(System.Collections.Generic.Dictionary_TKey_TValue, k, v)
+end
+
 __mt_index_of_dictionary = function(t, k)
     if k == "Count" then
         return __get_table_count(t)
@@ -2365,6 +2433,17 @@ __mt_index_of_hashset_table = {
             __inc_table_count(obj)
             return true
         end,
+    AddRange = function(obj, coll)
+            local data = __get_table_data(obj)    
+            local iter = newiterator(nil, coll)
+            for v in getiterator(iter) do
+                v = __unwrap_if_string(v)
+                v = __get_hash_code_if_integer64(v)
+                rawset(data, v, true)
+                __inc_array_count(obj)
+            end
+            recycleiterator(nil, iter)
+        end,    
     Remove = function(obj, p)
             up = __unwrap_if_string(p) 
             local data = __get_table_data(obj)     
@@ -2386,7 +2465,6 @@ __mt_index_of_hashset_table = {
     CopyTo = function(obj, arr) 
             local data = __get_table_data(obj)     
             for k, v in pairs(data) do
-                k = __wrap_if_string(k)
                 table.insert(arr, k)
                 __inc_array_count(arr)
             end
@@ -2407,6 +2485,10 @@ rawset(__mt_index_of_hashset_table, "CopyTo__A_T", rawget(__mt_index_of_hashset_
 rawset(__mt_index_of_hashset_table, "CopyTo__A_T__Int32", rawget(__mt_index_of_hashset_table, "CopyTo"))
 rawset(__mt_index_of_hashset_table, "CopyTo__A_T__Int32__Int32", rawget(__mt_index_of_hashset_table, "CopyTo"))
 
+for k,v in pairs(__mt_index_of_hashset_table) do
+    rawset(System.Collections.Generic.HashSet_T, k, v)
+end
+
 __mt_index_of_hashset = function(t, k)
     if k == "Count" then
         return __get_table_count(t)
@@ -2420,8 +2502,7 @@ __mt_index_of_keycollection_table = {
         local t = obj.dict
         local data = __get_table_data(t)     
         for k, v in pairs(data) do
-            wk = __wrap_if_string(k)
-            table.insert(arr, wk)
+            table.insert(arr, k)
             __inc_array_count(arr)
         end
     end,
@@ -2566,7 +2647,7 @@ function GetDictKeyEnumerator(tb)
                 local v = nil 
                 local data = __get_table_data(ltb)     
                 this.key, v = next(data, this.key)
-                this.current = __wrap_if_string(this.key)
+                this.current = this.key
                 if this.key then
                     return true
                 else
@@ -2628,7 +2709,7 @@ function GetDictValueEnumerator(tb)
 end
 
 function GetHashsetEnumerator(tb)
-    local function __get_Current(obj) return __wrap_if_string(obj.Key) end
+    local function __get_Current(obj) return obj.Key end
     return setmetatable(
         {
             Reset = function(this)
@@ -2651,7 +2732,7 @@ function GetHashsetEnumerator(tb)
         {
             __index = function(t, k)
                 if k == "Current" then
-                    return __wrap_if_string(t.key)
+                    return t.key
                 elseif k == "get_Current" then
                     return __get_Current
                 end
@@ -3259,6 +3340,8 @@ function getclassfullname(t)
     if t and type(t) ~= "string" then
         if type(t) ~= "table" then
             return tostring(t)
+        elseif t == System.Type then
+            return t.FullName
         else
             warmup(t)
             if rawget(t, "__cs2lua_defined") then
@@ -3287,6 +3370,8 @@ function getclasstypename(t)
     if t and type(t) ~= "string" then
         if type(t) ~= "table" then
             return tostring(t)
+        elseif t == System.Type then
+            return t.Name
         else
             warmup(t)
             if rawget(t, "__cs2lua_defined") then
@@ -3529,21 +3614,8 @@ function stringisequal(v1, v2)
     end
 end
 
-function __wrap_if_string(val)
-    if type(val) == "string" then
-        return luastrtocsstr(val)
-    else
-        return val
-    end
-end
-
 function __unwrap_if_string(val)
-    local meta = getmetatable(val)
-    if type(val) == "userdata" and rawget(meta, "__typename") == "String" then
-        return csstrtoluastr(val)
-    else
-        return val
-    end
+    return csstrtoluastr(val)
 end
 
 function __find_extern_class_or_obj_key(k, obj)
@@ -3758,9 +3830,15 @@ function defineclass(
     return class
 end
 
+
+function getoriginalmethod(class, name)
+    local obj_methods = class.__get_obj_methods()
+    return obj_methods[name]
+end
+
 function buildbaseobj(obj, class, baseClass, baseCtor, baseCtorRetCt, ...)
     rawset(obj, "__base", nil)
-    baseClass[baseCtor](obj, ...)
+    getoriginalmethod(baseClass, baseCtor)(obj, ...)
     rawset(obj, "__ctor_called", false)
 end
 
@@ -3895,4 +3973,5 @@ function defaultvalue(t, typename, isExtern)
 end
 
 require "lualib_valuetypescript"
+require "lualib_basic"
 require "lualib_special"

@@ -74,6 +74,7 @@ namespace SLua
             add(typeof(System.Convert), "System.Convert");
             add(typeof(System.TypeCode), "System.TypeCode");
             add(typeof(System.Type), "System.Type");
+            add(typeof(System.Reflection.MemberInfo), "System.Reflection.MemberInfo");
             add(typeof(System.IO.File), "System.IO.File");
             add(typeof(System.IO.Path), "System.IO.Path");
             add(typeof(System.IO.Directory), "System.IO.Directory");

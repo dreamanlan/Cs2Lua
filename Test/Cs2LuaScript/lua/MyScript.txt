@@ -190,30 +190,15 @@ MyScript = {
 
 		local class = MyScript;
 		local obj_methods = {
-			__self__Init = rawget(class, "__self__Init");
 			Init = rawget(class, "Init"),
-			__self__Update = rawget(class, "__self__Update");
 			Update = rawget(class, "Update"),
-			__ori_Update = rawget(class, "__ori_Update"),
-			__self__Call = rawget(class, "__self__Call");
 			Call = rawget(class, "Call"),
 			TestCoroutine = rawget(class, "TestCoroutine"),
 			Reset = rawget(class, "Reset"),
-			__ori_Reset = rawget(class, "__ori_Reset"),
-			__self__ctor = rawget(class, "__self__ctor");
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
-			__ori___ctor = rawget(class, "__ori___ctor"),
 		};
 		local tmp_obj_method = nil;
-		tmp_obj_method = rawget(class, "Init");
-		rawset(class, "__self__Init", tmp_obj_method);
-		tmp_obj_method = rawget(class, "Update");
-		rawset(class, "__self__Update", tmp_obj_method);
-		tmp_obj_method = rawget(class, "Call");
-		rawset(class, "__self__Call", tmp_obj_method);
-		tmp_obj_method = rawget(class, "ctor");
-		rawset(class, "__self__ctor", tmp_obj_method);
 
 		local __defineclass_return = defineclass(nil, "MyScript", "MyScript", class, obj_methods, false, false);
 		Utility.Warn("MyScript::__define_class end");

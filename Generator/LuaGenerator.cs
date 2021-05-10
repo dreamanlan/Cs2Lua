@@ -814,17 +814,6 @@ namespace Generator
             internal List<CapturedInfo> ParamBeCaptureds = new List<CapturedInfo>();
             internal List<CapturedInfo> LocalBeCaptureds = new List<CapturedInfo>();
 
-            internal bool IsParam(string name)
-            {
-                bool ret = false;
-                foreach (var t in ParamTypes) {
-                    if (t.Name == name) {
-                        ret = true;
-                        break;
-                    }
-                }
-                return ret;
-            }
             internal bool IsBeCaptured(string name)
             {
                 bool ret = false;

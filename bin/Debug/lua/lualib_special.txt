@@ -1,18 +1,22 @@
+function recycle_and_keep_vector3(funcInfo, fieldType, oldVal, newVal)
+	recycleandkeepcheck(funcInfo, fieldType, oldVal, newVal)
+	if not rawequal(oldVal,newVal) and oldVal~=nil then
+	    Vector3Pool.Recycle(oldVal)
+	end
+	if newVal~=nil then
+	    luatableremove(funcInfo.v3_list, newVal)
+	end
+end
+
 function wrap_out_vector3(funcInfo)
 	local obj = UnityEngine.Vector3.New(0,0,0)
 	table.insert(funcInfo.v3_list, obj)
 	return obj
 end
 
-function get_unity_color_red(funcInfo)
-	local obj = UnityEngine.Color.red
+function get_unity_color_white(funcInfo)
+	local obj = UnityEngine.Color.white
 	table.insert(funcInfo.c_list , obj)
-	return obj
-end
-
-function wrap_vector3(funcInfo, v)
-	local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
-	table.insert(funcInfo.v3_list, obj)
 	return obj
 end
 
@@ -22,15 +26,9 @@ function get_unity_color_black(funcInfo)
 	return obj
 end
 
-function get_vector3_zero(funcInfo)
-	local obj = UnityEngine.Vector3.New(0,0,0)
-	table.insert(funcInfo.v3_list, obj)
-	return obj
-end
-
-function wrap_vector2(funcInfo, v)
-	local obj = UnityEngine.Vector2.New(v.x,v.y)
-	table.insert(funcInfo.v2_list, obj)
+function get_unity_color_red(funcInfo)
+	local obj = UnityEngine.Color.red
+	table.insert(funcInfo.c_list , obj)
 	return obj
 end
 
@@ -44,16 +42,34 @@ function new_vector3(funcInfo, initializer, ...)
 	return obj
 end
 
-function get_unity_color_white(funcInfo)
-	local obj = UnityEngine.Color.white
-	table.insert(funcInfo.c_list , obj)
-	return obj
-end
-
 function remove_from_func_info_color(funcInfo, class, val)
 	if val~=nil then
 	    local result = luatableremove(funcInfo.c_list, val)
 	end
+end
+
+function wrap_color(funcInfo, v)
+	local obj = UnityEngine.Color.New(v.r,v.g,v.b,v.a)
+	table.insert(funcInfo.c_list, obj)
+	return obj
+end
+
+function move_to_caller_vector3(funcInfo, class, val)
+	if val~=nil then
+	    local cfi = luagetcallerfuncinfo()
+	    if cfi then
+	        local result = luatableremove(funcInfo.v3_list, val)
+	        if result then
+	            table.insert(cfi.v3_list, val)
+	        end
+	    end
+	end
+end
+
+function wrap_vector2(funcInfo, v)
+	local obj = UnityEngine.Vector2.New(v.x,v.y)
+	table.insert(funcInfo.v2_list, obj)
+	return obj
 end
 
 function recycle_and_keep_color32(funcInfo, fieldType, oldVal, newVal)
@@ -66,9 +82,15 @@ function recycle_and_keep_color32(funcInfo, fieldType, oldVal, newVal)
 	end
 end
 
-function wrap_color(funcInfo, v)
-	local obj = UnityEngine.Color.New(v.r,v.g,v.b,v.a)
-	table.insert(funcInfo.c_list, obj)
+function wrap_vector3(funcInfo, v)
+	local obj = UnityEngine.Vector3.New(v.x,v.y,v.z)
+	table.insert(funcInfo.v3_list, obj)
+	return obj
+end
+
+function get_vector3_zero(funcInfo)
+	local obj = UnityEngine.Vector3.New(0,0,0)
+	table.insert(funcInfo.v3_list, obj)
 	return obj
 end
 

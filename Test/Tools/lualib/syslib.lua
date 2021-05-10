@@ -3340,6 +3340,8 @@ function getclassfullname(t)
     if t and type(t) ~= "string" then
         if type(t) ~= "table" then
             return tostring(t)
+        elseif t == System.Type then
+            return t.FullName
         else
             warmup(t)
             if rawget(t, "__cs2lua_defined") then
@@ -3368,6 +3370,8 @@ function getclasstypename(t)
     if t and type(t) ~= "string" then
         if type(t) ~= "table" then
             return tostring(t)
+        elseif t == System.Type then
+            return t.Name
         else
             warmup(t)
             if rawget(t, "__cs2lua_defined") then

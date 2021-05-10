@@ -29,6 +29,7 @@ namespace SLua {
 				Lua_System_Double.reg,
 				Lua_System_Convert.reg,
 				Lua_System_TypeCode.reg,
+				Lua_System_Reflection_MemberInfo.reg,
 				Lua_System_Type.reg,
 				Lua_System_IO_File.reg,
 				Lua_System_IO_Path.reg,

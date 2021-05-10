@@ -10,6 +10,11 @@ internal static class Cs2LuaType
     {
         return type.AssemblyQualifiedName;
     }
+    [Cs2Dsl.TranslateTo("Cs2LuaTypeImpl", "Cs2LuaTypeImpl.GetName")]
+    internal static string GetName(System.Type type)
+    {
+        return type.Name;
+    }
 }
 
 [Cs2Dsl.Ignore]

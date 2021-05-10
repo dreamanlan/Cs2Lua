@@ -1561,7 +1561,7 @@ namespace Generator
                                     var rti = funcOpts.RetTypes[rtiIx];
                                     if (rti.TypeKind == "TypeKind.Struct" && !IsBasicType(rti.Type, rti.TypeKind, true)) {
                                         string pname = param.GetId();
-                                        if (!funcOpts.IsBeCaptured(pname) && !funcOpts.IsParam(pname)) {
+                                        if (!funcOpts.IsBeCaptured(pname)) {
                                             if (first)
                                                 first = false;
                                             else

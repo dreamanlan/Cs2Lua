@@ -233,6 +233,8 @@ public sealed class DictClass : AbstractDictClass
 
 class Test
 {
+    public UnityEngine.Vector3 s_V1 = UnityEngine.Vector3.zero;
+    public UnityEngine.Vector3 s_V2 = UnityEngine.Vector3.zero;
     public static implicit operator Exception(int v)
     {
         return new Exception(v.ToString());
@@ -241,6 +243,15 @@ class Test
     {
         get { return args[0]; }
         set { args[0] = value; }
+    }
+    public void TestOneV3(out UnityEngine.Vector3 v1)
+    {
+        v1 = UnityEngine.Vector3.zero;
+    }
+    public void TestTwoV3(out UnityEngine.Vector3 v1, out UnityEngine.Vector3 v2)
+    {
+        v1 = UnityEngine.Vector3.zero;
+        v2 = UnityEngine.Vector3.zero;
     }
     public void Init()
     {
@@ -256,6 +267,8 @@ class Test
         Action a = () => {
             Console.WriteLine("{0}", ts.m_A);
         };
+        TestOneV3(out s_V1);
+        TestTwoV3(out s_V1, out s_V2);
     }
     public void TestImp(UnityEngine.Vector2 pos)
     {
