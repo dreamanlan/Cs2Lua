@@ -158,13 +158,13 @@ Cs2Lua的输出主要包括：
 
 ## 【用法】
 
-1、建立供lua调用的C# api工程，可以使用C#的所有语法特性，但public类及其方法需要符合slua导出API的要求（主要是不能使用generic类型，避免使用params参数与值类型）。
+1、建立供lua调用的C# api工程，示例里的CustomApi工程，这个工程里可以使用C#的所有语法特性，但public类及其方法需要符合slua导出API的要求（主要是不能使用generic类型，避免使用params参数与值类型）。
 
-2、建立一个准备翻译到lua的C#工程，此工程添加Cs2DslUtility.dll（从而允许使用上面提到的7种属性标记）与1中api.dll的引用（如果希望lua直接访问unity3d API，可以添加UnityEngine.dll引用，注意只能依赖供lua使用的API的DLL与mscorlib.dll和System.dll，并且要只使用系统dll里的会导出成lua API的类型或lualib里会人工实现lua版本的功能），用vs开发功能，需要只使用Cs2Lua支持的语法构造。
+2、建立一个准备翻译到lua的C#工程，示例里的Cs2LuaScript工程，此工程添加Cs2DslUtility.dll（从而允许使用上面提到的7种属性标记）与1中CustomApi.dll的引用（如果希望lua直接访问unity3d API，可以添加UnityEngine.dll引用，注意此工程对dotnet框架库只依赖mscorlib.dll和System.dll，并且依赖的类要在slua的CustomExport.cs里列出，否则运行时会找不到相应API），用vs开发功能，需要只使用Cs2Lua支持的语法构造。
 
-3、运行Cs2Lua C#.csproj，生成该工程各C#类对应的lua代码，输出按类组织，每个类一个文件，输出时的类已经合并过（支持c# partial）
+3、运行Cs2Lua Cs2LuaScript.csproj，生成该工程各C#类对应的lua代码，输出按类组织，每个类一个文件，输出时的类已经合并过（支持c# partial）
 
-4、用slua封装供前面C#工程使用的api DLL（三类：api工程dll、UnityEngine.dll和mscorlib/System.dll）里的类（通过修改CustomExport.cs配置要导出的dll与unity api等，然后使用slua菜单生成API包装代码），包装类代码建议放到SluaExport.csproj里，编译为SluaExport.dll。
+4、用slua封装供前面C#工程使用的api DLL（三类：CustomApi.dll、UnityEngine.dll和mscorlib/System.dll）里的类（通过修改CustomExport.cs配置要导出的dll与unity api等，然后使用slua菜单生成API包装代码），包装类代码建议放到SluaExport.csproj里，编译为SluaExport.dll。
 
 5、装SluaExport.dll与SluaManaged.dll放到unity3d工程的plugins目录下。
 
