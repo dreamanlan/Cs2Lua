@@ -21,6 +21,8 @@ https://github.com/dreamanlan/Cs2Lua/blob/master/DESIGN.md
 
 ## 【最新进展】
 
+【2021-04-03】 if语句函数对象优化，条件操作符表达式拆分成函数，lualib增加lua字符串操作（避免频繁构造c# String）
+
 【2021-02-26】 对象模型调整，实现层基于class来定位方法（避免元表按继承层次查找，编译时绑定，虚方法转到obj上调用，类似虚函数表效果，运行时绑定），接口层基于obj来调用，使用常见的对象继承结构（基类方法表作为子类元表__index）。修正coroutine的crash隐患，修复因升级roslyn引入的隐式转换未识别的问题（roslyn新版本调整了在各语法层次获取IOperation的机制，以前能取到的现在取到的是null或类型和以前不一样了）。值类型局部变量如果被lambda函数捕获的，在函数退出时不回收。
 
 【2021-01-30】 去掉InvokeToLuaLib属性，改在rewriter.dsl里配置函数调用翻译为哪个lualib的调用，这样便于处理外部dll里的调用。
