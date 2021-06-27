@@ -1,5 +1,6 @@
 # Cs2Lua
-CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类型检查的语言的场合
+CSharp代码转lua，适用于使用lua实现热更新而又想有一个强类型检查的语言的场合。
+文档pptx压缩zip：[Cs2Lua](https://github.com/dreamanlan/Cs2Lua/raw/master/Cs2Lua.zip "Cs2Lua")
 
 
 
