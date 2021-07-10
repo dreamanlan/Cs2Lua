@@ -41,9 +41,9 @@ DataBlockDefine.CString = {
 	end,
 
 	GetDataBlockId = function(this)
-		local __method_ret_884_8_887_9;
-		__method_ret_884_8_887_9 = this.m_DataBlockId;
-		return __method_ret_884_8_887_9;
+		local __method_ret_885_8_888_9;
+		__method_ret_885_8_888_9 = this.m_DataBlockId;
+		return __method_ret_885_8_888_9;
 	end,
 
 	Init = function(this)
@@ -83,12 +83,12 @@ DataBlockDefine.CString = {
 	end,
 
 	GetString = function(this)
-		local __method_ret_921_8_927_9;
+		local __method_ret_922_8_928_9;
 		if (stringisequal(nil, this.m_StringCache) and (this.m_DataBlockId ~= 0)) then 
 			this.m_StringCache = DataBlockDefine.DclApi.get_string(this.m_DataBlockId);
 		end;
-		__method_ret_921_8_927_9 = this.m_StringCache;
-		return __method_ret_921_8_927_9;
+		__method_ret_922_8_928_9 = this.m_StringCache;
+		return __method_ret_922_8_928_9;
 	end,
 
 	SetString = function(this, val)

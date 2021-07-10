@@ -29,32 +29,32 @@ class(DataBlockDefine.StringArrayField) {
 
 	instance_methods {
 		GetDataBlockId = deffunc(1)args(this){
-			local(__method_ret_2372_8_2375_9);
-			__method_ret_2372_8_2375_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId");
-			return(__method_ret_2372_8_2375_9);
+			local(__method_ret_2376_8_2379_9);
+			__method_ret_2376_8_2379_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId");
+			return(__method_ret_2376_8_2379_9);
 		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true)];
 		Init = deffunc(0)args(this){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid"), 2378_12_2379_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid"), 2382_12_2383_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Release = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid"), System.Boolean, TypeKind.Struct), 2384_12_2385_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid"), System.Boolean, TypeKind.Struct), 2388_12_2389_23 ){
 				return();
 			};
-			foreachlist(__foreach_ix_2386_12_2388_13, __foreach_exp_2386_12_2388_13, str, getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
+			foreachlist(__foreach_ix_2390_12_2392_13, __foreach_exp_2390_12_2392_13, str, getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
 				callinstance(str, DataBlockDefine.CString, "Release");
 			};
 			callexterninstance(getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), System.Collections.Generic.List_T, "Clear");
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2390_12_2393_13 ){
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2394_12_2397_13 ){
 				callstatic(DataBlockDefine.DclApi, "free_array", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId"));
 				setinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId", 0);
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Attach = deffunc(0)args(this, dataBlockId){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid"), 2398_12_2399_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid"), 2402_12_2403_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId", dataBlockId);
@@ -69,10 +69,10 @@ class(DataBlockDefine.StringArrayField) {
 			setinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Struct, 0, true)];
 		Detach = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid"), System.Boolean, TypeKind.Struct), 2411_12_2412_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid"), System.Boolean, TypeKind.Struct), 2415_12_2416_23 ){
 				return();
 			};
-			foreachlist(__foreach_ix_2413_12_2415_13, __foreach_exp_2413_12_2415_13, str, getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
+			foreachlist(__foreach_ix_2417_12_2419_13, __foreach_exp_2417_12_2419_13, str, getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
 				callinstance(str, DataBlockDefine.CString, "Detach");
 			};
 			callexterninstance(getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), System.Collections.Generic.List_T, "Clear");
@@ -80,24 +80,24 @@ class(DataBlockDefine.StringArrayField) {
 			setinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		GetLength = deffunc(1)args(this){
-			local(__method_ret_2420_8_2428_9);
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2422_12_2427_13 ){
-				__method_ret_2420_8_2428_9 = callstatic(DataBlockDefine.DclApi, "get_array_length", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId"));
-				return(__method_ret_2420_8_2428_9);
+			local(__method_ret_2424_8_2432_9);
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2426_12_2431_13 ){
+				__method_ret_2424_8_2432_9 = callstatic(DataBlockDefine.DclApi, "get_array_length", getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataBlockId"));
+				return(__method_ret_2424_8_2432_9);
 			}else{
-				__method_ret_2420_8_2428_9 = 0;
-				return(__method_ret_2420_8_2428_9);
+				__method_ret_2424_8_2432_9 = 0;
+				return(__method_ret_2424_8_2432_9);
 			};
 			return(null);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		GetData = deffunc(1)args(this, index){
-			local(__method_ret_2429_8_2437_9);
-			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), System.Collections.Generic.List_T, "Count"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2431_12_2436_13 ){
-				__method_ret_2429_8_2437_9 = getexterninstanceindexer(DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), System.Collections.Generic.List_T, "get_Item", 1, index);
-				return(__method_ret_2429_8_2437_9);
+			local(__method_ret_2433_8_2441_9);
+			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), System.Collections.Generic.List_T, "Count"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2435_12_2440_13 ){
+				__method_ret_2433_8_2441_9 = getexterninstanceindexer(DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, getinstance(SymbolKind.Field, this, DataBlockDefine.StringArrayField, "m_DataWrap"), System.Collections.Generic.List_T, "get_Item", 1, index);
+				return(__method_ret_2433_8_2441_9);
 			}else{
-				__method_ret_2429_8_2437_9 = null;
-				return(__method_ret_2429_8_2437_9);
+				__method_ret_2433_8_2441_9 = null;
+				return(__method_ret_2433_8_2441_9);
 			};
 			return(null);
 		}options[needfuncinfo(false), rettype(return, DataBlockDefine.CString, TypeKind.Class, 0, false), paramtype(index, System.Int32, TypeKind.Struct, 0, true)];

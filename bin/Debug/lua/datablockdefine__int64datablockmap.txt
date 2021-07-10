@@ -1,0 +1,265 @@
+require "cs2lua__namespaces"; 
+
+DataBlockDefine.Int64DataBlockMap = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(DataBlockDefine.Int64DataBlockMap, nil, nil, "ctor", 0, nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		DataBlockDefine.Int64DataBlockMap.__cctor();
+	end,
+
+	__cctor = function()
+		if DataBlockDefine.Int64DataBlockMap.__cctor_called then 
+			return;
+		else
+			DataBlockDefine.Int64DataBlockMap.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	GetDataBlockId = function(this)
+		local __method_ret_1652_8_1655_9;
+		__method_ret_1652_8_1655_9 = this.m_DataBlockId;
+		return __method_ret_1652_8_1655_9;
+	end,
+
+	Init = function(this)
+		if this.m_IsValid then 
+			return;
+		end;
+		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_container(8);
+		this.m_DataWrap:Clear();
+		this.m_IsValid = true;
+	end,
+
+	Release = function(this)
+		if (not this.m_IsValid) then 
+			return;
+		end;
+		DataBlockDefine.Int64DataBlockMap.Clear(this);
+		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
+		this.m_DataBlockId = 0;
+		this.m_IsValid = false;
+	end,
+
+	Attach = function(this, dataBlockId)
+		if this.m_IsValid then 
+			return;
+		end;
+		this.m_DataBlockId = dataBlockId;
+		if (dataBlockId ~= 0) then 
+			DataBlockDefine.DclApi.iterate_int64_uint64_map(dataBlockId, function(k, v)
+				local __method_ret_1679_61_1684_17;
+				local elem;
+				elem = this.OnNewDataBlock();
+				callinterface(elem, DataBlockDefine.IDataBlock, "Attach", v);
+				this.m_DataWrap:Add(k, elem);
+				__method_ret_1679_61_1684_17 = true;
+				return __method_ret_1679_61_1684_17;
+			end);
+		end;
+		this.m_IsValid = true;
+	end,
+
+	Detach = function(this)
+		local __cs2lua_func_info = luainitialize();
+		luapcall(DataBlockDefine.Int64DataBlockMap.__ori_Detach, this, __cs2lua_func_info);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+	__ori_Detach = function(this, __cs2lua_func_info)
+		if (not this.m_IsValid) then 
+			return;
+		end;
+		local __foreach_1692_12_1696_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_1692_12_1696_13) do
+			if pair == __cs2lua_nil then
+				pair = nil;
+			end;
+			local elem;
+			elem = pair.Value;
+			if (not isequal(nil, elem)) then 
+				callinterface(elem, DataBlockDefine.IDataBlock, "Detach");
+			end;
+		end;
+		recycleiterator(__cs2lua_func_info, __foreach_1692_12_1696_13);
+		this.m_DataWrap:Clear();
+		this.m_DataBlockId = 0;
+		this.m_IsValid = false;
+	end,
+
+	GetCount = function(this)
+		local __method_ret_1702_8_1705_9;
+		__method_ret_1702_8_1705_9 = this.m_DataWrap.Count;
+		return __method_ret_1702_8_1705_9;
+	end,
+
+	GetData = function(this, T, key)
+		local __method_ret_1706_8_1711_9;
+		local v;
+		local __invoke_1709_12_1709_46;
+		__invoke_1709_12_1709_46,v = this.m_DataWrap:TryGetValue(key, __cs2lua_out);
+		__method_ret_1706_8_1711_9 = typecast(v, T, TypeKind.TypeParameter);
+		return __method_ret_1706_8_1711_9;
+	end,
+
+	SetData = function(this, key, val)
+		this.m_DataWrap[key] = val;
+		DataBlockDefine.DclApi.int64_uint64_map_set_element(this.m_DataBlockId, key, callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId"));
+	end,
+
+	Add = function(this, key, val)
+		this.m_DataWrap:Add(key, val);
+		DataBlockDefine.DclApi.int64_uint64_map_add_element(this.m_DataBlockId, key, callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId"));
+	end,
+
+	Remove = function(this, key)
+		this.m_DataWrap:Remove(key);
+		DataBlockDefine.DclApi.int64_uint64_map_remove_element(this.m_DataBlockId, key);
+	end,
+
+	Contains = function(this, key)
+		local __method_ret_1727_8_1730_9;
+		__method_ret_1727_8_1730_9 = this.m_DataWrap:ContainsKey(key);
+		return __method_ret_1727_8_1730_9;
+	end,
+
+	Clear = function(this)
+		local __cs2lua_func_info = luainitialize();
+		luapcall(DataBlockDefine.Int64DataBlockMap.__ori_Clear, this, __cs2lua_func_info);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+	__ori_Clear = function(this, __cs2lua_func_info)
+		local __foreach_1733_12_1737_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_1733_12_1737_13) do
+			if pair == __cs2lua_nil then
+				pair = nil;
+			end;
+			local elem;
+			elem = pair.Value;
+			if (not isequal(nil, elem)) then 
+				callinterface(elem, DataBlockDefine.IDataBlock, "Release");
+			end;
+		end;
+		recycleiterator(__cs2lua_func_info, __foreach_1733_12_1737_13);
+		this.m_DataWrap:Clear();
+		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
+	end,
+
+	Iterate = function(this, callback)
+		local __cs2lua_func_info = luainitialize();
+		luapcall(DataBlockDefine.Int64DataBlockMap.__ori_Iterate, this, __cs2lua_func_info, callback);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+	end,
+	__ori_Iterate = function(this, __cs2lua_func_info, callback)
+		local __foreach_1743_12_1746_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_1743_12_1746_13) do
+			if pair == __cs2lua_nil then
+				pair = nil;
+			end;
+			if (not callback(pair.Key, pair.Value)) then 
+				do
+					break;
+				end;
+			end;
+		end;
+		recycleiterator(__cs2lua_func_info, __foreach_1743_12_1746_13);
+	end,
+
+	ctor = function(this)
+		DataBlockDefine.Int64DataBlockMap.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+		this.m_DataWrap = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeArgs", getglobalinfo("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeArgs") or {System.Int64, DataBlockDefine.IDataBlock}), buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeKinds", getglobalinfo("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeKinds") or {TypeKind.Struct, TypeKind.Interface}), "ctor", 0, {});
+	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__init_obj_fields = function(this)
+		rawset(this, "m_IsValid", false);
+		rawset(this, "m_DataBlockId", 0);
+		rawset(this, "__ctor_called", false);
+	end,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("DataBlockDefine.Int64DataBlockMap::__define_class begin");
+
+		local class = DataBlockDefine.Int64DataBlockMap;
+		local obj_methods = {
+			GetDataBlockId = rawget(class, "GetDataBlockId"),
+			Init = rawget(class, "Init"),
+			Release = rawget(class, "Release"),
+			Attach = rawget(class, "Attach"),
+			Detach = rawget(class, "Detach"),
+			GetCount = rawget(class, "GetCount"),
+			GetData = rawget(class, "GetData"),
+			SetData = rawget(class, "SetData"),
+			Add = rawget(class, "Add"),
+			Remove = rawget(class, "Remove"),
+			Contains = rawget(class, "Contains"),
+			Clear = rawget(class, "Clear"),
+			Iterate = rawget(class, "Iterate"),
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
+		};
+		local tmp_obj_method = nil;
+
+		local __defineclass_return = defineclass(nil, "DataBlockDefine.Int64DataBlockMap", "Int64DataBlockMap", class, obj_methods, false, false);
+		Utility.Warn("DataBlockDefine.Int64DataBlockMap::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		OnNewDataBlock = true,
+		m_IsValid = true,
+		m_DataBlockId = true,
+		m_DataWrap = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__interfaces = {
+		"DataBlockDefine.IDataBlock",
+	},
+	__method_info = {
+		ctor = {
+			ctor = true,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(DataBlockDefine.Int64DataBlockMap);

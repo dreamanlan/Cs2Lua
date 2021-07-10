@@ -1,0 +1,310 @@
+require("cs2dsl__syslib");
+require("cs2dsl__namespaces");
+require("cs2dsl__externenums");
+require("cs2dsl__interfaces");
+require("datablockdefine__cstring");
+
+class(DataBlockDefine.StringDataBlockMap) {
+	static_methods {
+		__new_object = deffunc(1)args(...){
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newobject(DataBlockDefine.StringDataBlockMap, "g_DataBlockDefine_StringDataBlockMap", typeargs(), typekinds(), "ctor", 0, null, ...);
+			return(__cs2dsl_newobj);
+		}options[needfuncinfo(false)];
+		cctor = deffunc(0)args(){
+			callstatic(DataBlockDefine.StringDataBlockMap, "__cctor");
+		};
+		__cctor = deffunc(0)args(){
+			if(DataBlockDefine.StringDataBlockMap.__cctor_called){
+				return();
+			}else{
+				DataBlockDefine.StringDataBlockMap.__cctor_called = true;
+			};
+		}options[needfuncinfo(false)];
+	};
+	static_fields {
+		__cctor_called = false;
+	};
+	static_props {};
+	static_events {};
+
+	instance_methods {
+		GetDataBlockId = deffunc(1)args(this){
+			local(__method_ret_2179_8_2182_9);
+			__method_ret_2179_8_2182_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId");
+			return(__method_ret_2179_8_2182_9);
+		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true)];
+		Init = deffunc(0)args(this){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_IsValid"), 2185_12_2186_23 ){
+				return();
+			};
+			getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId") = callstatic(DataBlockDefine.DclApi, "alloc_container", 5);
+			callexternstructdictionaryinstance(2, [System.Collections.Generic.Dictionary_TKey_TValue, System.UInt64, TypeKind.Struct, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct], getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "Clear");
+			setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_IsValid", true);
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
+		Release = deffunc(0)args(this){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_IsValid"), System.Boolean, TypeKind.Struct), 2193_12_2194_23 ){
+				return();
+			};
+			callinstance(this, DataBlockDefine.StringDataBlockMap, "Clear");
+			callstatic(DataBlockDefine.DclApi, "free_container", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId"));
+			setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId", 0);
+			setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_IsValid", false);
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
+		Attach = deffunc(0)args(this, dataBlockId){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_IsValid"), 2202_12_2203_23 ){
+				return();
+			};
+			setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId", dataBlockId);
+			if( execbinary("!=", dataBlockId, 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2205_12_2214_13 ){
+				callstatic(DataBlockDefine.DclApi, "iterate_string_uint64_map", dataBlockId, deffunc(1)args(k, v){
+					local(__method_ret_2206_62_2213_17);
+					local(key); key = newobject(DataBlockDefine.CString, "g_DataBlockDefine_CString", typeargs(), typekinds(), "ctor", 0, null);
+					callinstance(key, DataBlockDefine.CString, "Attach", k);
+					local(val); val = calldelegation(getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "OnNewDataBlock"), "DataBlockDefine.NewDataBlockDelegation.Invoke");
+					callinterface(val, DataBlockDefine.IDataBlock, "Attach", v);
+					callexternstructdictionaryinstance(4, [System.Collections.Generic.Dictionary_TKey_TValue, System.UInt64, TypeKind.Struct, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct], [null, null, null, null, System.UInt64, TypeKind.Struct, OperationKind.ParameterReference, SymbolKind.Parameter], [null, null, null, null, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct, OperationKind.ObjectCreation, SymbolKind.Method], getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "Add", k, newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, "g_DataBlockDefine_StringDataBlockMap_KeyValue", typeargs(), typekinds(), "ctor", 0, function(newobj){ setinstance(SymbolKind.Field, newobj, DataBlockDefine.StringDataBlockMap.KeyValue, "Key", key);setinstance(SymbolKind.Field, newobj, DataBlockDefine.StringDataBlockMap.KeyValue, "Value", val); }));
+					__method_ret_2206_62_2213_17 = true;
+					return(__method_ret_2206_62_2213_17);
+				}options[needfuncinfo(true), rettype(return, System.Boolean, TypeKind.Struct, 0, true), paramtype(k, System.UInt64, TypeKind.Struct, 0, true), paramtype(v, System.UInt64, TypeKind.Struct, 0, true)]);
+			};
+			setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_IsValid", true);
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Struct, 0, true)];
+		Detach = deffunc(0)args(this){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_IsValid"), System.Boolean, TypeKind.Struct), 2219_12_2220_23 ){
+				return();
+			};
+			foreach(__foreach_2221_12_2227_13, pair, getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true){
+				local(kv); kv = getexterninstancestructmember(SymbolKind.Property, pair, System.Collections.Generic.KeyValuePair_TKey_TValue, "Value");
+				callinstance(getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Key"), DataBlockDefine.CString, "Detach");
+				if( execbinary("!=", null, getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value"), System.Object, System.Object, TypeKind.Class, TypeKind.Class), 2224_16_2226_17 ){
+					callinterface(getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value"), DataBlockDefine.IDataBlock, "Detach");
+				};
+			};
+			callexternstructdictionaryinstance(2, [System.Collections.Generic.Dictionary_TKey_TValue, System.UInt64, TypeKind.Struct, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct], getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "Clear");
+			setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId", 0);
+			setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_IsValid", false);
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
+		GetCount = deffunc(1)args(this){
+			local(__method_ret_2233_8_2236_9);
+			__method_ret_2233_8_2236_9 = getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "Count");
+			return(__method_ret_2233_8_2236_9);
+		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
+		GetData = deffunc(1)args(this, T, key){
+			local(__method_ret_2237_8_2247_9);
+			if( execbinary("&&", execbinary("!=", null, key, System.Object, System.Object, TypeKind.Class, TypeKind.Class), execbinary("!=", callinstance(key, DataBlockDefine.CString, "GetDataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2239_12_2245_13 ){
+				local(k); k = callstatic(DataBlockDefine.DclApi, "string_uint64_map_get_key", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId"), callinstance(key, DataBlockDefine.CString, "GetDataBlockId"));
+				local(kv);
+				if( execclosure(true, __invoke_2242_20_2242_53, true){ multiassign(precode{
+					},postcode{
+						kv = wrapstruct(kv, DataBlockDefine.StringDataBlockMap.KeyValue);
+					})varlist(__invoke_2242_20_2242_53, kv) = callexternstructdictionaryinstance(4, [System.Collections.Generic.Dictionary_TKey_TValue, System.UInt64, TypeKind.Struct, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct], [null, null, null, null, System.UInt64, TypeKind.Struct, OperationKind.LocalReference, SymbolKind.Local], [null, null, null, null, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct, OperationKind.LocalReference, SymbolKind.Local], getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "TryGetValue", k, __cs2dsl_out); }, 2242_16_2244_17 ){
+					__method_ret_2237_8_2247_9 = typecast(getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value"), T, TypeKind.TypeParameter);
+					return(__method_ret_2237_8_2247_9);
+				};
+			};
+			__method_ret_2237_8_2247_9 = null;
+			return(__method_ret_2237_8_2247_9);
+		}options[needfuncinfo(true), rettype(T, DataBlockDefine.IDataBlock, TypeKind.TypeParameter, 0, false), paramtype(T, DataBlockDefine.IDataBlock, TypeKind.TypeParameter, 0, false), paramtype(key, DataBlockDefine.CString, TypeKind.Class, 0, false)];
+		SetData = deffunc(0)args(this, key, val){
+			if( execbinary("&&", execbinary("!=", null, key, System.Object, System.Object, TypeKind.Class, TypeKind.Class), execbinary("!=", callinstance(key, DataBlockDefine.CString, "GetDataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2250_12_2272_13 ){
+				local(oldKey); oldKey = callstatic(DataBlockDefine.DclApi, "string_uint64_map_get_key", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId"), callinstance(key, DataBlockDefine.CString, "GetDataBlockId"));
+				local(mapKey); mapKey = callstatic(DataBlockDefine.DclApi, "string_uint64_map_set_element", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId"), callinstance(key, DataBlockDefine.CString, "GetDataBlockId"), condexpfunc(true, retval_2252_105_2252_143, condexp_2252_105_2252_143, DataBlockDefine.StringDataBlockMap, false, val){condexp(execbinary("==", null, val, System.Object, System.Object, TypeKind.Class, TypeKind.Class), true, 0, false, function(){ funcobjret(callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId")); });}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true), paramtype(val, DataBlockDefine.IDataBlock, Interface, 0, false)]);
+				if( execbinary("!=", oldKey, mapKey, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2253_16_2261_17 ){
+					local(kv);
+					if( execclosure(true, __invoke_2255_24_2255_62, true){ multiassign(precode{
+						},postcode{
+							kv = wrapstruct(kv, DataBlockDefine.StringDataBlockMap.KeyValue);
+						})varlist(__invoke_2255_24_2255_62, kv) = callexternstructdictionaryinstance(4, [System.Collections.Generic.Dictionary_TKey_TValue, System.UInt64, TypeKind.Struct, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct], [null, null, null, null, System.UInt64, TypeKind.Struct, OperationKind.LocalReference, SymbolKind.Local], [null, null, null, null, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct, OperationKind.LocalReference, SymbolKind.Local], getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "TryGetValue", oldKey, __cs2dsl_out); }, 2255_20_2260_21 ){
+						callinstance(getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Key"), DataBlockDefine.CString, "Release");
+						if( execbinary("!=", null, getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value"), System.Object, System.Object, TypeKind.Class, TypeKind.Class), 2257_24_2259_25 ){
+							callinterface(getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value"), DataBlockDefine.IDataBlock, "Release");
+						};
+					};
+				};
+				if( execbinary("!=", mapKey, callinstance(key, DataBlockDefine.CString, "GetDataBlockId"), System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2262_16_2271_17 ){
+					local(newKV); newKV = newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, "g_DataBlockDefine_StringDataBlockMap_KeyValue", typeargs(), typekinds(), "ctor", 0, null);
+					setinstance(SymbolKind.Field, newKV, DataBlockDefine.StringDataBlockMap.KeyValue, "Key", newobject(DataBlockDefine.CString, "g_DataBlockDefine_CString", typeargs(), typekinds(), "ctor", 0, null));
+					callinstance(getinstance(SymbolKind.Field, newKV, DataBlockDefine.StringDataBlockMap.KeyValue, "Key"), DataBlockDefine.CString, "Attach", mapKey);
+					setinstance(SymbolKind.Field, newKV, DataBlockDefine.StringDataBlockMap.KeyValue, "Value", val);
+					setinstanceindexerstruct(true, DataBlockDefine.StringDataBlockMap.KeyValue, System.Collections.Generic.Dictionary_TKey_TValue, getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "set_Item", 2, mapKey, newKV);
+				}else{
+					setinstanceindexerstruct(true, DataBlockDefine.StringDataBlockMap.KeyValue, System.Collections.Generic.Dictionary_TKey_TValue, getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "set_Item", 2, mapKey, newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, "g_DataBlockDefine_StringDataBlockMap_KeyValue", typeargs(), typekinds(), "ctor", 0, function(newobj){ setinstance(SymbolKind.Field, newobj, DataBlockDefine.StringDataBlockMap.KeyValue, "Key", key);setinstance(SymbolKind.Field, newobj, DataBlockDefine.StringDataBlockMap.KeyValue, "Value", val); }));
+				};
+			};
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(key, DataBlockDefine.CString, TypeKind.Class, 0, false), paramtype(val, DataBlockDefine.IDataBlock, TypeKind.Interface, 0, false)];
+		Add = deffunc(0)args(this, key, val){
+			if( execbinary("&&", execbinary("!=", null, key, System.Object, System.Object, TypeKind.Class, TypeKind.Class), execbinary("!=", callinstance(key, DataBlockDefine.CString, "GetDataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2276_12_2283_13 ){
+				local(mapKey); mapKey = callstatic(DataBlockDefine.DclApi, "string_uint64_map_add_element", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId"), callinstance(key, DataBlockDefine.CString, "GetDataBlockId"), condexpfunc(true, retval_2277_105_2277_143, condexp_2277_105_2277_143, DataBlockDefine.StringDataBlockMap, false, val){condexp(execbinary("==", null, val, System.Object, System.Object, TypeKind.Class, TypeKind.Class), true, 0, false, function(){ funcobjret(callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId")); });}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true), paramtype(val, DataBlockDefine.IDataBlock, Interface, 0, false)]);
+				local(newKV); newKV = newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, "g_DataBlockDefine_StringDataBlockMap_KeyValue", typeargs(), typekinds(), "ctor", 0, null);
+				setinstance(SymbolKind.Field, newKV, DataBlockDefine.StringDataBlockMap.KeyValue, "Key", newobject(DataBlockDefine.CString, "g_DataBlockDefine_CString", typeargs(), typekinds(), "ctor", 0, null));
+				callinstance(getinstance(SymbolKind.Field, newKV, DataBlockDefine.StringDataBlockMap.KeyValue, "Key"), DataBlockDefine.CString, "Attach", mapKey);
+				setinstance(SymbolKind.Field, newKV, DataBlockDefine.StringDataBlockMap.KeyValue, "Value", val);
+				callexternstructdictionaryinstance(4, [System.Collections.Generic.Dictionary_TKey_TValue, System.UInt64, TypeKind.Struct, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct], [null, null, null, null, System.UInt64, TypeKind.Struct, OperationKind.LocalReference, SymbolKind.Local], [null, null, null, null, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct, OperationKind.LocalReference, SymbolKind.Local], getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "Add", mapKey, wrapstructargument(newKV, DataBlockDefine.StringDataBlockMap.KeyValue, OperationKind.LocalReference, SymbolKind.Local));
+			};
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(key, DataBlockDefine.CString, TypeKind.Class, 0, false), paramtype(val, DataBlockDefine.IDataBlock, TypeKind.Interface, 0, false)];
+		Remove = deffunc(0)args(this, key){
+			if( execbinary("&&", execbinary("!=", null, key, System.Object, System.Object, TypeKind.Class, TypeKind.Class), execbinary("!=", callinstance(key, DataBlockDefine.CString, "GetDataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2287_12_2297_13 ){
+				local(mapKey); mapKey = callstatic(DataBlockDefine.DclApi, "string_uint64_map_get_key", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId"), callinstance(key, DataBlockDefine.CString, "GetDataBlockId"));
+				local(kv);
+				if( execclosure(true, __invoke_2290_20_2290_58, true){ multiassign(precode{
+					},postcode{
+						kv = wrapstruct(kv, DataBlockDefine.StringDataBlockMap.KeyValue);
+					})varlist(__invoke_2290_20_2290_58, kv) = callexternstructdictionaryinstance(4, [System.Collections.Generic.Dictionary_TKey_TValue, System.UInt64, TypeKind.Struct, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct], [null, null, null, null, System.UInt64, TypeKind.Struct, OperationKind.LocalReference, SymbolKind.Local], [null, null, null, null, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct, OperationKind.LocalReference, SymbolKind.Local], getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "TryGetValue", mapKey, __cs2dsl_out); }, 2290_16_2295_17 ){
+					callinstance(getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Key"), DataBlockDefine.CString, "Release");
+					if( execbinary("!=", null, getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value"), System.Object, System.Object, TypeKind.Class, TypeKind.Class), 2292_20_2294_21 ){
+						callinterface(getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value"), DataBlockDefine.IDataBlock, "Release");
+					};
+				};
+				callstatic(DataBlockDefine.DclApi, "string_uint64_map_remove_element", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId"), callinstance(key, DataBlockDefine.CString, "GetDataBlockId"));
+			};
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(key, DataBlockDefine.CString, TypeKind.Class, 0, false)];
+		Contains = deffunc(1)args(this, key){
+			local(__method_ret_2299_8_2305_9);
+			if( execbinary("&&", execbinary("!=", null, key, System.Object, System.Object, TypeKind.Class, TypeKind.Class), execbinary("!=", callinstance(key, DataBlockDefine.CString, "GetDataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2301_12_2303_13 ){
+				__method_ret_2299_8_2305_9 = callstatic(DataBlockDefine.DclApi, "string_int64_map_contains", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId"), callinstance(key, DataBlockDefine.CString, "GetDataBlockId"));
+				return(__method_ret_2299_8_2305_9);
+			};
+			__method_ret_2299_8_2305_9 = false;
+			return(__method_ret_2299_8_2305_9);
+		}options[needfuncinfo(false), rettype(return, System.Boolean, TypeKind.Struct, 0, true), paramtype(key, DataBlockDefine.CString, TypeKind.Class, 0, false)];
+		Clear = deffunc(0)args(this){
+			foreach(__foreach_2308_12_2314_13, pair, getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true){
+				local(kv); kv = getexterninstancestructmember(SymbolKind.Property, pair, System.Collections.Generic.KeyValuePair_TKey_TValue, "Value");
+				callinstance(getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Key"), DataBlockDefine.CString, "Release");
+				if( execbinary("!=", null, getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value"), System.Object, System.Object, TypeKind.Class, TypeKind.Class), 2311_16_2313_17 ){
+					callinterface(getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value"), DataBlockDefine.IDataBlock, "Release");
+				};
+			};
+			callexternstructdictionaryinstance(2, [System.Collections.Generic.Dictionary_TKey_TValue, System.UInt64, TypeKind.Struct, DataBlockDefine.StringDataBlockMap.KeyValue, TypeKind.Struct], getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, "Clear");
+			callstatic(DataBlockDefine.DclApi, "container_clear", getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataBlockId"));
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
+		Iterate = deffunc(0)args(this, callback){
+			foreach(__foreach_2320_12_2324_13, pair, getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap"), System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true){
+				local(kv); kv = getexterninstancestructmember(SymbolKind.Property, pair, System.Collections.Generic.KeyValuePair_TKey_TValue, "Value");
+				if( execunary("!", callexterndelegation(callback, "System.Func_T1_T2_TResult.Invoke", getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Key"), getinstance(SymbolKind.Field, kv, DataBlockDefine.StringDataBlockMap.KeyValue, "Value")), System.Boolean, TypeKind.Struct), 2322_16_2323_26 ){
+					block{
+					break;
+					};
+				};
+			};
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(callback, System.Func_T1_T2_TResult, TypeKind.Delegate, 0, true)];
+		ctor = deffunc(0)args(this){
+			callinstance(this, DataBlockDefine.StringDataBlockMap, "__ctor");
+		};
+		__ctor = deffunc(0)args(this){
+			if(getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "__ctor_called")){
+				return();
+			}else{
+				setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "__ctor_called", true);
+			};
+			setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap, "m_DataWrap", newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, "g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue", typeargs(System.UInt64, DataBlockDefine.StringDataBlockMap.KeyValue), typekinds(TypeKind.Struct, TypeKind.Struct), "ctor", 0, literaldictionary("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue", typeargs(System.UInt64, DataBlockDefine.StringDataBlockMap.KeyValue), typekinds(TypeKind.Struct, TypeKind.Struct))));
+		}options[needfuncinfo(true)];
+	};
+	instance_fields {
+		OnNewDataBlock = null;
+		m_IsValid = false;
+		m_DataBlockId = 0;
+		m_DataWrap = null;
+		__ctor_called = false;
+	};
+	instance_props {};
+	instance_events {};
+
+	interfaces {
+		"DataBlockDefine.IDataBlock";
+	};
+
+	class_info(TypeKind.Class, Accessibility.Public) {
+	};
+	method_info {
+		GetDataBlockId(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Init(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Release(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Attach(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Detach(MethodKind.Ordinary, Accessibility.Public){
+		};
+		GetCount(MethodKind.Ordinary, Accessibility.Public){
+		};
+		GetData(MethodKind.Ordinary, Accessibility.Public){
+			generic(true);
+		};
+		SetData(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Add(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Remove(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Contains(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Clear(MethodKind.Ordinary, Accessibility.Public){
+		};
+		Iterate(MethodKind.Ordinary, Accessibility.Public){
+		};
+		ctor(MethodKind.Constructor, Accessibility.Public){
+		};
+	};
+};
+
+
+
+
+struct(DataBlockDefine.StringDataBlockMap.KeyValue) {
+	static_methods {
+		__new_object = deffunc(1)args(...){
+			local(__cs2dsl_newobj);__cs2dsl_newobj = newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, "g_DataBlockDefine_StringDataBlockMap_KeyValue", typeargs(), typekinds(), "ctor", 0, null, ...);
+			return(__cs2dsl_newobj);
+		}options[needfuncinfo(true)];
+		cctor = deffunc(0)args(){
+			callstatic(DataBlockDefine.StringDataBlockMap.KeyValue, "__cctor");
+		};
+		__cctor = deffunc(0)args(){
+			if(DataBlockDefine.StringDataBlockMap.KeyValue.__cctor_called){
+				return();
+			}else{
+				DataBlockDefine.StringDataBlockMap.KeyValue.__cctor_called = true;
+			};
+		}options[needfuncinfo(false)];
+	};
+	static_fields {
+		__cctor_called = false;
+	};
+	static_props {};
+	static_events {};
+
+	instance_methods {
+		ctor = deffunc(0)args(this){
+			callinstance(this, DataBlockDefine.StringDataBlockMap.KeyValue, "__ctor");
+		};
+		__ctor = deffunc(0)args(this){
+			if(getinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap.KeyValue, "__ctor_called")){
+				return();
+			}else{
+				setinstance(SymbolKind.Field, this, DataBlockDefine.StringDataBlockMap.KeyValue, "__ctor_called", true);
+			};
+		}options[needfuncinfo(false)];
+	};
+	instance_fields {
+		Key = null;
+		Value = null;
+		__ctor_called = false;
+	};
+	instance_props {};
+	instance_events {};
+
+	interfaces {};
+
+	class_info(TypeKind.Struct, Accessibility.Private) {
+		sealed(true);
+	};
+	method_info {
+		ctor(MethodKind.Constructor, Accessibility.Public){
+		};
+	};
+};
+
+
+

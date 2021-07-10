@@ -31,9 +31,9 @@ DataBlockDefine.Int64Int64Map = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_1394_8_1397_9;
-		__method_ret_1394_8_1397_9 = this.m_DataBlockId;
-		return __method_ret_1394_8_1397_9;
+		local __method_ret_1396_8_1399_9;
+		__method_ret_1396_8_1399_9 = this.m_DataBlockId;
+		return __method_ret_1396_8_1399_9;
 	end,
 
 	Init = function(this)
@@ -70,15 +70,15 @@ DataBlockDefine.Int64Int64Map = {
 	end,
 
 	GetCount = function(this)
-		local __method_ret_1428_8_1431_9;
-		__method_ret_1428_8_1431_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
-		return __method_ret_1428_8_1431_9;
+		local __method_ret_1430_8_1433_9;
+		__method_ret_1430_8_1433_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		return __method_ret_1430_8_1433_9;
 	end,
 
 	GetData = function(this, key)
-		local __method_ret_1432_8_1435_9;
-		__method_ret_1432_8_1435_9 = DataBlockDefine.DclApi.int64_int64_map_get_element(this.m_DataBlockId, key);
-		return __method_ret_1432_8_1435_9;
+		local __method_ret_1434_8_1437_9;
+		__method_ret_1434_8_1437_9 = DataBlockDefine.DclApi.int64_int64_map_get_element(this.m_DataBlockId, key);
+		return __method_ret_1434_8_1437_9;
 	end,
 
 	SetData = function(this, key, val)
@@ -94,9 +94,9 @@ DataBlockDefine.Int64Int64Map = {
 	end,
 
 	Contains = function(this, key)
-		local __method_ret_1448_8_1451_9;
-		__method_ret_1448_8_1451_9 = DataBlockDefine.DclApi.int64_int64_map_contains(this.m_DataBlockId, key);
-		return __method_ret_1448_8_1451_9;
+		local __method_ret_1450_8_1453_9;
+		__method_ret_1450_8_1453_9 = DataBlockDefine.DclApi.int64_int64_map_contains(this.m_DataBlockId, key);
+		return __method_ret_1450_8_1453_9;
 	end,
 
 	Clear = function(this)
@@ -105,9 +105,9 @@ DataBlockDefine.Int64Int64Map = {
 
 	Iterate = function(this, callback)
 		DataBlockDefine.DclApi.iterate_int64_int64_map(this.m_DataBlockId, function(k, v)
-			local __method_ret_1458_58_1458_94;
-			__method_ret_1458_58_1458_94 = callback(k, v);
-			return __method_ret_1458_58_1458_94;
+			local __method_ret_1460_58_1460_94;
+			__method_ret_1460_58_1460_94 = callback(k, v);
+			return __method_ret_1460_58_1460_94;
 		end);
 	end,
 

@@ -28,48 +28,48 @@ class(DataBlockDefine.BaseIntegerArray) {
 
 	instance_methods {
 		GetDataBlockId = deffunc(1)args(this){
-			local(__method_ret_577_8_580_9);
-			__method_ret_577_8_580_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId");
-			return(__method_ret_577_8_580_9);
+			local(__method_ret_578_8_581_9);
+			__method_ret_578_8_581_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId");
+			return(__method_ret_578_8_581_9);
 		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true)];
 		Init = deffunc(0)args(this){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), 583_12_584_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), 584_12_585_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Release = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 589_12_590_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 590_12_591_23 ){
 				return();
 			};
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 591_12_594_13 ){
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 592_12_595_13 ){
 				callstatic(DataBlockDefine.DclApi, "free_array", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"));
 				setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId", 0);
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Attach = deffunc(0)args(this, dataBlockId){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), 599_12_600_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), 600_12_601_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId", dataBlockId);
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Struct, 0, true)];
 		Detach = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 606_12_607_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 607_12_608_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId", 0);
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		GetLength = deffunc(1)args(this){
-			local(__method_ret_611_8_619_9);
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 613_12_618_13 ){
-				__method_ret_611_8_619_9 = callstatic(DataBlockDefine.DclApi, "get_array_length", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"));
-				return(__method_ret_611_8_619_9);
+			local(__method_ret_612_8_620_9);
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 614_12_619_13 ){
+				__method_ret_612_8_620_9 = callstatic(DataBlockDefine.DclApi, "get_array_length", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"));
+				return(__method_ret_612_8_620_9);
 			}else{
-				__method_ret_611_8_619_9 = 0;
-				return(__method_ret_611_8_619_9);
+				__method_ret_612_8_620_9 = 0;
+				return(__method_ret_612_8_620_9);
 			};
 			return(null);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];

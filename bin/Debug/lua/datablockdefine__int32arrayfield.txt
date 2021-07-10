@@ -32,13 +32,13 @@ DataBlockDefine.Int32ArrayField = {
 	------ instance methods -------
 	-------------------------------
 	GetData = function(this, index)
-		local __method_ret_2336_8_2344_9;
+		local __method_ret_2340_8_2348_9;
 		if (this.m_DataBlockId ~= 0) then 
-			__method_ret_2336_8_2344_9 = DataBlockDefine.DclApi.get_array_element_int32(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct));
-			return __method_ret_2336_8_2344_9;
+			__method_ret_2340_8_2348_9 = DataBlockDefine.DclApi.get_array_element_int32(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct));
+			return __method_ret_2340_8_2348_9;
 		else
-			__method_ret_2336_8_2344_9 = 0;
-			return __method_ret_2336_8_2344_9;
+			__method_ret_2340_8_2348_9 = 0;
+			return __method_ret_2340_8_2348_9;
 		end;
 		return nil;
 	end,

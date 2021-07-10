@@ -1,24 +1,24 @@
 require "cs2lua__namespaces"; 
 
-DataBlockDefine.StringStringMap = {
+DataBlockDefine.StringDataBlockMap = {
 	-------------------------------
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(DataBlockDefine.StringStringMap, nil, nil, "ctor", 0, nil, ...);
+		__cs2dsl_newobj = newobject(DataBlockDefine.StringDataBlockMap, nil, nil, "ctor", 0, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
-		DataBlockDefine.StringStringMap.__cctor();
+		DataBlockDefine.StringDataBlockMap.__cctor();
 	end,
 
 	__cctor = function()
-		if DataBlockDefine.StringStringMap.__cctor_called then 
+		if DataBlockDefine.StringDataBlockMap.__cctor_called then 
 			return;
 		else
-			DataBlockDefine.StringStringMap.__cctor_called = true;
+			DataBlockDefine.StringDataBlockMap.__cctor_called = true;
 		end;
 	end,
 
@@ -31,9 +31,9 @@ DataBlockDefine.StringStringMap = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_2018_8_2021_9;
-		__method_ret_2018_8_2021_9 = this.m_DataBlockId;
-		return __method_ret_2018_8_2021_9;
+		local __method_ret_2179_8_2182_9;
+		__method_ret_2179_8_2182_9 = this.m_DataBlockId;
+		return __method_ret_2179_8_2182_9;
 	end,
 
 	Init = function(this)
@@ -49,7 +49,7 @@ DataBlockDefine.StringStringMap = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		DataBlockDefine.StringStringMap.Clear(this);
+		DataBlockDefine.StringDataBlockMap.Clear(this);
 		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
@@ -63,20 +63,20 @@ DataBlockDefine.StringStringMap = {
 		if (dataBlockId ~= 0) then 
 			DataBlockDefine.DclApi.iterate_string_uint64_map(dataBlockId, function(k, v)
 				local __cs2lua_func_info = luainitialize();
-				local __method_ret_2045_62_2052_17;
+				local __method_ret_2206_62_2213_17;
 				local key;
 				key = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
 				DataBlockDefine.CString.Attach(key, k);
 				local val;
-				val = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
-				DataBlockDefine.CString.Attach(val, v);
-				this.m_DataWrap:Add(k, newstruct(DataBlockDefine.StringStringMap.KeyValue, nil, nil, "ctor", 0, function(newobj)
+				val = this.OnNewDataBlock();
+				callinterface(val, DataBlockDefine.IDataBlock, "Attach", v);
+				this.m_DataWrap:Add(k, newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, nil, nil, "ctor", 0, function(newobj)
 					newobj.Key = key;
 					newobj.Value = val;
 				end));
-				__method_ret_2045_62_2052_17 = true;
+				__method_ret_2206_62_2213_17 = true;
 				__cs2lua_func_info = luafinalize(__cs2lua_func_info);
-				return __method_ret_2045_62_2052_17;
+				return __method_ret_2206_62_2213_17;
 			end);
 		end;
 		this.m_IsValid = true;
@@ -84,15 +84,15 @@ DataBlockDefine.StringStringMap = {
 
 	Detach = function(this)
 		local __cs2lua_func_info = luainitialize();
-		luapcall(DataBlockDefine.StringStringMap.__ori_Detach, this, __cs2lua_func_info);
+		luapcall(DataBlockDefine.StringDataBlockMap.__ori_Detach, this, __cs2lua_func_info);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori_Detach = function(this, __cs2lua_func_info)
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_2060_12_2066_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
-		for pair in getiterator(__foreach_2060_12_2066_13) do
+		local __foreach_2221_12_2227_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_2221_12_2227_13) do
 			if pair == __cs2lua_nil then
 				pair = nil;
 			end;
@@ -100,54 +100,54 @@ DataBlockDefine.StringStringMap = {
 			kv = getexterninstancestructmember(SymbolKind.Property, pair, System.Collections.Generic.KeyValuePair_TKey_TValue, "Value");
 			DataBlockDefine.CString.Detach(kv.Key);
 			if (not isequal(nil, kv.Value)) then 
-				DataBlockDefine.CString.Detach(kv.Value);
+				callinterface(kv.Value, DataBlockDefine.IDataBlock, "Detach");
 			end;
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_2060_12_2066_13);
+		recycleiterator(__cs2lua_func_info, __foreach_2221_12_2227_13);
 		this.m_DataWrap:Clear();
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
 	end,
 
 	GetCount = function(this)
-		local __method_ret_2072_8_2075_9;
-		__method_ret_2072_8_2075_9 = this.m_DataWrap.Count;
-		return __method_ret_2072_8_2075_9;
+		local __method_ret_2233_8_2236_9;
+		__method_ret_2233_8_2236_9 = this.m_DataWrap.Count;
+		return __method_ret_2233_8_2236_9;
 	end,
 
-	GetData = function(this, key)
+	GetData = function(this, T, key)
 		local __cs2lua_func_info = luainitialize();
-		local __retval_0, __retval_1 = luapcall(DataBlockDefine.StringStringMap.__ori_GetData, this, __cs2lua_func_info, key);
+		local __retval_0, __retval_1 = luapcall(DataBlockDefine.StringDataBlockMap.__ori_GetData, this, __cs2lua_func_info, T, key);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 		if not __retval_0 then
 			lualog("{0}", __retval_1);
-			__retval_1 = nil;
+			__retval_1 = defaultvalue(T, "DataBlockDefine.IDataBlock", false);
 		end;
 		return __retval_1;
 	end,
-	__ori_GetData = function(this, __cs2lua_func_info, key)
-		local __method_ret_2076_8_2086_9;
+	__ori_GetData = function(this, __cs2lua_func_info, T, key)
+		local __method_ret_2237_8_2247_9;
 		if ((not isequal(nil, key)) and (DataBlockDefine.CString.GetDataBlockId(key) ~= 0)) then 
 			local k;
 			k = DataBlockDefine.DclApi.string_uint64_map_get_key(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
 			local kv;
 			--
-			local __invoke_2081_20_2081_53;
-			__invoke_2081_20_2081_53,kv = this.m_DataWrap:TryGetValue(k, __cs2lua_out);
-			kv = wrapstruct(kv, DataBlockDefine.StringStringMap.KeyValue);
-			if __invoke_2081_20_2081_53 then
+			local __invoke_2242_20_2242_53;
+			__invoke_2242_20_2242_53,kv = this.m_DataWrap:TryGetValue(k, __cs2lua_out);
+			kv = wrapstruct(kv, DataBlockDefine.StringDataBlockMap.KeyValue);
+			if __invoke_2242_20_2242_53 then
 
-				__method_ret_2076_8_2086_9 = kv.Value;
-				return __method_ret_2076_8_2086_9;
+				__method_ret_2237_8_2247_9 = typecast(kv.Value, T, TypeKind.TypeParameter);
+				return __method_ret_2237_8_2247_9;
 			end;
 		end;
-		__method_ret_2076_8_2086_9 = nil;
-		return __method_ret_2076_8_2086_9;
+		__method_ret_2237_8_2247_9 = nil;
+		return __method_ret_2237_8_2247_9;
 	end,
 
 	SetData = function(this, key, val)
 		local __cs2lua_func_info = luainitialize();
-		luapcall(DataBlockDefine.StringStringMap.__ori_SetData, this, __cs2lua_func_info, key, val);
+		luapcall(DataBlockDefine.StringDataBlockMap.__ori_SetData, this, __cs2lua_func_info, key, val);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori_SetData = function(this, __cs2lua_func_info, key, val)
@@ -155,68 +155,68 @@ DataBlockDefine.StringStringMap = {
 			local oldKey;
 			oldKey = DataBlockDefine.DclApi.string_uint64_map_get_key(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
 			local mapKey;
-			mapKey = DataBlockDefine.DclApi.string_uint64_map_set_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key), DataBlockDefine.StringStringMap.condexp_2091_105_2091_143(this, val));
+			mapKey = DataBlockDefine.DclApi.string_uint64_map_set_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key), DataBlockDefine.StringDataBlockMap.condexp_2252_105_2252_143(this, val));
 			if (oldKey ~= mapKey) then 
 				local kv;
 				--
-				local __invoke_2094_24_2094_62;
-				__invoke_2094_24_2094_62,kv = this.m_DataWrap:TryGetValue(oldKey, __cs2lua_out);
-				kv = wrapstruct(kv, DataBlockDefine.StringStringMap.KeyValue);
-				if __invoke_2094_24_2094_62 then
+				local __invoke_2255_24_2255_62;
+				__invoke_2255_24_2255_62,kv = this.m_DataWrap:TryGetValue(oldKey, __cs2lua_out);
+				kv = wrapstruct(kv, DataBlockDefine.StringDataBlockMap.KeyValue);
+				if __invoke_2255_24_2255_62 then
 
 					DataBlockDefine.CString.Release(kv.Key);
 					if (not isequal(nil, kv.Value)) then 
-						DataBlockDefine.CString.Release(kv.Value);
+						callinterface(kv.Value, DataBlockDefine.IDataBlock, "Release");
 					end;
 				end;
 			end;
 			if (mapKey ~= DataBlockDefine.CString.GetDataBlockId(key)) then 
 				local newKV;
-				newKV = newstruct(DataBlockDefine.StringStringMap.KeyValue, nil, nil, "ctor", 0, nil);
+				newKV = newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, nil, nil, "ctor", 0, nil);
 				newKV.Key = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
 				DataBlockDefine.CString.Attach(newKV.Key, mapKey);
 				newKV.Value = val;
-				setinstanceindexerstruct(true, DataBlockDefine.StringStringMap.KeyValue, System.Collections.Generic.Dictionary_TKey_TValue, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, "set_Item", 2, mapKey, newKV);
+				setinstanceindexerstruct(true, DataBlockDefine.StringDataBlockMap.KeyValue, System.Collections.Generic.Dictionary_TKey_TValue, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, "set_Item", 2, mapKey, newKV);
 			else
-				setinstanceindexerstruct(true, DataBlockDefine.StringStringMap.KeyValue, System.Collections.Generic.Dictionary_TKey_TValue, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, "set_Item", 2, mapKey, newstruct(DataBlockDefine.StringStringMap.KeyValue, nil, nil, "ctor", 0, function(newobj)
+				setinstanceindexerstruct(true, DataBlockDefine.StringDataBlockMap.KeyValue, System.Collections.Generic.Dictionary_TKey_TValue, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, "set_Item", 2, mapKey, newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, nil, nil, "ctor", 0, function(newobj)
 					newobj.Key = key;
 					newobj.Value = val;
 				end));
 			end;
 		end;
 	end,
-	condexp_2091_105_2091_143 = function(this, val)
-		local retval_2091_105_2091_143 = nil;
-		if isequal(nil, val) then retval_2091_105_2091_143 = 0 else retval_2091_105_2091_143 = DataBlockDefine.CString.GetDataBlockId(val) end;
-		return retval_2091_105_2091_143;
+	condexp_2252_105_2252_143 = function(this, val)
+		local retval_2252_105_2252_143 = nil;
+		if isequal(nil, val) then retval_2252_105_2252_143 = 0 else retval_2252_105_2252_143 = callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId") end;
+		return retval_2252_105_2252_143;
 	end,
 
 	Add = function(this, key, val)
 		local __cs2lua_func_info = luainitialize();
-		luapcall(DataBlockDefine.StringStringMap.__ori_Add, this, __cs2lua_func_info, key, val);
+		luapcall(DataBlockDefine.StringDataBlockMap.__ori_Add, this, __cs2lua_func_info, key, val);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori_Add = function(this, __cs2lua_func_info, key, val)
 		if ((not isequal(nil, key)) and (DataBlockDefine.CString.GetDataBlockId(key) ~= 0)) then 
 			local mapKey;
-			mapKey = DataBlockDefine.DclApi.string_uint64_map_add_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key), DataBlockDefine.StringStringMap.condexp_2116_105_2116_143(this, val));
+			mapKey = DataBlockDefine.DclApi.string_uint64_map_add_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key), DataBlockDefine.StringDataBlockMap.condexp_2277_105_2277_143(this, val));
 			local newKV;
-			newKV = newstruct(DataBlockDefine.StringStringMap.KeyValue, nil, nil, "ctor", 0, nil);
+			newKV = newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, nil, nil, "ctor", 0, nil);
 			newKV.Key = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
 			DataBlockDefine.CString.Attach(newKV.Key, mapKey);
 			newKV.Value = val;
-			this.m_DataWrap:Add(mapKey, wrapstructargument(newKV, DataBlockDefine.StringStringMap.KeyValue, OperationKind.LocalReference, SymbolKind.Local));
+			this.m_DataWrap:Add(mapKey, wrapstructargument(newKV, DataBlockDefine.StringDataBlockMap.KeyValue, OperationKind.LocalReference, SymbolKind.Local));
 		end;
 	end,
-	condexp_2116_105_2116_143 = function(this, val)
-		local retval_2116_105_2116_143 = nil;
-		if isequal(nil, val) then retval_2116_105_2116_143 = 0 else retval_2116_105_2116_143 = DataBlockDefine.CString.GetDataBlockId(val) end;
-		return retval_2116_105_2116_143;
+	condexp_2277_105_2277_143 = function(this, val)
+		local retval_2277_105_2277_143 = nil;
+		if isequal(nil, val) then retval_2277_105_2277_143 = 0 else retval_2277_105_2277_143 = callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId") end;
+		return retval_2277_105_2277_143;
 	end,
 
 	Remove = function(this, key)
 		local __cs2lua_func_info = luainitialize();
-		luapcall(DataBlockDefine.StringStringMap.__ori_Remove, this, __cs2lua_func_info, key);
+		luapcall(DataBlockDefine.StringDataBlockMap.__ori_Remove, this, __cs2lua_func_info, key);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori_Remove = function(this, __cs2lua_func_info, key)
@@ -225,14 +225,14 @@ DataBlockDefine.StringStringMap = {
 			mapKey = DataBlockDefine.DclApi.string_uint64_map_get_key(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
 			local kv;
 			--
-			local __invoke_2129_20_2129_58;
-			__invoke_2129_20_2129_58,kv = this.m_DataWrap:TryGetValue(mapKey, __cs2lua_out);
-			kv = wrapstruct(kv, DataBlockDefine.StringStringMap.KeyValue);
-			if __invoke_2129_20_2129_58 then
+			local __invoke_2290_20_2290_58;
+			__invoke_2290_20_2290_58,kv = this.m_DataWrap:TryGetValue(mapKey, __cs2lua_out);
+			kv = wrapstruct(kv, DataBlockDefine.StringDataBlockMap.KeyValue);
+			if __invoke_2290_20_2290_58 then
 
 				DataBlockDefine.CString.Release(kv.Key);
 				if (not isequal(nil, kv.Value)) then 
-					DataBlockDefine.CString.Release(kv.Value);
+					callinterface(kv.Value, DataBlockDefine.IDataBlock, "Release");
 				end;
 			end;
 			DataBlockDefine.DclApi.string_uint64_map_remove_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
@@ -240,23 +240,23 @@ DataBlockDefine.StringStringMap = {
 	end,
 
 	Contains = function(this, key)
-		local __method_ret_2138_8_2144_9;
+		local __method_ret_2299_8_2305_9;
 		if ((not isequal(nil, key)) and (DataBlockDefine.CString.GetDataBlockId(key) ~= 0)) then 
-			__method_ret_2138_8_2144_9 = DataBlockDefine.DclApi.string_int64_map_contains(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
-			return __method_ret_2138_8_2144_9;
+			__method_ret_2299_8_2305_9 = DataBlockDefine.DclApi.string_int64_map_contains(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
+			return __method_ret_2299_8_2305_9;
 		end;
-		__method_ret_2138_8_2144_9 = false;
-		return __method_ret_2138_8_2144_9;
+		__method_ret_2299_8_2305_9 = false;
+		return __method_ret_2299_8_2305_9;
 	end,
 
 	Clear = function(this)
 		local __cs2lua_func_info = luainitialize();
-		luapcall(DataBlockDefine.StringStringMap.__ori_Clear, this, __cs2lua_func_info);
+		luapcall(DataBlockDefine.StringDataBlockMap.__ori_Clear, this, __cs2lua_func_info);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori_Clear = function(this, __cs2lua_func_info)
-		local __foreach_2147_12_2153_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
-		for pair in getiterator(__foreach_2147_12_2153_13) do
+		local __foreach_2308_12_2314_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_2308_12_2314_13) do
 			if pair == __cs2lua_nil then
 				pair = nil;
 			end;
@@ -264,22 +264,22 @@ DataBlockDefine.StringStringMap = {
 			kv = getexterninstancestructmember(SymbolKind.Property, pair, System.Collections.Generic.KeyValuePair_TKey_TValue, "Value");
 			DataBlockDefine.CString.Release(kv.Key);
 			if (not isequal(nil, kv.Value)) then 
-				DataBlockDefine.CString.Release(kv.Value);
+				callinterface(kv.Value, DataBlockDefine.IDataBlock, "Release");
 			end;
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_2147_12_2153_13);
+		recycleiterator(__cs2lua_func_info, __foreach_2308_12_2314_13);
 		this.m_DataWrap:Clear();
 		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
 	end,
 
 	Iterate = function(this, callback)
 		local __cs2lua_func_info = luainitialize();
-		luapcall(DataBlockDefine.StringStringMap.__ori_Iterate, this, __cs2lua_func_info, callback);
+		luapcall(DataBlockDefine.StringDataBlockMap.__ori_Iterate, this, __cs2lua_func_info, callback);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori_Iterate = function(this, __cs2lua_func_info, callback)
-		local __foreach_2159_12_2163_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
-		for pair in getiterator(__foreach_2159_12_2163_13) do
+		local __foreach_2320_12_2324_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_2320_12_2324_13) do
 			if pair == __cs2lua_nil then
 				pair = nil;
 			end;
@@ -291,16 +291,16 @@ DataBlockDefine.StringStringMap = {
 				end;
 			end;
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_2159_12_2163_13);
+		recycleiterator(__cs2lua_func_info, __foreach_2320_12_2324_13);
 	end,
 
 	ctor = function(this)
-		DataBlockDefine.StringStringMap.__ctor(this);
+		DataBlockDefine.StringDataBlockMap.__ctor(this);
 	end,
 
 	__ctor = function(this)
 		local __cs2lua_func_info = luainitialize();
-		luapcall(DataBlockDefine.StringStringMap.__ori___ctor, this, __cs2lua_func_info);
+		luapcall(DataBlockDefine.StringDataBlockMap.__ori___ctor, this, __cs2lua_func_info);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori___ctor = function(this, __cs2lua_func_info)
@@ -309,7 +309,7 @@ DataBlockDefine.StringStringMap = {
 		else
 			this.__ctor_called = true;
 		end;
-		this.m_DataWrap = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringStringMap_KeyValue_TypeArgs", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringStringMap_KeyValue_TypeArgs") or {System.UInt64, DataBlockDefine.StringStringMap.KeyValue}), buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringStringMap_KeyValue_TypeKinds", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringStringMap_KeyValue_TypeKinds") or {TypeKind.Struct, TypeKind.Struct}), "ctor", 0, {});
+		this.m_DataWrap = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeArgs", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeArgs") or {System.UInt64, DataBlockDefine.StringDataBlockMap.KeyValue}), buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeKinds", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeKinds") or {TypeKind.Struct, TypeKind.Struct}), "ctor", 0, {});
 	end,
 	-------------------------------
 	------ instance fields -------
@@ -324,9 +324,9 @@ DataBlockDefine.StringStringMap = {
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
-		Utility.Warn("DataBlockDefine.StringStringMap::__define_class begin");
+		Utility.Warn("DataBlockDefine.StringDataBlockMap::__define_class begin");
 
-		local class = DataBlockDefine.StringStringMap;
+		local class = DataBlockDefine.StringDataBlockMap;
 		local obj_methods = {
 			GetDataBlockId = rawget(class, "GetDataBlockId"),
 			Init = rawget(class, "Init"),
@@ -346,8 +346,8 @@ DataBlockDefine.StringStringMap = {
 		};
 		local tmp_obj_method = nil;
 
-		local __defineclass_return = defineclass(nil, "DataBlockDefine.StringStringMap", "StringStringMap", class, obj_methods, false, false);
-		Utility.Warn("DataBlockDefine.StringStringMap::__define_class end");
+		local __defineclass_return = defineclass(nil, "DataBlockDefine.StringDataBlockMap", "StringDataBlockMap", class, obj_methods, false, false);
+		Utility.Warn("DataBlockDefine.StringDataBlockMap::__define_class end");
 		return __defineclass_return;
 	end,
 
@@ -359,6 +359,7 @@ DataBlockDefine.StringStringMap = {
 	},
 
 	__obj_fields = {
+		OnNewDataBlock = true,
 		m_IsValid = true,
 		m_DataBlockId = true,
 		m_DataWrap = true,
@@ -378,13 +379,13 @@ DataBlockDefine.StringStringMap = {
 	},
 };
 
-DataBlockDefine.StringStringMap.KeyValue = {
+DataBlockDefine.StringDataBlockMap.KeyValue = {
 	-------------------------------
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
 		local __cs2lua_func_info = luainitialize();
-		local __retval_0, __retval_1 = luapcall(DataBlockDefine.StringStringMap.KeyValue.__ori___new_object, __cs2lua_func_info, ...);
+		local __retval_0, __retval_1 = luapcall(DataBlockDefine.StringDataBlockMap.KeyValue.__ori___new_object, __cs2lua_func_info, ...);
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 		if not __retval_0 then
 			lualog("{0}", __retval_1);
@@ -394,19 +395,19 @@ DataBlockDefine.StringStringMap.KeyValue = {
 	end,
 	__ori___new_object = function(__cs2lua_func_info, ...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newstruct(DataBlockDefine.StringStringMap.KeyValue, nil, nil, "ctor", 0, nil, ...);
+		__cs2dsl_newobj = newstruct(DataBlockDefine.StringDataBlockMap.KeyValue, nil, nil, "ctor", 0, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
-		DataBlockDefine.StringStringMap.KeyValue.__cctor();
+		DataBlockDefine.StringDataBlockMap.KeyValue.__cctor();
 	end,
 
 	__cctor = function()
-		if DataBlockDefine.StringStringMap.KeyValue.__cctor_called then 
+		if DataBlockDefine.StringDataBlockMap.KeyValue.__cctor_called then 
 			return;
 		else
-			DataBlockDefine.StringStringMap.KeyValue.__cctor_called = true;
+			DataBlockDefine.StringDataBlockMap.KeyValue.__cctor_called = true;
 		end;
 	end,
 
@@ -419,7 +420,7 @@ DataBlockDefine.StringStringMap.KeyValue = {
 	------ instance methods -------
 	-------------------------------
 	ctor = function(this)
-		DataBlockDefine.StringStringMap.KeyValue.__ctor(this);
+		DataBlockDefine.StringDataBlockMap.KeyValue.__ctor(this);
 	end,
 
 	__ctor = function(this)
@@ -440,16 +441,16 @@ DataBlockDefine.StringStringMap.KeyValue = {
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
-		Utility.Warn("DataBlockDefine.StringStringMap.KeyValue::__define_class begin");
+		Utility.Warn("DataBlockDefine.StringDataBlockMap.KeyValue::__define_class begin");
 
-		local class = DataBlockDefine.StringStringMap.KeyValue;
+		local class = DataBlockDefine.StringDataBlockMap.KeyValue;
 		local obj_methods = {
 			ctor = rawget(class, "ctor"),
 			__ctor = rawget(class, "__ctor"),
 		};
 
-		local __defineclass_return = defineclass(nil, "DataBlockDefine.StringStringMap.KeyValue", "KeyValue", class, obj_methods, true, false);
-		Utility.Warn("DataBlockDefine.StringStringMap.KeyValue::__define_class end");
+		local __defineclass_return = defineclass(nil, "DataBlockDefine.StringDataBlockMap.KeyValue", "KeyValue", class, obj_methods, true, false);
+		Utility.Warn("DataBlockDefine.StringDataBlockMap.KeyValue::__define_class end");
 		return __defineclass_return;
 	end,
 
@@ -477,5 +478,5 @@ require "cs2lua__syslib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
 require "datablockdefine__cstring";
-settempmetatable(DataBlockDefine.StringStringMap.KeyValue);
-settempmetatable(DataBlockDefine.StringStringMap);
+settempmetatable(DataBlockDefine.StringDataBlockMap.KeyValue);
+settempmetatable(DataBlockDefine.StringDataBlockMap);

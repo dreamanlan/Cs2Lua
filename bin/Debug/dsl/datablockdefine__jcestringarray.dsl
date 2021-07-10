@@ -29,36 +29,36 @@ class(DataBlockDefine.JceStringArray) {
 
 	instance_methods {
 		GetDataBlockId = deffunc(1)args(this){
-			local(__method_ret_2446_8_2449_9);
-			__method_ret_2446_8_2449_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId");
-			return(__method_ret_2446_8_2449_9);
+			local(__method_ret_2450_8_2453_9);
+			__method_ret_2450_8_2453_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId");
+			return(__method_ret_2450_8_2453_9);
 		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true)];
 		Init = deffunc(0)args(this){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid"), 2452_12_2453_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid"), 2456_12_2457_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Release = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 2458_12_2459_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 2462_12_2463_23 ){
 				return();
 			};
-			foreachlist(__foreach_ix_2460_12_2462_13, __foreach_exp_2460_12_2462_13, str, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
+			foreachlist(__foreach_ix_2464_12_2466_13, __foreach_exp_2464_12_2466_13, str, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
 				callstatic(DataBlockDefine.DclApi, "free_string", callinstance(str, DataBlockDefine.CString, "GetDataBlockId"));
 			};
 			callexterninstance(getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "Clear");
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2464_12_2467_13 ){
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2468_12_2471_13 ){
 				callstatic(DataBlockDefine.DclApi, "free_array", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"));
 				setinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId", 0);
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Attach = deffunc(0)args(this, dataBlockId){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid"), 2472_12_2473_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid"), 2476_12_2477_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId", dataBlockId);
-			if( execbinary("!=", dataBlockId, 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2475_12_2484_13 ){
+			if( execbinary("!=", dataBlockId, 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2479_12_2488_13 ){
 				local(len); len = callstatic(DataBlockDefine.DclApi, "get_array_length", dataBlockId);
 				setexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "Capacity", len);
 				local(ix); ix = 0;
@@ -73,10 +73,10 @@ class(DataBlockDefine.JceStringArray) {
 			setinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Struct, 0, true)];
 		Detach = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 2489_12_2490_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 2493_12_2494_23 ){
 				return();
 			};
-			foreachlist(__foreach_ix_2491_12_2493_13, __foreach_exp_2491_12_2493_13, str, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
+			foreachlist(__foreach_ix_2495_12_2497_13, __foreach_exp_2495_12_2497_13, str, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
 				callinstance(str, DataBlockDefine.CString, "Detach");
 			};
 			callexterninstance(getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "Clear");
@@ -84,19 +84,19 @@ class(DataBlockDefine.JceStringArray) {
 			setinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		GetLength = deffunc(1)args(this){
-			local(__method_ret_2498_8_2506_9);
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2500_12_2505_13 ){
-				__method_ret_2498_8_2506_9 = callstatic(DataBlockDefine.DclApi, "get_array_length", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"));
-				return(__method_ret_2498_8_2506_9);
+			local(__method_ret_2502_8_2510_9);
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2504_12_2509_13 ){
+				__method_ret_2502_8_2510_9 = callstatic(DataBlockDefine.DclApi, "get_array_length", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"));
+				return(__method_ret_2502_8_2510_9);
 			}else{
-				__method_ret_2498_8_2506_9 = 0;
-				return(__method_ret_2498_8_2506_9);
+				__method_ret_2502_8_2510_9 = 0;
+				return(__method_ret_2502_8_2510_9);
 			};
 			return(null);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		Reset = deffunc(0)args(this, size){
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2510_12_2516_13 ){
-				foreachlist(__foreach_ix_2511_16_2513_17, __foreach_exp_2511_16_2513_17, str, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2514_12_2520_13 ){
+				foreachlist(__foreach_ix_2515_16_2517_17, __foreach_exp_2515_16_2517_17, str, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, System.Collections.Generic.List_T, true){
 					callstatic(DataBlockDefine.DclApi, "free_string", callinstance(str, DataBlockDefine.CString, "GetDataBlockId"));
 				};
 				callexterninstance(getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "Clear");
@@ -112,19 +112,19 @@ class(DataBlockDefine.JceStringArray) {
 			};
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(size, System.UInt32, TypeKind.Struct, 0, true)];
 		GetData = deffunc(1)args(this, index){
-			local(__method_ret_2524_8_2532_9);
-			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "Count"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2526_12_2531_13 ){
-				__method_ret_2524_8_2532_9 = getexterninstanceindexer(DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "get_Item", 1, index);
-				return(__method_ret_2524_8_2532_9);
+			local(__method_ret_2528_8_2536_9);
+			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "Count"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2530_12_2535_13 ){
+				__method_ret_2528_8_2536_9 = getexterninstanceindexer(DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "get_Item", 1, index);
+				return(__method_ret_2528_8_2536_9);
 			}else{
-				__method_ret_2524_8_2532_9 = null;
-				return(__method_ret_2524_8_2532_9);
+				__method_ret_2528_8_2536_9 = null;
+				return(__method_ret_2528_8_2536_9);
 			};
 			return(null);
 		}options[needfuncinfo(false), rettype(return, DataBlockDefine.CString, TypeKind.Class, 0, false), paramtype(index, System.Int32, TypeKind.Struct, 0, true)];
 		SetData = deffunc(0)args(this, index, val){
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2535_12_2540_13 ){
-				if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "Count"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2536_16_2538_17 ){
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2539_12_2544_13 ){
+				if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "Count"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 2540_16_2542_17 ){
 					setexterninstanceindexer(DataBlockDefine.CString, TypeKind.Class, System.Collections.Generic.List_T, getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataWrap"), System.Collections.Generic.List_T, "set_Item", 2, index, val);
 				};
 				callstatic(DataBlockDefine.DclApi, "set_array_element_uint64", getinstance(SymbolKind.Field, this, DataBlockDefine.JceStringArray, "m_DataBlockId"), typecast(index, System.UInt32, TypeKind.Struct), callinstance(val, DataBlockDefine.CString, "GetDataBlockId"));

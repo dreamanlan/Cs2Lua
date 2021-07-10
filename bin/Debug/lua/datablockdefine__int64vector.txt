@@ -31,9 +31,9 @@ DataBlockDefine.Int64Vector = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_944_8_947_9;
-		__method_ret_944_8_947_9 = this.m_DataBlockId;
-		return __method_ret_944_8_947_9;
+		local __method_ret_945_8_948_9;
+		__method_ret_945_8_948_9 = this.m_DataBlockId;
+		return __method_ret_945_8_948_9;
 	end,
 
 	Init = function(this)
@@ -74,19 +74,19 @@ DataBlockDefine.Int64Vector = {
 	end,
 
 	GetCount = function(this)
-		local __method_ret_982_8_985_9;
-		__method_ret_982_8_985_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
-		return __method_ret_982_8_985_9;
+		local __method_ret_983_8_986_9;
+		__method_ret_983_8_986_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		return __method_ret_983_8_986_9;
 	end,
 
 	GetData = function(this, index)
-		local __method_ret_986_8_992_9;
+		local __method_ret_987_8_993_9;
 		if ((index >= 0) and (index < DataBlockDefine.Int64Vector.GetCount(this))) then 
-			__method_ret_986_8_992_9 = DataBlockDefine.DclApi.int64_vector_get_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
-			return __method_ret_986_8_992_9;
+			__method_ret_987_8_993_9 = DataBlockDefine.DclApi.int64_vector_get_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			return __method_ret_987_8_993_9;
 		end;
-		__method_ret_986_8_992_9 = 0;
-		return __method_ret_986_8_992_9;
+		__method_ret_987_8_993_9 = 0;
+		return __method_ret_987_8_993_9;
 	end,
 
 	SetData = function(this, index, data)
@@ -96,24 +96,24 @@ DataBlockDefine.Int64Vector = {
 	end,
 
 	IndexOf = function(this, data)
-		local __method_ret_999_8_1006_9;
+		local __method_ret_1000_8_1007_9;
 		local ix;
 		ix = 0;
 		while (ix < DataBlockDefine.Int64Vector.GetCount(this)) do
 			if (DataBlockDefine.Int64Vector.GetData(this, ix) == data) then 
-				__method_ret_999_8_1006_9 = ix;
-				return __method_ret_999_8_1006_9;
+				__method_ret_1000_8_1007_9 = ix;
+				return __method_ret_1000_8_1007_9;
 			end;
 			ix = (ix + 1);
 		end;
-		__method_ret_999_8_1006_9 = -1;
-		return __method_ret_999_8_1006_9;
+		__method_ret_1000_8_1007_9 = -1;
+		return __method_ret_1000_8_1007_9;
 	end,
 
 	GetLast = function(this)
-		local __method_ret_1007_8_1010_9;
-		__method_ret_1007_8_1010_9 = DataBlockDefine.Int64Vector.GetData(this, (DataBlockDefine.Int64Vector.GetCount(this) - 1));
-		return __method_ret_1007_8_1010_9;
+		local __method_ret_1008_8_1011_9;
+		__method_ret_1008_8_1011_9 = DataBlockDefine.Int64Vector.GetData(this, (DataBlockDefine.Int64Vector.GetCount(this) - 1));
+		return __method_ret_1008_8_1011_9;
 	end,
 
 	AddLast = function(this, data)

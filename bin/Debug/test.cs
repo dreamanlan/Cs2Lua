@@ -120,6 +120,7 @@ namespace DataBlockDefine
         Recycle,
         PostAndRecycle
     }
+    public delegate IDataBlock NewDataBlockDelegation();
     [Cs2Dsl.Ignore]
     public static class DclApi
     {
@@ -829,7 +830,7 @@ namespace DataBlockDefine
             if (m_DataBlockId != 0) {
                 DclApi.free_array(m_DataBlockId);
             }
-            m_DataBlockId = DclApi.alloc_array(sizeof(long), size, size);
+            m_DataBlockId = DclApi.alloc_array(sizeof(float), size, size);
         }
         public float GetData(int index)
         {
@@ -854,7 +855,7 @@ namespace DataBlockDefine
             if (m_DataBlockId != 0) {
                 DclApi.free_array(m_DataBlockId);
             }
-            m_DataBlockId = DclApi.alloc_array(sizeof(ulong), size, size);
+            m_DataBlockId = DclApi.alloc_array(sizeof(double), size, size);
         }
         public double GetData(int index)
         {
@@ -1269,8 +1270,9 @@ namespace DataBlockDefine
         private ulong m_DataBlockId;
         private List<CString> m_DataWrap = new List<CString>();
     }
-    public class DataBlockVector<T> : IDataBlock where T : IDataBlock, new()
+    public class DataBlockVector : IDataBlock
     {
+        public NewDataBlockDelegation OnNewDataBlock;
         public ulong GetDataBlockId()
         {
             return m_DataBlockId;
@@ -1304,7 +1306,7 @@ namespace DataBlockDefine
             m_DataBlockId = dataBlockId;
             long ct = DclApi.container_get_size(dataBlockId);
             for (long ix = 0; ix < ct; ++ix) {
-                var elem = new T();
+                var elem = OnNewDataBlock();
                 elem.Attach(DclApi.uint64_vector_get_element(dataBlockId, (ulong)ix));
                 m_DataWrap.Add(elem);
             }
@@ -1333,29 +1335,29 @@ namespace DataBlockDefine
         {
             return m_DataWrap.Count;
         }
-        public T GetData(int index)
+        public T GetData<T>(int index) where T : IDataBlock
         {
             if (index >= 0 && index < m_DataWrap.Count) {
-                return m_DataWrap[index];
+                return (T)m_DataWrap[index];
             }
             return default(T);
         }
-        public void SetData(int index, T data)
+        public void SetData(int index, IDataBlock data)
         {
             if (index >= 0 && index < m_DataWrap.Count) {
                 m_DataWrap[index] = data;
                 DclApi.uint64_vector_set_element(m_DataBlockId, (ulong)index, data.GetDataBlockId());
             }
         }
-        public int IndexOf(T data)
+        public int IndexOf(IDataBlock data)
         {
             return m_DataWrap.IndexOf(data);
         }
-        public T GetLast()
+        public T GetLast<T>() where T : IDataBlock
         {
-            return GetData(GetCount() - 1);
+            return GetData<T>(GetCount() - 1);
         }
-        public void AddLast(T data)
+        public void AddLast(IDataBlock data)
         {
             m_DataWrap.Add(data);
             DclApi.uint64_vector_push_back(m_DataBlockId, data.GetDataBlockId());
@@ -1367,7 +1369,7 @@ namespace DataBlockDefine
                 DclApi.uint64_vector_pop_back(m_DataBlockId);
             }
         }
-        public void Remove(T data)
+        public void Remove(IDataBlock data)
         {
             int index = IndexOf(data);
             RemoveAt(index);
@@ -1387,7 +1389,7 @@ namespace DataBlockDefine
 
         private bool m_IsValid;
         private ulong m_DataBlockId;
-        private List<T> m_DataWrap = new List<T>();
+        private List<IDataBlock> m_DataWrap = new List<IDataBlock>();
     }
 
     public class Int64Int64Map : IDataBlock
@@ -1645,8 +1647,9 @@ namespace DataBlockDefine
         private ulong m_DataBlockId;
         private Dictionary<long, CString> m_DataWrap = new Dictionary<long, CString>();
     }
-    public class Int64DataBlockMap<T> : IDataBlock where T : IDataBlock, new()
+    public class Int64DataBlockMap : IDataBlock
     {
+        public NewDataBlockDelegation OnNewDataBlock;
         public ulong GetDataBlockId()
         {
             return m_DataBlockId;
@@ -1675,7 +1678,7 @@ namespace DataBlockDefine
             m_DataBlockId = dataBlockId;
             if (dataBlockId != 0) {
                 DclApi.iterate_int64_uint64_map(dataBlockId, (k, v) => {
-                    var elem = new T();
+                    var elem = OnNewDataBlock();
                     elem.Attach(v);
                     m_DataWrap.Add(k, elem);
                     return true;
@@ -1701,18 +1704,18 @@ namespace DataBlockDefine
         {
             return m_DataWrap.Count;
         }
-        public T GetData(long key)
+        public T GetData<T>(long key) where T : IDataBlock
         {
-            T v;
+            IDataBlock v;
             m_DataWrap.TryGetValue(key, out v);
-            return v;
+            return (T)v;
         }
-        public void SetData(long key, T val)
+        public void SetData(long key, IDataBlock val)
         {
             m_DataWrap[key] = val;
             DclApi.int64_uint64_map_set_element(m_DataBlockId, key, val.GetDataBlockId());
         }
-        public void Add(long key, T val)
+        public void Add(long key, IDataBlock val)
         {
             m_DataWrap.Add(key, val);
             DclApi.int64_uint64_map_add_element(m_DataBlockId, key, val.GetDataBlockId());
@@ -1736,7 +1739,7 @@ namespace DataBlockDefine
             m_DataWrap.Clear();
             DclApi.container_clear(m_DataBlockId);
         }
-        public void Iterate(Func<long, T, bool> callback)
+        public void Iterate(Func<long, IDataBlock, bool> callback)
         {
             foreach (var pair in m_DataWrap) {
                 if (!callback(pair.Key, pair.Value))
@@ -1746,7 +1749,7 @@ namespace DataBlockDefine
 
         private bool m_IsValid;
         private ulong m_DataBlockId;
-        private Dictionary<long, T> m_DataWrap = new Dictionary<long, T>();
+        private Dictionary<long, IDataBlock> m_DataWrap = new Dictionary<long, IDataBlock>();
     }
 
     public class StringInt64Map : IDataBlock
@@ -2171,8 +2174,9 @@ namespace DataBlockDefine
         private ulong m_DataBlockId;
         private Dictionary<ulong, KeyValue> m_DataWrap = new Dictionary<ulong, KeyValue>();
     }
-    public class StringDataBlockMap<T> : IDataBlock where T : IDataBlock, new()
+    public class StringDataBlockMap : IDataBlock
     {
+        public NewDataBlockDelegation OnNewDataBlock;
         public ulong GetDataBlockId()
         {
             return m_DataBlockId;
@@ -2203,7 +2207,7 @@ namespace DataBlockDefine
                 DclApi.iterate_string_uint64_map(dataBlockId, (k, v) => {
                     CString key = new CString();
                     key.Attach(k);
-                    T val = new T();
+                    IDataBlock val = OnNewDataBlock();
                     val.Attach(v);
                     m_DataWrap.Add(k, new KeyValue { Key = key, Value = val });
                     return true;
@@ -2231,18 +2235,18 @@ namespace DataBlockDefine
         {
             return m_DataWrap.Count;
         }
-        public T GetData(CString key)
+        public T GetData<T>(CString key) where T : IDataBlock
         {
             if (null != key && key.GetDataBlockId() != 0) {
                 ulong k = DclApi.string_uint64_map_get_key(m_DataBlockId, key.GetDataBlockId());
                 KeyValue kv;
                 if (m_DataWrap.TryGetValue(k, out kv)) {
-                    return kv.Value;
+                    return (T)kv.Value;
                 }
             }
             return default(T);
         }
-        public void SetData(CString key, T val)
+        public void SetData(CString key, IDataBlock val)
         {
             if (null != key && key.GetDataBlockId() != 0) {
                 ulong oldKey = DclApi.string_uint64_map_get_key(m_DataBlockId, key.GetDataBlockId());
@@ -2268,7 +2272,7 @@ namespace DataBlockDefine
                 }
             }
         }
-        public void Add(CString key, T val)
+        public void Add(CString key, IDataBlock val)
         {
             if (null != key && key.GetDataBlockId() != 0) {
                 ulong mapKey = DclApi.string_uint64_map_add_element(m_DataBlockId, key.GetDataBlockId(), null == val ? 0 : val.GetDataBlockId());
@@ -2312,7 +2316,7 @@ namespace DataBlockDefine
             m_DataWrap.Clear();
             DclApi.container_clear(m_DataBlockId);
         }
-        public void Iterate(Func<CString, T, bool> callback)
+        public void Iterate(Func<CString, IDataBlock, bool> callback)
         {
             foreach (var pair in m_DataWrap) {
                 var kv = pair.Value;
@@ -2324,7 +2328,7 @@ namespace DataBlockDefine
         private struct KeyValue
         {
             internal CString Key;
-            internal T Value;
+            internal IDataBlock Value;
         }
 
         private bool m_IsValid;
@@ -2545,8 +2549,9 @@ namespace DataBlockDefine
         private ulong m_DataBlockId;
         private List<CString> m_DataWrap = new List<CString>();
     }
-    public class JceStructArray<T> : IDataBlock where T : IDataBlock, new()
+    public class JceStructArray : IDataBlock
     {
+        public NewDataBlockDelegation OnNewDataBlock;
         public ulong GetDataBlockId()
         {
             return m_DataBlockId;
@@ -2581,7 +2586,7 @@ namespace DataBlockDefine
                 m_DataWrap.Capacity = len;
                 for (int ix = 0; ix < len; ++ix) {
                     ulong objId = DclApi.get_array_element_uint64(dataBlockId, (uint)ix);
-                    var obj = new T();
+                    var obj = OnNewDataBlock();
                     obj.Attach(objId);
                     m_DataWrap.Add(obj);
                 }
@@ -2621,20 +2626,20 @@ namespace DataBlockDefine
             m_DataBlockId = DclApi.alloc_array(sizeof(ulong), size, size);
             m_DataWrap.Capacity = (int)size;
             for (uint ix = 0; ix < size; ++ix) {
-                var obj = new T();
+                var obj = OnNewDataBlock();
                 m_DataWrap.Add(obj);
             }
         }
-        public T GetData(int index)
+        public T GetData<T>(int index) where T : IDataBlock
         {
             if (index >= 0 && index < m_DataWrap.Count) {
-                return m_DataWrap[index];
+                return (T)m_DataWrap[index];
             }
             else {
                 return default(T);
             }
         }
-        public void SetData(int index, T val)
+        public void SetData(int index, IDataBlock val)
         {
             if (m_DataBlockId != 0) {
                 if (index >= 0 && index < m_DataWrap.Count) {
@@ -2646,6 +2651,7 @@ namespace DataBlockDefine
 
         private bool m_IsValid;
         private ulong m_DataBlockId;
-        private List<T> m_DataWrap = new List<T>();
+        private List<IDataBlock> m_DataWrap = new List<IDataBlock>();
     }
 }
+

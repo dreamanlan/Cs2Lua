@@ -1,24 +1,24 @@
 require "cs2lua__namespaces"; 
 
-DataBlockDefine.JceStringArray = {
+DataBlockDefine.JceStructArray = {
 	-------------------------------
 	-------- class methods --------
 	-------------------------------
 	__new_object = function(...)
 		local __cs2dsl_newobj;
-		__cs2dsl_newobj = newobject(DataBlockDefine.JceStringArray, nil, nil, "ctor", 0, nil, ...);
+		__cs2dsl_newobj = newobject(DataBlockDefine.JceStructArray, nil, nil, "ctor", 0, nil, ...);
 		return __cs2dsl_newobj;
 	end,
 
 	cctor = function()
-		DataBlockDefine.JceStringArray.__cctor();
+		DataBlockDefine.JceStructArray.__cctor();
 	end,
 
 	__cctor = function()
-		if DataBlockDefine.JceStringArray.__cctor_called then 
+		if DataBlockDefine.JceStructArray.__cctor_called then 
 			return;
 		else
-			DataBlockDefine.JceStringArray.__cctor_called = true;
+			DataBlockDefine.JceStructArray.__cctor_called = true;
 		end;
 	end,
 
@@ -31,9 +31,9 @@ DataBlockDefine.JceStringArray = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_2450_8_2453_9;
-		__method_ret_2450_8_2453_9 = this.m_DataBlockId;
-		return __method_ret_2450_8_2453_9;
+		local __method_ret_2554_8_2557_9;
+		__method_ret_2554_8_2557_9 = this.m_DataBlockId;
+		return __method_ret_2554_8_2557_9;
 	end,
 
 	Init = function(this)
@@ -47,10 +47,10 @@ DataBlockDefine.JceStringArray = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_exp_2464_12_2466_13 = this.m_DataWrap;
-		for __foreach_ix_2464_12_2466_13 = 1, __foreach_exp_2464_12_2466_13.Count do
-			local str = __foreach_exp_2464_12_2466_13[__foreach_ix_2464_12_2466_13];
-			DataBlockDefine.DclApi.free_string(DataBlockDefine.CString.GetDataBlockId(str));
+		local __foreach_exp_2568_12_2570_13 = this.m_DataWrap;
+		for __foreach_ix_2568_12_2570_13 = 1, __foreach_exp_2568_12_2570_13.Count do
+			local obj = __foreach_exp_2568_12_2570_13[__foreach_ix_2568_12_2570_13];
+			callinterface(obj, DataBlockDefine.IDataBlock, "Release");
 		end;
 		this.m_DataWrap:Clear();
 		if (this.m_DataBlockId ~= 0) then 
@@ -72,12 +72,12 @@ DataBlockDefine.JceStringArray = {
 			local ix;
 			ix = 0;
 			while (ix < len) do
-				local strId;
-				strId = DataBlockDefine.DclApi.get_array_element_uint64(dataBlockId, typecast(ix, System.UInt32, TypeKind.Struct));
-				local cstr;
-				cstr = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
-				DataBlockDefine.CString.Attach(cstr, strId);
-				this.m_DataWrap:Add(cstr);
+				local objId;
+				objId = DataBlockDefine.DclApi.get_array_element_uint64(dataBlockId, typecast(ix, System.UInt32, TypeKind.Struct));
+				local obj;
+				obj = this.OnNewDataBlock();
+				callinterface(obj, DataBlockDefine.IDataBlock, "Attach", objId);
+				this.m_DataWrap:Add(obj);
 				ix = (ix + 1);
 			end;
 		end;
@@ -88,10 +88,10 @@ DataBlockDefine.JceStringArray = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_exp_2495_12_2497_13 = this.m_DataWrap;
-		for __foreach_ix_2495_12_2497_13 = 1, __foreach_exp_2495_12_2497_13.Count do
-			local str = __foreach_exp_2495_12_2497_13[__foreach_ix_2495_12_2497_13];
-			DataBlockDefine.CString.Detach(str);
+		local __foreach_exp_2599_12_2601_13 = this.m_DataWrap;
+		for __foreach_ix_2599_12_2601_13 = 1, __foreach_exp_2599_12_2601_13.Count do
+			local obj = __foreach_exp_2599_12_2601_13[__foreach_ix_2599_12_2601_13];
+			callinterface(obj, DataBlockDefine.IDataBlock, "Detach");
 		end;
 		this.m_DataWrap:Clear();
 		this.m_DataBlockId = 0;
@@ -99,23 +99,23 @@ DataBlockDefine.JceStringArray = {
 	end,
 
 	GetLength = function(this)
-		local __method_ret_2502_8_2510_9;
+		local __method_ret_2606_8_2614_9;
 		if (this.m_DataBlockId ~= 0) then 
-			__method_ret_2502_8_2510_9 = DataBlockDefine.DclApi.get_array_length(this.m_DataBlockId);
-			return __method_ret_2502_8_2510_9;
+			__method_ret_2606_8_2614_9 = DataBlockDefine.DclApi.get_array_length(this.m_DataBlockId);
+			return __method_ret_2606_8_2614_9;
 		else
-			__method_ret_2502_8_2510_9 = 0;
-			return __method_ret_2502_8_2510_9;
+			__method_ret_2606_8_2614_9 = 0;
+			return __method_ret_2606_8_2614_9;
 		end;
 		return nil;
 	end,
 
 	Reset = function(this, size)
 		if (this.m_DataBlockId ~= 0) then 
-			local __foreach_exp_2515_16_2517_17 = this.m_DataWrap;
-			for __foreach_ix_2515_16_2517_17 = 1, __foreach_exp_2515_16_2517_17.Count do
-				local str = __foreach_exp_2515_16_2517_17[__foreach_ix_2515_16_2517_17];
-				DataBlockDefine.DclApi.free_string(DataBlockDefine.CString.GetDataBlockId(str));
+			local __foreach_exp_2619_16_2621_17 = this.m_DataWrap;
+			for __foreach_ix_2619_16_2621_17 = 1, __foreach_exp_2619_16_2621_17.Count do
+				local obj = __foreach_exp_2619_16_2621_17[__foreach_ix_2619_16_2621_17];
+				callinterface(obj, DataBlockDefine.IDataBlock, "Release");
 			end;
 			this.m_DataWrap:Clear();
 			DataBlockDefine.DclApi.free_array(this.m_DataBlockId);
@@ -125,21 +125,21 @@ DataBlockDefine.JceStringArray = {
 		local ix;
 		ix = 0;
 		while (ix < size) do
-			local cstr;
-			cstr = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
-			this.m_DataWrap:Add(cstr);
+			local obj;
+			obj = this.OnNewDataBlock();
+			this.m_DataWrap:Add(obj);
 			ix = (ix + 1);
 		end;
 	end,
 
-	GetData = function(this, index)
-		local __method_ret_2528_8_2536_9;
+	GetData = function(this, T, index)
+		local __method_ret_2632_8_2640_9;
 		if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
-			__method_ret_2528_8_2536_9 = this.m_DataWrap[index + 1];
-			return __method_ret_2528_8_2536_9;
+			__method_ret_2632_8_2640_9 = typecast(this.m_DataWrap[index + 1], T, TypeKind.TypeParameter);
+			return __method_ret_2632_8_2640_9;
 		else
-			__method_ret_2528_8_2536_9 = nil;
-			return __method_ret_2528_8_2536_9;
+			__method_ret_2632_8_2640_9 = nil;
+			return __method_ret_2632_8_2640_9;
 		end;
 		return nil;
 	end,
@@ -149,12 +149,12 @@ DataBlockDefine.JceStringArray = {
 			if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
 				this.m_DataWrap[index + 1] = val;
 			end;
-			DataBlockDefine.DclApi.set_array_element_uint64(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct), DataBlockDefine.CString.GetDataBlockId(val));
+			DataBlockDefine.DclApi.set_array_element_uint64(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct), callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId"));
 		end;
 	end,
 
 	ctor = function(this)
-		DataBlockDefine.JceStringArray.__ctor(this);
+		DataBlockDefine.JceStructArray.__ctor(this);
 	end,
 
 	__ctor = function(this)
@@ -163,7 +163,7 @@ DataBlockDefine.JceStringArray = {
 		else
 			this.__ctor_called = true;
 		end;
-		this.m_DataWrap = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_DataBlockDefine_CString_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_DataBlockDefine_CString_TypeArgs") or {DataBlockDefine.CString}), buildglobalinfoonce("g_System_Collections_Generic_List_DataBlockDefine_CString_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_DataBlockDefine_CString_TypeKinds") or {TypeKind.Class}), "ctor", 0, {});
+		this.m_DataWrap = newexternlist(System.Collections.Generic.List_T, buildglobalinfoonce("g_System_Collections_Generic_List_DataBlockDefine_IDataBlock_TypeArgs", getglobalinfo("g_System_Collections_Generic_List_DataBlockDefine_IDataBlock_TypeArgs") or {DataBlockDefine.IDataBlock}), buildglobalinfoonce("g_System_Collections_Generic_List_DataBlockDefine_IDataBlock_TypeKinds", getglobalinfo("g_System_Collections_Generic_List_DataBlockDefine_IDataBlock_TypeKinds") or {TypeKind.Interface}), "ctor", 0, {});
 	end,
 	-------------------------------
 	------ instance fields -------
@@ -178,9 +178,9 @@ DataBlockDefine.JceStringArray = {
 	--- define class and object ---
 	-------------------------------
 	__define_class = function()
-		Utility.Warn("DataBlockDefine.JceStringArray::__define_class begin");
+		Utility.Warn("DataBlockDefine.JceStructArray::__define_class begin");
 
-		local class = DataBlockDefine.JceStringArray;
+		local class = DataBlockDefine.JceStructArray;
 		local obj_methods = {
 			GetDataBlockId = rawget(class, "GetDataBlockId"),
 			Init = rawget(class, "Init"),
@@ -196,8 +196,8 @@ DataBlockDefine.JceStringArray = {
 		};
 		local tmp_obj_method = nil;
 
-		local __defineclass_return = defineclass(nil, "DataBlockDefine.JceStringArray", "JceStringArray", class, obj_methods, false, false);
-		Utility.Warn("DataBlockDefine.JceStringArray::__define_class end");
+		local __defineclass_return = defineclass(nil, "DataBlockDefine.JceStructArray", "JceStructArray", class, obj_methods, false, false);
+		Utility.Warn("DataBlockDefine.JceStructArray::__define_class end");
 		return __defineclass_return;
 	end,
 
@@ -209,6 +209,7 @@ DataBlockDefine.JceStringArray = {
 	},
 
 	__obj_fields = {
+		OnNewDataBlock = true,
 		m_IsValid = true,
 		m_DataBlockId = true,
 		m_DataWrap = true,
@@ -232,5 +233,4 @@ DataBlockDefine.JceStringArray = {
 require "cs2lua__syslib";
 require "cs2lua__externenums";
 require "cs2lua__interfaces";
-require "datablockdefine__cstring";
-settempmetatable(DataBlockDefine.JceStringArray);
+settempmetatable(DataBlockDefine.JceStructArray);

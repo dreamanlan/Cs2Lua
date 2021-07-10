@@ -15,15 +15,15 @@ DataBlockDefine.DclApi = {
 		return __retval_1;
 	end,
 	__ori_get_string = function(__cs2lua_func_info, id)
-		local __method_ret_271_8_278_9;
+		local __method_ret_272_8_279_9;
 		local v;
 		v = DataBlockDefine.DclApi.get_cstring(id);
 		if isequal(callexterninstancereturnstruct(v, System.IntPtr, "ToPointer"), nil) then 
-			__method_ret_271_8_278_9 = nil;
-			return __method_ret_271_8_278_9;
+			__method_ret_272_8_279_9 = nil;
+			return __method_ret_272_8_279_9;
 		end;
-		__method_ret_271_8_278_9 = System.Runtime.InteropServices.Marshal.PtrToStringAnsi__IntPtr(wrapexternstructargument(v, System.IntPtr, OperationKind.LocalReference, SymbolKind.Local));
-		return __method_ret_271_8_278_9;
+		__method_ret_272_8_279_9 = System.Runtime.InteropServices.Marshal.PtrToStringAnsi__IntPtr(wrapexternstructargument(v, System.IntPtr, OperationKind.LocalReference, SymbolKind.Local));
+		return __method_ret_272_8_279_9;
 	end,
 
 	cctor = function()

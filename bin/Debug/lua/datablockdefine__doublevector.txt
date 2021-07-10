@@ -31,9 +31,9 @@ DataBlockDefine.DoubleVector = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_1040_8_1043_9;
-		__method_ret_1040_8_1043_9 = this.m_DataBlockId;
-		return __method_ret_1040_8_1043_9;
+		local __method_ret_1041_8_1044_9;
+		__method_ret_1041_8_1044_9 = this.m_DataBlockId;
+		return __method_ret_1041_8_1044_9;
 	end,
 
 	Init = function(this)
@@ -74,19 +74,19 @@ DataBlockDefine.DoubleVector = {
 	end,
 
 	GetCount = function(this)
-		local __method_ret_1078_8_1081_9;
-		__method_ret_1078_8_1081_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
-		return __method_ret_1078_8_1081_9;
+		local __method_ret_1079_8_1082_9;
+		__method_ret_1079_8_1082_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		return __method_ret_1079_8_1082_9;
 	end,
 
 	GetData = function(this, index)
-		local __method_ret_1082_8_1088_9;
+		local __method_ret_1083_8_1089_9;
 		if ((index >= 0) and (index < DataBlockDefine.DoubleVector.GetCount(this))) then 
-			__method_ret_1082_8_1088_9 = DataBlockDefine.DclApi.double_vector_get_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
-			return __method_ret_1082_8_1088_9;
+			__method_ret_1083_8_1089_9 = DataBlockDefine.DclApi.double_vector_get_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			return __method_ret_1083_8_1089_9;
 		end;
-		__method_ret_1082_8_1088_9 = 0;
-		return __method_ret_1082_8_1088_9;
+		__method_ret_1083_8_1089_9 = 0;
+		return __method_ret_1083_8_1089_9;
 	end,
 
 	SetData = function(this, index, data)
@@ -96,15 +96,15 @@ DataBlockDefine.DoubleVector = {
 	end,
 
 	IndexOf = function(this, data)
-		local __method_ret_1095_8_1098_9;
-		__method_ret_1095_8_1098_9 = typecast(DataBlockDefine.DclApi.double_vector_index_of_element(this.m_DataBlockId, data), System.Int32, TypeKind.Struct);
-		return __method_ret_1095_8_1098_9;
+		local __method_ret_1096_8_1099_9;
+		__method_ret_1096_8_1099_9 = typecast(DataBlockDefine.DclApi.double_vector_index_of_element(this.m_DataBlockId, data), System.Int32, TypeKind.Struct);
+		return __method_ret_1096_8_1099_9;
 	end,
 
 	GetLast = function(this)
-		local __method_ret_1099_8_1102_9;
-		__method_ret_1099_8_1102_9 = DataBlockDefine.DoubleVector.GetData(this, (DataBlockDefine.DoubleVector.GetCount(this) - 1));
-		return __method_ret_1099_8_1102_9;
+		local __method_ret_1100_8_1103_9;
+		__method_ret_1100_8_1103_9 = DataBlockDefine.DoubleVector.GetData(this, (DataBlockDefine.DoubleVector.GetCount(this) - 1));
+		return __method_ret_1100_8_1103_9;
 	end,
 
 	AddLast = function(this, data)

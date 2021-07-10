@@ -39,13 +39,13 @@ DataBlockDefine.UInt64Array = {
 	end,
 
 	GetData = function(this, index)
-		local __method_ret_808_8_816_9;
+		local __method_ret_809_8_817_9;
 		if (this.m_DataBlockId ~= 0) then 
-			__method_ret_808_8_816_9 = DataBlockDefine.DclApi.get_array_element_uint64(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct));
-			return __method_ret_808_8_816_9;
+			__method_ret_809_8_817_9 = DataBlockDefine.DclApi.get_array_element_uint64(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct));
+			return __method_ret_809_8_817_9;
 		else
-			__method_ret_808_8_816_9 = 0;
-			return __method_ret_808_8_816_9;
+			__method_ret_809_8_817_9 = 0;
+			return __method_ret_809_8_817_9;
 		end;
 		return nil;
 	end,
