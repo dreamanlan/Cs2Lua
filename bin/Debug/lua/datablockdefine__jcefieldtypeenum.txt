@@ -1,0 +1,64 @@
+require "cs2lua__namespaces"; 
+
+rawset(DataBlockDefine, "JceFieldTypeEnum", {
+	["JceBoolField"] = 1,
+	["JceInt8Field"] = 2,
+	["JceUInt8Field"] = 3,
+	["JceInt16Field"] = 4,
+	["JceUInt16Field"] = 5,
+	["JceInt32Field"] = 6,
+	["JceUInt32Field"] = 7,
+	["JceInt64Field"] = 8,
+	["JceUInt64Field"] = 9,
+	["JceFloatField"] = 10,
+	["JceDoubleField"] = 11,
+	["JceStringField"] = 12,
+	["JceBoolListField"] = 13,
+	["JceInt8ListField"] = 14,
+	["JceUInt8ListField"] = 15,
+	["JceInt16ListField"] = 16,
+	["JceUInt16ListField"] = 17,
+	["JceInt32ListField"] = 18,
+	["JceUInt32ListField"] = 19,
+	["JceInt64ListField"] = 20,
+	["JceUInt64ListField"] = 21,
+	["JceFloatListField"] = 22,
+	["JceDoubleListField"] = 23,
+	["JceStringListField"] = 24,
+	["JceStructField"] = 25,
+	["JceStructListField"] = 26,
+});
+
+rawset(DataBlockDefine.JceFieldTypeEnum, "Value2String", {
+	[1] = "JceBoolField",
+	[2] = "JceInt8Field",
+	[3] = "JceUInt8Field",
+	[4] = "JceInt16Field",
+	[5] = "JceUInt16Field",
+	[6] = "JceInt32Field",
+	[7] = "JceUInt32Field",
+	[8] = "JceInt64Field",
+	[9] = "JceUInt64Field",
+	[10] = "JceFloatField",
+	[11] = "JceDoubleField",
+	[12] = "JceStringField",
+	[13] = "JceBoolListField",
+	[14] = "JceInt8ListField",
+	[15] = "JceUInt8ListField",
+	[16] = "JceInt16ListField",
+	[17] = "JceUInt16ListField",
+	[18] = "JceInt32ListField",
+	[19] = "JceUInt32ListField",
+	[20] = "JceInt64ListField",
+	[21] = "JceUInt64ListField",
+	[22] = "JceFloatListField",
+	[23] = "JceDoubleListField",
+	[24] = "JceStringListField",
+	[25] = "JceStructField",
+	[26] = "JceStructListField",
+});
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";

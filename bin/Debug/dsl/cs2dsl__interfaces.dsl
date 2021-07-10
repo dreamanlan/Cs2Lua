@@ -1,2 +1,3 @@
-interface(ICs2LuaPoolAllocatedObjectEx_T) { interfaces {}; };
-interface(IDict) { interfaces {}; };
+interface(DataBlockDefine.IDataBlock) { interfaces {}; };
+interface(DataBlockDefine.IFinalizableDataBlock) { interfaces {"DataBlockDefine.IDataBlock"}; };
+interface(DataBlockDefine.IJceProto) { interfaces {"DataBlockDefine.IFinalizableDataBlock"; "DataBlockDefine.IDataBlock"}; };

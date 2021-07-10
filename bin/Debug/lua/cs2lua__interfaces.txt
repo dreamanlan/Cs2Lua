@@ -1,15 +1,25 @@
-ICs2LuaPoolAllocatedObjectEx_T = {
+DataBlockDefine.IDataBlock = {
 	__cs2lua_defined = true, 
-	__cs2lua_fullname = "ICs2LuaPoolAllocatedObjectEx_T", 
-	__cs2lua_typename = "ICs2LuaPoolAllocatedObjectEx_T", 
+	__cs2lua_fullname = "DataBlockDefine.IDataBlock", 
+	__cs2lua_typename = "IDataBlock", 
 	__interfaces = {
 	}
 };
-IDict = {
+DataBlockDefine.IFinalizableDataBlock = {
 	__cs2lua_defined = true, 
-	__cs2lua_fullname = "IDict", 
-	__cs2lua_typename = "IDict", 
+	__cs2lua_fullname = "DataBlockDefine.IFinalizableDataBlock", 
+	__cs2lua_typename = "IFinalizableDataBlock", 
 	__interfaces = {
+"DataBlockDefine.IDataBlock"
+	}
+};
+DataBlockDefine.IJceProto = {
+	__cs2lua_defined = true, 
+	__cs2lua_fullname = "DataBlockDefine.IJceProto", 
+	__cs2lua_typename = "IJceProto", 
+	__interfaces = {
+, "DataBlockDefine.IFinalizableDataBlock"
+, "DataBlockDefine.IDataBlock"
 	}
 };
 

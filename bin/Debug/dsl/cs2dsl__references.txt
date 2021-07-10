@@ -1,11 +1,6 @@
-System.ArgumentException
 System.Boolean
-System.Console
-System.Exception
+System.Double
 System.Int32
-System.Object
-System.String
-UnityEngine.Color
-UnityEngine.Color32
-UnityEngine.Vector2
-UnityEngine.Vector3
+System.Int64
+System.UInt32
+System.UInt64

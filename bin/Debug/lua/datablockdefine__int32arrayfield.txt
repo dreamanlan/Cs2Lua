@@ -1,0 +1,113 @@
+require "cs2lua__namespaces"; 
+
+DataBlockDefine.Int32ArrayField = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(DataBlockDefine.Int32ArrayField, nil, nil, "ctor", 0, nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		DataBlockDefine.BaseIntegerArray.cctor();
+		DataBlockDefine.Int32ArrayField.__cctor();
+	end,
+
+	__cctor = function()
+		if DataBlockDefine.Int32ArrayField.__cctor_called then 
+			return;
+		else
+			DataBlockDefine.Int32ArrayField.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	GetData = function(this, index)
+		local __method_ret_2336_8_2344_9;
+		if (this.m_DataBlockId ~= 0) then 
+			__method_ret_2336_8_2344_9 = DataBlockDefine.DclApi.get_array_element_int32(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct));
+			return __method_ret_2336_8_2344_9;
+		else
+			__method_ret_2336_8_2344_9 = 0;
+			return __method_ret_2336_8_2344_9;
+		end;
+		return nil;
+	end,
+
+	ctor = function(this)
+		buildbaseobj(this, DataBlockDefine.Int32ArrayField, DataBlockDefine.BaseIntegerArray, "ctor", 0);
+		DataBlockDefine.Int32ArrayField.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__init_obj_fields = function(this)
+		rawset(this, "__ctor_called", false);
+	end,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("DataBlockDefine.Int32ArrayField::__define_class begin");
+
+		local class = DataBlockDefine.Int32ArrayField;
+		local obj_methods = {
+			GetData = rawget(class, "GetData"),
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
+		};
+		local tmp_obj_method = nil;
+
+		local __defineclass_return = defineclass(DataBlockDefine.BaseIntegerArray, "DataBlockDefine.Int32ArrayField", "Int32ArrayField", class, obj_methods, false, false);
+		Utility.Warn("DataBlockDefine.Int32ArrayField::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__interfaces = {
+		"DataBlockDefine.IDataBlock",
+	},
+	__method_info = {
+		ctor = {
+			ctor = true,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+require "datablockdefine__baseintegerarray";
+settempmetatable(DataBlockDefine.Int32ArrayField);

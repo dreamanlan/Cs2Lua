@@ -1,0 +1,178 @@
+require "cs2lua__namespaces"; 
+
+DataBlockDefine.CString = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		DataBlockDefine.CString.__cctor();
+	end,
+
+	__cctor = function()
+		if DataBlockDefine.CString.__cctor_called then 
+			return;
+		else
+			DataBlockDefine.CString.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	ctor = function(this)
+		DataBlockDefine.CString.__ctor(this);
+	end,
+
+	ctor__String = function(this, str)
+		DataBlockDefine.CString.__ctor(this);
+		DataBlockDefine.CString.Init(this);
+		DataBlockDefine.CString.SetString(this, str);
+	end,
+
+	GetDataBlockId = function(this)
+		local __method_ret_884_8_887_9;
+		__method_ret_884_8_887_9 = this.m_DataBlockId;
+		return __method_ret_884_8_887_9;
+	end,
+
+	Init = function(this)
+		if this.m_IsValid then 
+			return;
+		end;
+		this.m_IsValid = true;
+	end,
+
+	Release = function(this)
+		if (not this.m_IsValid) then 
+			return;
+		end;
+		this.m_StringCache = nil;
+		if (this.m_DataBlockId ~= 0) then 
+			DataBlockDefine.DclApi.free_string(this.m_DataBlockId);
+			this.m_DataBlockId = 0;
+		end;
+		this.m_IsValid = false;
+	end,
+
+	Attach = function(this, dataBlockId)
+		if this.m_IsValid then 
+			return;
+		end;
+		this.m_DataBlockId = dataBlockId;
+		this.m_IsValid = true;
+	end,
+
+	Detach = function(this)
+		if (not this.m_IsValid) then 
+			return;
+		end;
+		this.m_StringCache = nil;
+		this.m_DataBlockId = 0;
+		this.m_IsValid = false;
+	end,
+
+	GetString = function(this)
+		local __method_ret_921_8_927_9;
+		if (stringisequal(nil, this.m_StringCache) and (this.m_DataBlockId ~= 0)) then 
+			this.m_StringCache = DataBlockDefine.DclApi.get_string(this.m_DataBlockId);
+		end;
+		__method_ret_921_8_927_9 = this.m_StringCache;
+		return __method_ret_921_8_927_9;
+	end,
+
+	SetString = function(this, val)
+		this.m_StringCache = val;
+		if (this.m_DataBlockId ~= 0) then 
+			DataBlockDefine.DclApi.free_string(this.m_DataBlockId);
+		end;
+		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_string(this.m_StringCache);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__init_obj_fields = function(this)
+		rawset(this, "m_IsValid", false);
+		rawset(this, "m_DataBlockId", 0);
+		rawset(this, "__ctor_called", false);
+	end,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("DataBlockDefine.CString::__define_class begin");
+
+		local class = DataBlockDefine.CString;
+		local obj_methods = {
+			ctor = rawget(class, "ctor"),
+			ctor__String = rawget(class, "ctor__String"),
+			GetDataBlockId = rawget(class, "GetDataBlockId"),
+			Init = rawget(class, "Init"),
+			Release = rawget(class, "Release"),
+			Attach = rawget(class, "Attach"),
+			Detach = rawget(class, "Detach"),
+			GetString = rawget(class, "GetString"),
+			SetString = rawget(class, "SetString"),
+			__ctor = rawget(class, "__ctor"),
+		};
+		local tmp_obj_method = nil;
+
+		local __defineclass_return = defineclass(nil, "DataBlockDefine.CString", "CString", class, obj_methods, false, false);
+		Utility.Warn("DataBlockDefine.CString::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		m_IsValid = true,
+		m_DataBlockId = true,
+		m_StringCache = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__interfaces = {
+		"DataBlockDefine.IDataBlock",
+	},
+	__method_info = {
+		ctor = {
+			ctor = true,
+		},
+		ctor__String = {
+			ctor = true,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(DataBlockDefine.CString);

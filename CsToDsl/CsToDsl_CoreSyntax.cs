@@ -2176,7 +2176,7 @@ namespace RoslynTool.CsToDsl
             SymbolInfo symInfo = m_Model.GetSymbolInfoEx(invocation);
             IMethodSymbol sym = symInfo.Symbol as IMethodSymbol;
 
-            if (null != sym && sym.DeclaringSyntaxReferences.Length > 0) {
+            if (null != sym && !sym.IsExtern && sym.DeclaringSyntaxReferences.Length > 0) {
                 var decl = sym.DeclaringSyntaxReferences[0].GetSyntax() as MethodDeclarationSyntax;
                 if (null != decl && null == decl.Body && null == decl.ExpressionBody && sym.ReceiverType.TypeKind != TypeKind.Interface && !sym.IsAbstract) {
                     //partial method invocation

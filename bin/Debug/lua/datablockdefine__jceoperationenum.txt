@@ -1,0 +1,20 @@
+require "cs2lua__namespaces"; 
+
+rawset(DataBlockDefine, "JceOperationEnum", {
+	["Nothing"] = 0,
+	["Post"] = 1,
+	["Recycle"] = 2,
+	["PostAndRecycle"] = 3,
+});
+
+rawset(DataBlockDefine.JceOperationEnum, "Value2String", {
+	[0] = "Nothing",
+	[1] = "Post",
+	[2] = "Recycle",
+	[3] = "PostAndRecycle",
+});
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";

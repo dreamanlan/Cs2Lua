@@ -1,0 +1,30 @@
+require "cs2lua__namespaces"; 
+
+rawset(DataBlockDefine, "ContainerTypeEnum", {
+	["Int64Vector"] = 1,
+	["UInt64Vector"] = 2,
+	["DoubleVector"] = 3,
+	["StrInt64Map"] = 4,
+	["StrUInt64Map"] = 5,
+	["StrDoubleMap"] = 6,
+	["Int64Int64Map"] = 7,
+	["Int64UInt64Map"] = 8,
+	["Int64DoubleMap"] = 9,
+});
+
+rawset(DataBlockDefine.ContainerTypeEnum, "Value2String", {
+	[1] = "Int64Vector",
+	[2] = "UInt64Vector",
+	[3] = "DoubleVector",
+	[4] = "StrInt64Map",
+	[5] = "StrUInt64Map",
+	[6] = "StrDoubleMap",
+	[7] = "Int64Int64Map",
+	[8] = "Int64UInt64Map",
+	[9] = "Int64DoubleMap",
+});
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";

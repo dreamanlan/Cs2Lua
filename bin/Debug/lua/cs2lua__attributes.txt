@@ -1,2 +1,33 @@
+__cs2lua__AllAttrs = {};
+__cs2lua__AllAttrs["DataBlockDefine.DclApi.StrInt64MapIterateCallback"] = {
+	Class = {
+		{"System.Runtime.InteropServices.UnmanagedFunctionPointerAttribute", {callingConvention = "2"}, {}};
+	};
+};
+__cs2lua__AllAttrs["DataBlockDefine.DclApi.StrUInt64MapIterateCallback"] = {
+	Class = {
+		{"System.Runtime.InteropServices.UnmanagedFunctionPointerAttribute", {callingConvention = "2"}, {}};
+	};
+};
+__cs2lua__AllAttrs["DataBlockDefine.DclApi.StrDoubleMapIterateCallback"] = {
+	Class = {
+		{"System.Runtime.InteropServices.UnmanagedFunctionPointerAttribute", {callingConvention = "2"}, {}};
+	};
+};
+__cs2lua__AllAttrs["DataBlockDefine.DclApi.Int64Int64MapIterateCallback"] = {
+	Class = {
+		{"System.Runtime.InteropServices.UnmanagedFunctionPointerAttribute", {callingConvention = "2"}, {}};
+	};
+};
+__cs2lua__AllAttrs["DataBlockDefine.DclApi.Int64UInt64MapIterateCallback"] = {
+	Class = {
+		{"System.Runtime.InteropServices.UnmanagedFunctionPointerAttribute", {callingConvention = "2"}, {}};
+	};
+};
+__cs2lua__AllAttrs["DataBlockDefine.DclApi.Int64DoubleMapIterateCallback"] = {
+	Class = {
+		{"System.Runtime.InteropServices.UnmanagedFunctionPointerAttribute", {callingConvention = "2"}, {}};
+	};
+};
 
 

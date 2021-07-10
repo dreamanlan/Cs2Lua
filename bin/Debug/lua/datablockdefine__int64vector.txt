@@ -1,0 +1,227 @@
+require "cs2lua__namespaces"; 
+
+DataBlockDefine.Int64Vector = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(DataBlockDefine.Int64Vector, nil, nil, "ctor", 0, nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		DataBlockDefine.Int64Vector.__cctor();
+	end,
+
+	__cctor = function()
+		if DataBlockDefine.Int64Vector.__cctor_called then 
+			return;
+		else
+			DataBlockDefine.Int64Vector.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	GetDataBlockId = function(this)
+		local __method_ret_944_8_947_9;
+		__method_ret_944_8_947_9 = this.m_DataBlockId;
+		return __method_ret_944_8_947_9;
+	end,
+
+	Init = function(this)
+		if this.m_IsValid then 
+			return;
+		end;
+		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_container(1);
+		this.m_IsValid = true;
+	end,
+
+	Release = function(this)
+		if (not this.m_IsValid) then 
+			return;
+		end;
+		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
+		this.m_DataBlockId = 0;
+		this.m_IsValid = false;
+	end,
+
+	Attach = function(this, dataBlockId)
+		if this.m_IsValid then 
+			return;
+		end;
+		this.m_DataBlockId = dataBlockId;
+		this.m_IsValid = true;
+	end,
+
+	Detach = function(this)
+		if (not this.m_IsValid) then 
+			return;
+		end;
+		this.m_DataBlockId = 0;
+		this.m_IsValid = false;
+	end,
+
+	Reserve = function(this, space)
+		DataBlockDefine.DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
+	end,
+
+	GetCount = function(this)
+		local __method_ret_982_8_985_9;
+		__method_ret_982_8_985_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		return __method_ret_982_8_985_9;
+	end,
+
+	GetData = function(this, index)
+		local __method_ret_986_8_992_9;
+		if ((index >= 0) and (index < DataBlockDefine.Int64Vector.GetCount(this))) then 
+			__method_ret_986_8_992_9 = DataBlockDefine.DclApi.int64_vector_get_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			return __method_ret_986_8_992_9;
+		end;
+		__method_ret_986_8_992_9 = 0;
+		return __method_ret_986_8_992_9;
+	end,
+
+	SetData = function(this, index, data)
+		if ((index >= 0) and (index < DataBlockDefine.Int64Vector.GetCount(this))) then 
+			DataBlockDefine.DclApi.int64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), data);
+		end;
+	end,
+
+	IndexOf = function(this, data)
+		local __method_ret_999_8_1006_9;
+		local ix;
+		ix = 0;
+		while (ix < DataBlockDefine.Int64Vector.GetCount(this)) do
+			if (DataBlockDefine.Int64Vector.GetData(this, ix) == data) then 
+				__method_ret_999_8_1006_9 = ix;
+				return __method_ret_999_8_1006_9;
+			end;
+			ix = (ix + 1);
+		end;
+		__method_ret_999_8_1006_9 = -1;
+		return __method_ret_999_8_1006_9;
+	end,
+
+	GetLast = function(this)
+		local __method_ret_1007_8_1010_9;
+		__method_ret_1007_8_1010_9 = DataBlockDefine.Int64Vector.GetData(this, (DataBlockDefine.Int64Vector.GetCount(this) - 1));
+		return __method_ret_1007_8_1010_9;
+	end,
+
+	AddLast = function(this, data)
+		DataBlockDefine.DclApi.int64_vector_push_back(this.m_DataBlockId, data);
+	end,
+
+	RemoveLast = function(this)
+		DataBlockDefine.DclApi.int64_vector_pop_back(this.m_DataBlockId);
+	end,
+
+	Remove = function(this, data)
+		local index;
+		index = DataBlockDefine.Int64Vector.IndexOf(this, data);
+		DataBlockDefine.Int64Vector.RemoveAt(this, index);
+	end,
+
+	RemoveAt = function(this, index)
+		if ((index >= 0) and (index < DataBlockDefine.Int64Vector.GetCount(this))) then 
+			DataBlockDefine.DclApi.int64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+		end;
+	end,
+
+	Clear = function(this)
+		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
+	end,
+
+	ctor = function(this)
+		DataBlockDefine.Int64Vector.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__init_obj_fields = function(this)
+		rawset(this, "m_IsValid", false);
+		rawset(this, "m_DataBlockId", 0);
+		rawset(this, "__ctor_called", false);
+	end,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("DataBlockDefine.Int64Vector::__define_class begin");
+
+		local class = DataBlockDefine.Int64Vector;
+		local obj_methods = {
+			GetDataBlockId = rawget(class, "GetDataBlockId"),
+			Init = rawget(class, "Init"),
+			Release = rawget(class, "Release"),
+			Attach = rawget(class, "Attach"),
+			Detach = rawget(class, "Detach"),
+			Reserve = rawget(class, "Reserve"),
+			GetCount = rawget(class, "GetCount"),
+			GetData = rawget(class, "GetData"),
+			SetData = rawget(class, "SetData"),
+			IndexOf = rawget(class, "IndexOf"),
+			GetLast = rawget(class, "GetLast"),
+			AddLast = rawget(class, "AddLast"),
+			RemoveLast = rawget(class, "RemoveLast"),
+			Remove = rawget(class, "Remove"),
+			RemoveAt = rawget(class, "RemoveAt"),
+			Clear = rawget(class, "Clear"),
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
+		};
+		local tmp_obj_method = nil;
+
+		local __defineclass_return = defineclass(nil, "DataBlockDefine.Int64Vector", "Int64Vector", class, obj_methods, false, false);
+		Utility.Warn("DataBlockDefine.Int64Vector::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		m_IsValid = true,
+		m_DataBlockId = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__interfaces = {
+		"DataBlockDefine.IDataBlock",
+	},
+	__method_info = {
+		ctor = {
+			ctor = true,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(DataBlockDefine.Int64Vector);

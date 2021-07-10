@@ -1,0 +1,82 @@
+require "cs2lua__namespaces"; 
+
+DataBlockDefine.DclApi = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	get_string = function(id)
+		local __cs2lua_func_info = luainitialize();
+		local __retval_0, __retval_1 = luapcall(DataBlockDefine.DclApi.__ori_get_string, __cs2lua_func_info, id);
+		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
+		if not __retval_0 then
+			lualog("{0}", __retval_1);
+			__retval_1 = nil;
+		end;
+		return __retval_1;
+	end,
+	__ori_get_string = function(__cs2lua_func_info, id)
+		local __method_ret_271_8_278_9;
+		local v;
+		v = DataBlockDefine.DclApi.get_cstring(id);
+		if isequal(callexterninstancereturnstruct(v, System.IntPtr, "ToPointer"), nil) then 
+			__method_ret_271_8_278_9 = nil;
+			return __method_ret_271_8_278_9;
+		end;
+		__method_ret_271_8_278_9 = System.Runtime.InteropServices.Marshal.PtrToStringAnsi__IntPtr(wrapexternstructargument(v, System.IntPtr, OperationKind.LocalReference, SymbolKind.Local));
+		return __method_ret_271_8_278_9;
+	end,
+
+	cctor = function()
+		DataBlockDefine.DclApi.__cctor();
+	end,
+
+	__cctor = function()
+		if DataBlockDefine.DclApi.__cctor_called then 
+			return;
+		else
+			DataBlockDefine.DclApi.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__attributes = DataBlockDefine__DclApi__Attrs,
+	__cctor_called = false,
+
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("DataBlockDefine.DclApi::__define_class begin");
+
+		local class = DataBlockDefine.DclApi;
+		local obj_methods = nil;
+		local tmp_obj_method = nil;
+
+		local __defineclass_return = defineclass(nil, "DataBlockDefine.DclApi", "DclApi", class, obj_methods, false, false);
+		Utility.Warn("DataBlockDefine.DclApi::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__attributes = true,
+		__cctor_called = true,
+	},
+
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__attributes";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(DataBlockDefine.DclApi);

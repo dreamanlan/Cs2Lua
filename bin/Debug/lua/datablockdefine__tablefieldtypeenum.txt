@@ -1,0 +1,28 @@
+require "cs2lua__namespaces"; 
+
+rawset(DataBlockDefine, "TableFieldTypeEnum", {
+	["TableInt32Field"] = 1,
+	["TableInt64Field"] = 2,
+	["TableFloatField"] = 3,
+	["TableStringField"] = 4,
+	["TableInt32ArrayField"] = 5,
+	["TableInt64ArrayField"] = 6,
+	["TableFloatArrayField"] = 7,
+	["TableStringArrayField"] = 8,
+});
+
+rawset(DataBlockDefine.TableFieldTypeEnum, "Value2String", {
+	[1] = "TableInt32Field",
+	[2] = "TableInt64Field",
+	[3] = "TableFloatField",
+	[4] = "TableStringField",
+	[5] = "TableInt32ArrayField",
+	[6] = "TableInt64ArrayField",
+	[7] = "TableFloatArrayField",
+	[8] = "TableStringArrayField",
+});
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";

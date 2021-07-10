@@ -1,0 +1,195 @@
+require "cs2lua__namespaces"; 
+
+DataBlockDefine.Int64DoubleMap = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	__new_object = function(...)
+		local __cs2dsl_newobj;
+		__cs2dsl_newobj = newobject(DataBlockDefine.Int64DoubleMap, nil, nil, "ctor", 0, nil, ...);
+		return __cs2dsl_newobj;
+	end,
+
+	cctor = function()
+		DataBlockDefine.Int64DoubleMap.__cctor();
+	end,
+
+	__cctor = function()
+		if DataBlockDefine.Int64DoubleMap.__cctor_called then 
+			return;
+		else
+			DataBlockDefine.Int64DoubleMap.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+	-------------------------------
+	------ instance methods -------
+	-------------------------------
+	GetDataBlockId = function(this)
+		local __method_ret_1466_8_1469_9;
+		__method_ret_1466_8_1469_9 = this.m_DataBlockId;
+		return __method_ret_1466_8_1469_9;
+	end,
+
+	Init = function(this)
+		if this.m_IsValid then 
+			return;
+		end;
+		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_container(9);
+		this.m_IsValid = true;
+	end,
+
+	Release = function(this)
+		if (not this.m_IsValid) then 
+			return;
+		end;
+		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
+		this.m_DataBlockId = 0;
+		this.m_IsValid = false;
+	end,
+
+	Attach = function(this, dataBlockId)
+		if this.m_IsValid then 
+			return;
+		end;
+		this.m_DataBlockId = dataBlockId;
+		this.m_IsValid = true;
+	end,
+
+	Detach = function(this)
+		if (not this.m_IsValid) then 
+			return;
+		end;
+		this.m_DataBlockId = 0;
+		this.m_IsValid = false;
+	end,
+
+	GetCount = function(this)
+		local __method_ret_1500_8_1503_9;
+		__method_ret_1500_8_1503_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		return __method_ret_1500_8_1503_9;
+	end,
+
+	GetData = function(this, key)
+		local __method_ret_1504_8_1507_9;
+		__method_ret_1504_8_1507_9 = DataBlockDefine.DclApi.int64_double_map_get_element(this.m_DataBlockId, key);
+		return __method_ret_1504_8_1507_9;
+	end,
+
+	SetData = function(this, key, val)
+		DataBlockDefine.DclApi.int64_double_map_set_element(this.m_DataBlockId, key, val);
+	end,
+
+	Add = function(this, key, val)
+		DataBlockDefine.DclApi.int64_double_map_add_element(this.m_DataBlockId, key, val);
+	end,
+
+	Remove = function(this, key)
+		DataBlockDefine.DclApi.int64_double_map_remove_element(this.m_DataBlockId, key);
+	end,
+
+	Contains = function(this, key)
+		local __method_ret_1520_8_1523_9;
+		__method_ret_1520_8_1523_9 = DataBlockDefine.DclApi.int64_double_map_contains(this.m_DataBlockId, key);
+		return __method_ret_1520_8_1523_9;
+	end,
+
+	Clear = function(this)
+		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
+	end,
+
+	Iterate = function(this, callback)
+		DataBlockDefine.DclApi.iterate_int64_double_map(this.m_DataBlockId, function(k, v)
+			local __method_ret_1530_59_1530_95;
+			__method_ret_1530_59_1530_95 = callback(k, v);
+			return __method_ret_1530_59_1530_95;
+		end);
+	end,
+
+	ctor = function(this)
+		DataBlockDefine.Int64DoubleMap.__ctor(this);
+	end,
+
+	__ctor = function(this)
+		if this.__ctor_called then 
+			return;
+		else
+			this.__ctor_called = true;
+		end;
+	end,
+	-------------------------------
+	------ instance fields -------
+	-------------------------------
+	__init_obj_fields = function(this)
+		rawset(this, "m_IsValid", false);
+		rawset(this, "m_DataBlockId", 0);
+		rawset(this, "__ctor_called", false);
+	end,
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("DataBlockDefine.Int64DoubleMap::__define_class begin");
+
+		local class = DataBlockDefine.Int64DoubleMap;
+		local obj_methods = {
+			GetDataBlockId = rawget(class, "GetDataBlockId"),
+			Init = rawget(class, "Init"),
+			Release = rawget(class, "Release"),
+			Attach = rawget(class, "Attach"),
+			Detach = rawget(class, "Detach"),
+			GetCount = rawget(class, "GetCount"),
+			GetData = rawget(class, "GetData"),
+			SetData = rawget(class, "SetData"),
+			Add = rawget(class, "Add"),
+			Remove = rawget(class, "Remove"),
+			Contains = rawget(class, "Contains"),
+			Clear = rawget(class, "Clear"),
+			Iterate = rawget(class, "Iterate"),
+			ctor = rawget(class, "ctor"),
+			__ctor = rawget(class, "__ctor"),
+		};
+		local tmp_obj_method = nil;
+
+		local __defineclass_return = defineclass(nil, "DataBlockDefine.Int64DoubleMap", "Int64DoubleMap", class, obj_methods, false, false);
+		Utility.Warn("DataBlockDefine.Int64DoubleMap::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+	__obj_fields = {
+		m_IsValid = true,
+		m_DataBlockId = true,
+		__ctor_called = true,
+	},
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+	__interfaces = {
+		"DataBlockDefine.IDataBlock",
+	},
+	__method_info = {
+		ctor = {
+			ctor = true,
+		},
+	},
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(DataBlockDefine.Int64DoubleMap);

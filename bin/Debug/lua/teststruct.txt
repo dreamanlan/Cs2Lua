@@ -21,9 +21,9 @@ TestStruct = {
 	end,
 
 	op_Implicit = function(ts)
-		local __method_ret_26_4_29_5;
-		__method_ret_26_4_29_5 = ts.m_A;
-		return __method_ret_26_4_29_5;
+		local __method_ret_28_4_31_5;
+		__method_ret_28_4_31_5 = ts.m_A;
+		return __method_ret_28_4_31_5;
 		return nil;
 	end,
 

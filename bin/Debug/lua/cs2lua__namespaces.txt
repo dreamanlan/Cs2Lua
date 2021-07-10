@@ -1,2 +1,3 @@
+DataBlockDefine = DataBlockDefine or {};
 
 

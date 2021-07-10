@@ -40,9 +40,9 @@ DataChangeCallBackInfo = {
 	end,
 
 	Downcast = function(this)
-		local __method_ret_133_4_136_5;
-		__method_ret_133_4_136_5 = this;
-		return __method_ret_133_4_136_5;
+		local __method_ret_135_4_138_5;
+		__method_ret_135_4_138_5 = this;
+		return __method_ret_135_4_138_5;
 	end,
 
 	InitPool = function(this, pool)

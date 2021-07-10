@@ -10,9 +10,9 @@ struct(TestStruct) {
 			return(__cs2dsl_newobj);
 		}options[needfuncinfo(true)];
 		op_Implicit = deffunc(1)args(ts){
-			local(__method_ret_26_4_29_5);
-			__method_ret_26_4_29_5 = getinstance(SymbolKind.Field, ts, TestStruct, "m_A");
-			return(__method_ret_26_4_29_5);
+			local(__method_ret_28_4_31_5);
+			__method_ret_28_4_31_5 = getinstance(SymbolKind.Field, ts, TestStruct, "m_A");
+			return(__method_ret_28_4_31_5);
 			return(null);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(ts, TestStruct, TypeKind.Struct, 0, false)];
 		cctor = deffunc(0)args(){

@@ -43,37 +43,37 @@ class(Cs2LuaObjectPoolEx_DataChangeCallBackInfo) {
 			};
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(initPoolSize, System.Int32, TypeKind.Struct, 0, true), paramtype(creater, System.Func_TResult, TypeKind.Delegate, 0, true), paramtype(destroyer, System.Action_T, TypeKind.Delegate, 0, true)];
 		Alloc = deffunc(1)args(this){
-			local(__method_ret_82_4_93_5);
-			if( execbinary(">", getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Count"), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), 84_8_92_9 ){
-				__method_ret_82_4_93_5 = callexterninstance(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Dequeue");
-				return(__method_ret_82_4_93_5);
+			local(__method_ret_84_4_95_5);
+			if( execbinary(">", getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Count"), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), 86_8_94_9 ){
+				__method_ret_84_4_95_5 = callexterninstance(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Dequeue");
+				return(__method_ret_84_4_95_5);
 			}else{
 				local(t); t = callexterndelegation(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Creater"), "System.Func_TResult.Invoke");
-				if( execbinary("!=", null, t, System.Object, System.Object, TypeKind.Class, TypeKind.Class), 88_12_90_13 ){
+				if( execbinary("!=", null, t, System.Object, System.Object, TypeKind.Class, TypeKind.Class), 90_12_92_13 ){
 					callinterface(t, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, "InitPool", this);
 				};
-				__method_ret_82_4_93_5 = t;
-				return(__method_ret_82_4_93_5);
+				__method_ret_84_4_95_5 = t;
+				return(__method_ret_84_4_95_5);
 			};
 			return(null);
 		}options[needfuncinfo(false), rettype(T, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, TypeKind.TypeParameter, 0, false)];
 		Recycle = deffunc(0)args(this, t){
-			if( execbinary("!=", null, t, System.Object, System.Object, TypeKind.Class, TypeKind.Class), 96_8_98_9 ){
+			if( execbinary("!=", null, t, System.Object, System.Object, TypeKind.Class, TypeKind.Class), 98_8_100_9 ){
 				callexterninstance(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Enqueue", callinterface(t, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, "Downcast"));
 			};
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(t, ICs2LuaPoolAllocatedObjectEx_DataChangeCallBackInfo, TypeKind.Interface, 0, false)];
 		Clear = deffunc(0)args(this){
-			if( delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false), 102_8_106_9 ){
-				foreach(__foreach_103_12_105_13, item, getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, System.Collections.Generic.Queue_T, true){
+			if( delegationcomparewithnil(false, this, "m_Destroyer", SymbolKind.Field, false), 104_8_108_9 ){
+				foreach(__foreach_105_12_107_13, item, getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, System.Collections.Generic.Queue_T, true){
 					callexterndelegation(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_Destroyer"), "System.Action_T.Invoke", item);
 				};
 			};
 			callexterninstance(getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Clear");
 		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		get_Count = deffunc(1)args(this){
-			local(__method_ret_109_4_114_5);
-			__method_ret_109_4_114_5 = getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Count");
-			return(__method_ret_109_4_114_5);
+			local(__method_ret_111_4_116_5);
+			__method_ret_111_4_116_5 = getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "m_UnusedObjects"), System.Collections.Generic.Queue_T, "Count");
+			return(__method_ret_111_4_116_5);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, Cs2LuaObjectPoolEx_DataChangeCallBackInfo, "__ctor");

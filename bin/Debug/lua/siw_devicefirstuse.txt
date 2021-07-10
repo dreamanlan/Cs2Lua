@@ -35,15 +35,15 @@ SIW_DeviceFirstUse = {
 	end,
 
 	OnLoad = function(this)
-		local __method_ret_204_4_207_5;
-		__method_ret_204_4_207_5 = -1;
-		return __method_ret_204_4_207_5;
+		local __method_ret_206_4_209_5;
+		__method_ret_206_4_209_5 = -1;
+		return __method_ret_206_4_209_5;
 	end,
 
 	OnSet = function(this, _value)
-		local __method_ret_208_4_211_5;
-		__method_ret_208_4_211_5 = getoriginalmethod(SettingInfoWrapper, "OnSet")(this, _value);
-		return __method_ret_208_4_211_5;
+		local __method_ret_210_4_213_5;
+		__method_ret_210_4_213_5 = getoriginalmethod(SettingInfoWrapper, "OnSet")(this, _value);
+		return __method_ret_210_4_213_5;
 	end,
 
 	ctor = function(this)

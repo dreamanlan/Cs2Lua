@@ -48,26 +48,32 @@ Cs2LuaKeyValuePair_System_Int32_System_Int32 = {
 	end,
 
 	get_Key = function(this)
-		local __method_ret_163_4_166_5;
-		__method_ret_163_4_166_5 = this.key;
-		return __method_ret_163_4_166_5;
+		local __method_ret_165_4_168_5;
+		__method_ret_165_4_168_5 = this.key;
+		return __method_ret_165_4_168_5;
 	end,
 
 	get_Value = function(this)
-		local __method_ret_168_4_171_5;
-		__method_ret_168_4_171_5 = this.value;
-		return __method_ret_168_4_171_5;
+		local __method_ret_170_4_173_5;
+		__method_ret_170_4_173_5 = this.value;
+		return __method_ret_170_4_173_5;
 	end,
 
 	ToString = function(this)
-		local __method_ret_173_4_184_5;
+		local __method_ret_175_4_186_5;
 		local stringBuilder;
-		(= stringBuilder);
+		stringBuilder = newexternobject(System.Text.StringBuilder, nil, nil, "ctor", 0, nil);
+		stringBuilder:Append__Char(wrapchar("[", 0x05B));
 		if (not isequal(typecast(Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Key(this), System.Object, TypeKind.Class), nil)) then 
+			stringBuilder:Append__String(Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Key(this):ToString());
 		end;
+		stringBuilder:Append__String(luastrtocsstr(", "));
 		if (not isequal(typecast(Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Value(this), System.Object, TypeKind.Class), nil)) then 
+			stringBuilder:Append__String(Cs2LuaKeyValuePair_System_Int32_System_Int32.get_Value(this):ToString());
 		end;
-		return __method_ret_173_4_184_5;
+		stringBuilder:Append__Char(wrapchar("]", 0x05D));
+		__method_ret_175_4_186_5 = stringBuilder:ToString();
+		return __method_ret_175_4_186_5;
 	end,
 
 	__ctor = function(this)
