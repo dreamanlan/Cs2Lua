@@ -28,88 +28,88 @@ class(DataBlockDefine.DoubleVector) {
 
 	instance_methods {
 		GetDataBlockId = deffunc(1)args(this){
-			local(__method_ret_1041_8_1044_9);
-			__method_ret_1041_8_1044_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId");
-			return(__method_ret_1041_8_1044_9);
+			local(__method_ret_1042_8_1045_9);
+			__method_ret_1042_8_1045_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId");
+			return(__method_ret_1042_8_1045_9);
 		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true)];
 		Init = deffunc(0)args(this){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid"), 1047_12_1048_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid"), 1048_12_1049_23 ){
 				return();
 			};
-			getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId") = callstatic(DataBlockDefine.DclApi, "alloc_container", 3);
+			getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId") = callstatic(DclApi, "alloc_container", 3);
 			setinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Release = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid"), System.Boolean, TypeKind.Struct), 1054_12_1055_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid"), System.Boolean, TypeKind.Struct), 1055_12_1056_23 ){
 				return();
 			};
-			callstatic(DataBlockDefine.DclApi, "free_container", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"));
+			callstatic(DclApi, "free_container", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"));
 			setinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId", 0);
 			setinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Attach = deffunc(0)args(this, dataBlockId){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid"), 1062_12_1063_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid"), 1063_12_1064_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId", dataBlockId);
 			setinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Struct, 0, true)];
 		Detach = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid"), System.Boolean, TypeKind.Struct), 1069_12_1070_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid"), System.Boolean, TypeKind.Struct), 1070_12_1071_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId", 0);
 			setinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Reserve = deffunc(0)args(this, space){
-			callstatic(DataBlockDefine.DclApi, "container_reserve_space", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), typecast(space, System.UInt64, TypeKind.Struct));
+			callstatic(DclApi, "container_reserve_space", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), typecast(space, System.UInt64, TypeKind.Struct));
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(space, System.Int32, TypeKind.Struct, 0, true)];
 		GetCount = deffunc(1)args(this){
-			local(__method_ret_1079_8_1082_9);
-			__method_ret_1079_8_1082_9 = typecast(callstatic(DataBlockDefine.DclApi, "container_get_size", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId")), System.Int32, TypeKind.Struct);
-			return(__method_ret_1079_8_1082_9);
+			local(__method_ret_1080_8_1083_9);
+			__method_ret_1080_8_1083_9 = typecast(callstatic(DclApi, "container_get_size", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId")), System.Int32, TypeKind.Struct);
+			return(__method_ret_1080_8_1083_9);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
 		GetData = deffunc(1)args(this, index){
-			local(__method_ret_1083_8_1089_9);
-			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, callinstance(this, DataBlockDefine.DoubleVector, "GetCount"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 1085_12_1087_13 ){
-				__method_ret_1083_8_1089_9 = callstatic(DataBlockDefine.DclApi, "double_vector_get_element", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), typecast(index, System.UInt64, TypeKind.Struct));
-				return(__method_ret_1083_8_1089_9);
+			local(__method_ret_1084_8_1090_9);
+			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, callinstance(this, DataBlockDefine.DoubleVector, "GetCount"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 1086_12_1088_13 ){
+				__method_ret_1084_8_1090_9 = callstatic(DclApi, "double_vector_get_element", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), typecast(index, System.UInt64, TypeKind.Struct));
+				return(__method_ret_1084_8_1090_9);
 			};
-			__method_ret_1083_8_1089_9 = 0;
-			return(__method_ret_1083_8_1089_9);
+			__method_ret_1084_8_1090_9 = 0;
+			return(__method_ret_1084_8_1090_9);
 		}options[needfuncinfo(false), rettype(return, System.Double, TypeKind.Struct, 0, true), paramtype(index, System.Int32, TypeKind.Struct, 0, true)];
 		SetData = deffunc(0)args(this, index, data){
-			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, callinstance(this, DataBlockDefine.DoubleVector, "GetCount"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 1092_12_1094_13 ){
-				callstatic(DataBlockDefine.DclApi, "double_vector_set_element", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), typecast(index, System.UInt64, TypeKind.Struct), data);
+			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, callinstance(this, DataBlockDefine.DoubleVector, "GetCount"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 1093_12_1095_13 ){
+				callstatic(DclApi, "double_vector_set_element", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), typecast(index, System.UInt64, TypeKind.Struct), data);
 			};
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(index, System.Int32, TypeKind.Struct, 0, true), paramtype(data, System.Double, TypeKind.Struct, 0, true)];
 		IndexOf = deffunc(1)args(this, data){
-			local(__method_ret_1096_8_1099_9);
-			__method_ret_1096_8_1099_9 = typecast(callstatic(DataBlockDefine.DclApi, "double_vector_index_of_element", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), data), System.Int32, TypeKind.Struct);
-			return(__method_ret_1096_8_1099_9);
+			local(__method_ret_1097_8_1100_9);
+			__method_ret_1097_8_1100_9 = typecast(callstatic(DclApi, "double_vector_index_of_element", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), data), System.Int32, TypeKind.Struct);
+			return(__method_ret_1097_8_1100_9);
 		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true), paramtype(data, System.Double, TypeKind.Struct, 0, true)];
 		GetLast = deffunc(1)args(this){
-			local(__method_ret_1100_8_1103_9);
-			__method_ret_1100_8_1103_9 = callinstance(this, DataBlockDefine.DoubleVector, "GetData", execbinary("-", callinstance(this, DataBlockDefine.DoubleVector, "GetCount"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
-			return(__method_ret_1100_8_1103_9);
+			local(__method_ret_1101_8_1104_9);
+			__method_ret_1101_8_1104_9 = callinstance(this, DataBlockDefine.DoubleVector, "GetData", execbinary("-", callinstance(this, DataBlockDefine.DoubleVector, "GetCount"), 1, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
+			return(__method_ret_1101_8_1104_9);
 		}options[needfuncinfo(false), rettype(return, System.Double, TypeKind.Struct, 0, true)];
 		AddLast = deffunc(0)args(this, data){
-			callstatic(DataBlockDefine.DclApi, "double_vector_push_back", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), data);
+			callstatic(DclApi, "double_vector_push_back", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), data);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(data, System.Double, TypeKind.Struct, 0, true)];
 		RemoveLast = deffunc(0)args(this){
-			callstatic(DataBlockDefine.DclApi, "double_vector_pop_back", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"));
+			callstatic(DclApi, "double_vector_pop_back", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"));
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Remove = deffunc(0)args(this, data){
 			local(index); index = callinstance(this, DataBlockDefine.DoubleVector, "IndexOf", data);
 			callinstance(this, DataBlockDefine.DoubleVector, "RemoveAt", index);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(data, System.Int64, TypeKind.Struct, 0, true)];
 		RemoveAt = deffunc(0)args(this, index){
-			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, callinstance(this, DataBlockDefine.DoubleVector, "GetCount"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 1119_12_1121_13 ){
-				callstatic(DataBlockDefine.DclApi, "double_vector_erase", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), typecast(index, System.UInt64, TypeKind.Struct));
+			if( execbinary("&&", execbinary(">=", index, 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), execbinary("<", index, callinstance(this, DataBlockDefine.DoubleVector, "GetCount"), System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 1120_12_1122_13 ){
+				callstatic(DclApi, "double_vector_erase", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"), typecast(index, System.UInt64, TypeKind.Struct));
 			};
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(index, System.Int32, TypeKind.Struct, 0, true)];
 		Clear = deffunc(0)args(this){
-			callstatic(DataBlockDefine.DclApi, "container_clear", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"));
+			callstatic(DclApi, "container_clear", getinstance(SymbolKind.Field, this, DataBlockDefine.DoubleVector, "m_DataBlockId"));
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, DataBlockDefine.DoubleVector, "__ctor");

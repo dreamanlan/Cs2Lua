@@ -31,16 +31,16 @@ DataBlockDefine.Int64Vector = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_945_8_948_9;
-		__method_ret_945_8_948_9 = this.m_DataBlockId;
-		return __method_ret_945_8_948_9;
+		local __method_ret_946_8_949_9;
+		__method_ret_946_8_949_9 = this.m_DataBlockId;
+		return __method_ret_946_8_949_9;
 	end,
 
 	Init = function(this)
 		if this.m_IsValid then 
 			return;
 		end;
-		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_container(1);
+		this.m_DataBlockId = DclApi.alloc_container(1);
 		this.m_IsValid = true;
 	end,
 
@@ -48,7 +48,7 @@ DataBlockDefine.Int64Vector = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
+		DclApi.free_container(this.m_DataBlockId);
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
 	end,
@@ -70,58 +70,58 @@ DataBlockDefine.Int64Vector = {
 	end,
 
 	Reserve = function(this, space)
-		DataBlockDefine.DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
+		DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
 	end,
 
 	GetCount = function(this)
-		local __method_ret_983_8_986_9;
-		__method_ret_983_8_986_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
-		return __method_ret_983_8_986_9;
+		local __method_ret_984_8_987_9;
+		__method_ret_984_8_987_9 = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		return __method_ret_984_8_987_9;
 	end,
 
 	GetData = function(this, index)
-		local __method_ret_987_8_993_9;
+		local __method_ret_988_8_994_9;
 		if ((index >= 0) and (index < DataBlockDefine.Int64Vector.GetCount(this))) then 
-			__method_ret_987_8_993_9 = DataBlockDefine.DclApi.int64_vector_get_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
-			return __method_ret_987_8_993_9;
+			__method_ret_988_8_994_9 = DclApi.int64_vector_get_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			return __method_ret_988_8_994_9;
 		end;
-		__method_ret_987_8_993_9 = 0;
-		return __method_ret_987_8_993_9;
+		__method_ret_988_8_994_9 = 0;
+		return __method_ret_988_8_994_9;
 	end,
 
 	SetData = function(this, index, data)
 		if ((index >= 0) and (index < DataBlockDefine.Int64Vector.GetCount(this))) then 
-			DataBlockDefine.DclApi.int64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), data);
+			DclApi.int64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), data);
 		end;
 	end,
 
 	IndexOf = function(this, data)
-		local __method_ret_1000_8_1007_9;
+		local __method_ret_1001_8_1008_9;
 		local ix;
 		ix = 0;
 		while (ix < DataBlockDefine.Int64Vector.GetCount(this)) do
 			if (DataBlockDefine.Int64Vector.GetData(this, ix) == data) then 
-				__method_ret_1000_8_1007_9 = ix;
-				return __method_ret_1000_8_1007_9;
+				__method_ret_1001_8_1008_9 = ix;
+				return __method_ret_1001_8_1008_9;
 			end;
 			ix = (ix + 1);
 		end;
-		__method_ret_1000_8_1007_9 = -1;
-		return __method_ret_1000_8_1007_9;
+		__method_ret_1001_8_1008_9 = -1;
+		return __method_ret_1001_8_1008_9;
 	end,
 
 	GetLast = function(this)
-		local __method_ret_1008_8_1011_9;
-		__method_ret_1008_8_1011_9 = DataBlockDefine.Int64Vector.GetData(this, (DataBlockDefine.Int64Vector.GetCount(this) - 1));
-		return __method_ret_1008_8_1011_9;
+		local __method_ret_1009_8_1012_9;
+		__method_ret_1009_8_1012_9 = DataBlockDefine.Int64Vector.GetData(this, (DataBlockDefine.Int64Vector.GetCount(this) - 1));
+		return __method_ret_1009_8_1012_9;
 	end,
 
 	AddLast = function(this, data)
-		DataBlockDefine.DclApi.int64_vector_push_back(this.m_DataBlockId, data);
+		DclApi.int64_vector_push_back(this.m_DataBlockId, data);
 	end,
 
 	RemoveLast = function(this)
-		DataBlockDefine.DclApi.int64_vector_pop_back(this.m_DataBlockId);
+		DclApi.int64_vector_pop_back(this.m_DataBlockId);
 	end,
 
 	Remove = function(this, data)
@@ -132,12 +132,12 @@ DataBlockDefine.Int64Vector = {
 
 	RemoveAt = function(this, index)
 		if ((index >= 0) and (index < DataBlockDefine.Int64Vector.GetCount(this))) then 
-			DataBlockDefine.DclApi.int64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			DclApi.int64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
 		end;
 	end,
 
 	Clear = function(this)
-		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
+		DclApi.container_clear(this.m_DataBlockId);
 	end,
 
 	ctor = function(this)

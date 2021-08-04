@@ -31,16 +31,16 @@ DataBlockDefine.StringVector = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_1133_8_1136_9;
-		__method_ret_1133_8_1136_9 = this.m_DataBlockId;
-		return __method_ret_1133_8_1136_9;
+		local __method_ret_1134_8_1137_9;
+		__method_ret_1134_8_1137_9 = this.m_DataBlockId;
+		return __method_ret_1134_8_1137_9;
 	end,
 
 	Init = function(this)
 		if this.m_IsValid then 
 			return;
 		end;
-		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_container(2);
+		this.m_DataBlockId = DclApi.alloc_container(2);
 		this.m_DataWrap:Clear();
 		this.m_IsValid = true;
 	end,
@@ -50,7 +50,7 @@ DataBlockDefine.StringVector = {
 			return;
 		end;
 		DataBlockDefine.StringVector.Clear(this);
-		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
+		DclApi.free_container(this.m_DataBlockId);
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
 	end,
@@ -61,12 +61,12 @@ DataBlockDefine.StringVector = {
 		end;
 		this.m_DataBlockId = dataBlockId;
 		local ct;
-		ct = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		ct = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
 		local ix;
 		ix = 0;
 		while (ix < ct) do
 			local strId;
-			strId = DataBlockDefine.DclApi.uint64_vector_get_element(this.m_DataBlockId, typecast(ix, System.UInt64, TypeKind.Struct));
+			strId = DclApi.uint64_vector_get_element(this.m_DataBlockId, typecast(ix, System.UInt64, TypeKind.Struct));
 			local cstr;
 			cstr = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
 			DataBlockDefine.CString.Attach(cstr, strId);
@@ -80,9 +80,9 @@ DataBlockDefine.StringVector = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_exp_1172_12_1174_13 = this.m_DataWrap;
-		for __foreach_ix_1172_12_1174_13 = 1, __foreach_exp_1172_12_1174_13.Count do
-			local str = __foreach_exp_1172_12_1174_13[__foreach_ix_1172_12_1174_13];
+		local __foreach_exp_1173_12_1175_13 = this.m_DataWrap;
+		for __foreach_ix_1173_12_1175_13 = 1, __foreach_exp_1173_12_1175_13.Count do
+			local str = __foreach_exp_1173_12_1175_13[__foreach_ix_1173_12_1175_13];
 			DataBlockDefine.CString.Detach(str);
 		end;
 		this.m_DataWrap:Clear();
@@ -92,23 +92,23 @@ DataBlockDefine.StringVector = {
 
 	Reserve = function(this, space)
 		this.m_DataWrap.Capacity = space;
-		DataBlockDefine.DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
+		DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
 	end,
 
 	GetCount = function(this)
-		local __method_ret_1185_8_1188_9;
-		__method_ret_1185_8_1188_9 = this.m_DataWrap.Count;
-		return __method_ret_1185_8_1188_9;
+		local __method_ret_1186_8_1189_9;
+		__method_ret_1186_8_1189_9 = this.m_DataWrap.Count;
+		return __method_ret_1186_8_1189_9;
 	end,
 
 	GetData = function(this, index)
-		local __method_ret_1189_8_1195_9;
+		local __method_ret_1190_8_1196_9;
 		if ((index >= 0) and (index < DataBlockDefine.StringVector.GetCount(this))) then 
-			__method_ret_1189_8_1195_9 = this.m_DataWrap[index + 1];
-			return __method_ret_1189_8_1195_9;
+			__method_ret_1190_8_1196_9 = this.m_DataWrap[index + 1];
+			return __method_ret_1190_8_1196_9;
 		end;
-		__method_ret_1189_8_1195_9 = nil;
-		return __method_ret_1189_8_1195_9;
+		__method_ret_1190_8_1196_9 = nil;
+		return __method_ret_1190_8_1196_9;
 	end,
 
 	SetData = function(this, index, data)
@@ -119,50 +119,50 @@ DataBlockDefine.StringVector = {
 				DataBlockDefine.CString.Release(oldData);
 			end;
 			this.m_DataWrap[index + 1] = data;
-			DataBlockDefine.DclApi.uint64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), DataBlockDefine.StringVector.condexp_1204_78_1204_118(this, data));
+			DclApi.uint64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), DataBlockDefine.StringVector.condexp_1205_78_1205_118(this, data));
 		end;
 	end,
-	condexp_1204_78_1204_118 = function(this, data)
-		local retval_1204_78_1204_118 = nil;
-		if isequal(nil, data) then retval_1204_78_1204_118 = 0 else retval_1204_78_1204_118 = DataBlockDefine.CString.GetDataBlockId(data) end;
-		return retval_1204_78_1204_118;
+	condexp_1205_78_1205_118 = function(this, data)
+		local retval_1205_78_1205_118 = nil;
+		if isequal(nil, data) then retval_1205_78_1205_118 = 0 else retval_1205_78_1205_118 = DataBlockDefine.CString.GetDataBlockId(data) end;
+		return retval_1205_78_1205_118;
 	end,
 
 	IndexOf = function(this, data)
-		local __method_ret_1207_8_1214_9;
+		local __method_ret_1208_8_1215_9;
 		local ix;
 		ix = 0;
 		while (ix < DataBlockDefine.StringVector.GetCount(this)) do
 			if isequal(DataBlockDefine.StringVector.GetData(this, ix), data) then 
-				__method_ret_1207_8_1214_9 = ix;
-				return __method_ret_1207_8_1214_9;
+				__method_ret_1208_8_1215_9 = ix;
+				return __method_ret_1208_8_1215_9;
 			end;
 			ix = (ix + 1);
 		end;
-		__method_ret_1207_8_1214_9 = -1;
-		return __method_ret_1207_8_1214_9;
+		__method_ret_1208_8_1215_9 = -1;
+		return __method_ret_1208_8_1215_9;
 	end,
 
 	GetLast = function(this)
-		local __method_ret_1215_8_1221_9;
+		local __method_ret_1216_8_1222_9;
 		if (DataBlockDefine.StringVector.GetCount(this) > 0) then 
-			__method_ret_1215_8_1221_9 = DataBlockDefine.StringVector.GetData(this, (DataBlockDefine.StringVector.GetCount(this) - 1));
-			return __method_ret_1215_8_1221_9;
+			__method_ret_1216_8_1222_9 = DataBlockDefine.StringVector.GetData(this, (DataBlockDefine.StringVector.GetCount(this) - 1));
+			return __method_ret_1216_8_1222_9;
 		else
-			__method_ret_1215_8_1221_9 = nil;
-			return __method_ret_1215_8_1221_9;
+			__method_ret_1216_8_1222_9 = nil;
+			return __method_ret_1216_8_1222_9;
 		end;
 		return nil;
 	end,
 
 	AddLast = function(this, data)
 		this.m_DataWrap:Add(data);
-		DataBlockDefine.DclApi.uint64_vector_push_back(this.m_DataBlockId, DataBlockDefine.StringVector.condexp_1225_58_1225_98(this, data));
+		DclApi.uint64_vector_push_back(this.m_DataBlockId, DataBlockDefine.StringVector.condexp_1226_58_1226_98(this, data));
 	end,
-	condexp_1225_58_1225_98 = function(this, data)
-		local retval_1225_58_1225_98 = nil;
-		if isequal(nil, data) then retval_1225_58_1225_98 = 0 else retval_1225_58_1225_98 = DataBlockDefine.CString.GetDataBlockId(data) end;
-		return retval_1225_58_1225_98;
+	condexp_1226_58_1226_98 = function(this, data)
+		local retval_1226_58_1226_98 = nil;
+		if isequal(nil, data) then retval_1226_58_1226_98 = 0 else retval_1226_58_1226_98 = DataBlockDefine.CString.GetDataBlockId(data) end;
+		return retval_1226_58_1226_98;
 	end,
 
 	RemoveLast = function(this)
@@ -173,7 +173,7 @@ DataBlockDefine.StringVector = {
 				DataBlockDefine.CString.Release(oldData);
 			end;
 			this.m_DataWrap:RemoveAt((this.m_DataWrap.Count - 1));
-			DataBlockDefine.DclApi.uint64_vector_pop_back(this.m_DataBlockId);
+			DclApi.uint64_vector_pop_back(this.m_DataBlockId);
 		end;
 	end,
 
@@ -196,18 +196,18 @@ DataBlockDefine.StringVector = {
 				DataBlockDefine.CString.Release(oldData);
 			end;
 			this.m_DataWrap:RemoveAt(index);
-			DataBlockDefine.DclApi.uint64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			DclApi.uint64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
 		end;
 	end,
 
 	Clear = function(this)
-		local __foreach_exp_1261_12_1263_13 = this.m_DataWrap;
-		for __foreach_ix_1261_12_1263_13 = 1, __foreach_exp_1261_12_1263_13.Count do
-			local str = __foreach_exp_1261_12_1263_13[__foreach_ix_1261_12_1263_13];
+		local __foreach_exp_1262_12_1264_13 = this.m_DataWrap;
+		for __foreach_ix_1262_12_1264_13 = 1, __foreach_exp_1262_12_1264_13.Count do
+			local str = __foreach_exp_1262_12_1264_13[__foreach_ix_1262_12_1264_13];
 			DataBlockDefine.CString.Release(str);
 		end;
 		this.m_DataWrap:Clear();
-		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
+		DclApi.container_clear(this.m_DataBlockId);
 	end,
 
 	ctor = function(this)

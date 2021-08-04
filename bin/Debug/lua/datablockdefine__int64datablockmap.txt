@@ -31,16 +31,16 @@ DataBlockDefine.Int64DataBlockMap = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_1652_8_1655_9;
-		__method_ret_1652_8_1655_9 = this.m_DataBlockId;
-		return __method_ret_1652_8_1655_9;
+		local __method_ret_1653_8_1656_9;
+		__method_ret_1653_8_1656_9 = this.m_DataBlockId;
+		return __method_ret_1653_8_1656_9;
 	end,
 
 	Init = function(this)
 		if this.m_IsValid then 
 			return;
 		end;
-		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_container(8);
+		this.m_DataBlockId = DclApi.alloc_container(8);
 		this.m_DataWrap:Clear();
 		this.m_IsValid = true;
 	end,
@@ -50,7 +50,7 @@ DataBlockDefine.Int64DataBlockMap = {
 			return;
 		end;
 		DataBlockDefine.Int64DataBlockMap.Clear(this);
-		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
+		DclApi.free_container(this.m_DataBlockId);
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
 	end,
@@ -61,14 +61,14 @@ DataBlockDefine.Int64DataBlockMap = {
 		end;
 		this.m_DataBlockId = dataBlockId;
 		if (dataBlockId ~= 0) then 
-			DataBlockDefine.DclApi.iterate_int64_uint64_map(dataBlockId, function(k, v)
-				local __method_ret_1679_61_1684_17;
+			DclApi.iterate_int64_uint64_map(dataBlockId, function(k, v)
+				local __method_ret_1680_61_1685_17;
 				local elem;
 				elem = this.OnNewDataBlock();
 				callinterface(elem, DataBlockDefine.IDataBlock, "Attach", v);
 				this.m_DataWrap:Add(k, elem);
-				__method_ret_1679_61_1684_17 = true;
-				return __method_ret_1679_61_1684_17;
+				__method_ret_1680_61_1685_17 = true;
+				return __method_ret_1680_61_1685_17;
 			end);
 		end;
 		this.m_IsValid = true;
@@ -83,8 +83,8 @@ DataBlockDefine.Int64DataBlockMap = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_1692_12_1696_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
-		for pair in getiterator(__foreach_1692_12_1696_13) do
+		local __foreach_1693_12_1697_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_1693_12_1697_13) do
 			if pair == __cs2lua_nil then
 				pair = nil;
 			end;
@@ -94,46 +94,46 @@ DataBlockDefine.Int64DataBlockMap = {
 				callinterface(elem, DataBlockDefine.IDataBlock, "Detach");
 			end;
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_1692_12_1696_13);
+		recycleiterator(__cs2lua_func_info, __foreach_1693_12_1697_13);
 		this.m_DataWrap:Clear();
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
 	end,
 
 	GetCount = function(this)
-		local __method_ret_1702_8_1705_9;
-		__method_ret_1702_8_1705_9 = this.m_DataWrap.Count;
-		return __method_ret_1702_8_1705_9;
+		local __method_ret_1703_8_1706_9;
+		__method_ret_1703_8_1706_9 = this.m_DataWrap.Count;
+		return __method_ret_1703_8_1706_9;
 	end,
 
 	GetData = function(this, T, key)
-		local __method_ret_1706_8_1711_9;
+		local __method_ret_1707_8_1712_9;
 		local v;
-		local __invoke_1709_12_1709_46;
-		__invoke_1709_12_1709_46,v = this.m_DataWrap:TryGetValue(key, __cs2lua_out);
-		__method_ret_1706_8_1711_9 = typecast(v, T, TypeKind.TypeParameter);
-		return __method_ret_1706_8_1711_9;
+		local __invoke_1710_12_1710_46;
+		__invoke_1710_12_1710_46,v = this.m_DataWrap:TryGetValue(key, __cs2lua_out);
+		__method_ret_1707_8_1712_9 = typecast(v, T, TypeKind.TypeParameter);
+		return __method_ret_1707_8_1712_9;
 	end,
 
 	SetData = function(this, key, val)
 		this.m_DataWrap[key] = val;
-		DataBlockDefine.DclApi.int64_uint64_map_set_element(this.m_DataBlockId, key, callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId"));
+		DclApi.int64_uint64_map_set_element(this.m_DataBlockId, key, callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId"));
 	end,
 
 	Add = function(this, key, val)
 		this.m_DataWrap:Add(key, val);
-		DataBlockDefine.DclApi.int64_uint64_map_add_element(this.m_DataBlockId, key, callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId"));
+		DclApi.int64_uint64_map_add_element(this.m_DataBlockId, key, callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId"));
 	end,
 
 	Remove = function(this, key)
 		this.m_DataWrap:Remove(key);
-		DataBlockDefine.DclApi.int64_uint64_map_remove_element(this.m_DataBlockId, key);
+		DclApi.int64_uint64_map_remove_element(this.m_DataBlockId, key);
 	end,
 
 	Contains = function(this, key)
-		local __method_ret_1727_8_1730_9;
-		__method_ret_1727_8_1730_9 = this.m_DataWrap:ContainsKey(key);
-		return __method_ret_1727_8_1730_9;
+		local __method_ret_1728_8_1731_9;
+		__method_ret_1728_8_1731_9 = this.m_DataWrap:ContainsKey(key);
+		return __method_ret_1728_8_1731_9;
 	end,
 
 	Clear = function(this)
@@ -142,8 +142,8 @@ DataBlockDefine.Int64DataBlockMap = {
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori_Clear = function(this, __cs2lua_func_info)
-		local __foreach_1733_12_1737_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
-		for pair in getiterator(__foreach_1733_12_1737_13) do
+		local __foreach_1734_12_1738_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_1734_12_1738_13) do
 			if pair == __cs2lua_nil then
 				pair = nil;
 			end;
@@ -153,9 +153,9 @@ DataBlockDefine.Int64DataBlockMap = {
 				callinterface(elem, DataBlockDefine.IDataBlock, "Release");
 			end;
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_1733_12_1737_13);
+		recycleiterator(__cs2lua_func_info, __foreach_1734_12_1738_13);
 		this.m_DataWrap:Clear();
-		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
+		DclApi.container_clear(this.m_DataBlockId);
 	end,
 
 	Iterate = function(this, callback)
@@ -164,8 +164,8 @@ DataBlockDefine.Int64DataBlockMap = {
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori_Iterate = function(this, __cs2lua_func_info, callback)
-		local __foreach_1743_12_1746_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
-		for pair in getiterator(__foreach_1743_12_1746_13) do
+		local __foreach_1744_12_1747_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_1744_12_1747_13) do
 			if pair == __cs2lua_nil then
 				pair = nil;
 			end;
@@ -175,7 +175,7 @@ DataBlockDefine.Int64DataBlockMap = {
 				end;
 			end;
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_1743_12_1746_13);
+		recycleiterator(__cs2lua_func_info, __foreach_1744_12_1747_13);
 	end,
 
 	ctor = function(this)

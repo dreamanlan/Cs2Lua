@@ -31,16 +31,16 @@ DataBlockDefine.DataBlockVector = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_1275_8_1278_9;
-		__method_ret_1275_8_1278_9 = this.m_DataBlockId;
-		return __method_ret_1275_8_1278_9;
+		local __method_ret_1276_8_1279_9;
+		__method_ret_1276_8_1279_9 = this.m_DataBlockId;
+		return __method_ret_1276_8_1279_9;
 	end,
 
 	Init = function(this)
 		if this.m_IsValid then 
 			return;
 		end;
-		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_container(2);
+		this.m_DataBlockId = DclApi.alloc_container(2);
 		this.m_DataWrap:Clear();
 		this.m_IsValid = true;
 	end,
@@ -49,15 +49,15 @@ DataBlockDefine.DataBlockVector = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_exp_1291_12_1295_13 = this.m_DataWrap;
-		for __foreach_ix_1291_12_1295_13 = 1, __foreach_exp_1291_12_1295_13.Count do
-			local elem = __foreach_exp_1291_12_1295_13[__foreach_ix_1291_12_1295_13];
+		local __foreach_exp_1292_12_1296_13 = this.m_DataWrap;
+		for __foreach_ix_1292_12_1296_13 = 1, __foreach_exp_1292_12_1296_13.Count do
+			local elem = __foreach_exp_1292_12_1296_13[__foreach_ix_1292_12_1296_13];
 			if (not isequal(nil, elem)) then 
 				callinterface(elem, DataBlockDefine.IDataBlock, "Release");
 			end;
 		end;
 		this.m_DataWrap:Clear();
-		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
+		DclApi.free_container(this.m_DataBlockId);
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
 	end,
@@ -68,13 +68,13 @@ DataBlockDefine.DataBlockVector = {
 		end;
 		this.m_DataBlockId = dataBlockId;
 		local ct;
-		ct = DataBlockDefine.DclApi.container_get_size(dataBlockId);
+		ct = DclApi.container_get_size(dataBlockId);
 		local ix;
 		ix = 0;
 		while (ix < ct) do
 			local elem;
 			elem = this.OnNewDataBlock();
-			callinterface(elem, DataBlockDefine.IDataBlock, "Attach", DataBlockDefine.DclApi.uint64_vector_get_element(dataBlockId, typecast(ix, System.UInt64, TypeKind.Struct)));
+			callinterface(elem, DataBlockDefine.IDataBlock, "Attach", DclApi.uint64_vector_get_element(dataBlockId, typecast(ix, System.UInt64, TypeKind.Struct)));
 			this.m_DataWrap:Add(elem);
 			ix = (ix + 1);
 		end;
@@ -85,9 +85,9 @@ DataBlockDefine.DataBlockVector = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_exp_1318_12_1322_13 = this.m_DataWrap;
-		for __foreach_ix_1318_12_1322_13 = 1, __foreach_exp_1318_12_1322_13.Count do
-			local elem = __foreach_exp_1318_12_1322_13[__foreach_ix_1318_12_1322_13];
+		local __foreach_exp_1319_12_1323_13 = this.m_DataWrap;
+		for __foreach_ix_1319_12_1323_13 = 1, __foreach_exp_1319_12_1323_13.Count do
+			local elem = __foreach_exp_1319_12_1323_13[__foreach_ix_1319_12_1323_13];
 			if (not isequal(nil, elem)) then 
 				callinterface(elem, DataBlockDefine.IDataBlock, "Detach");
 			end;
@@ -99,53 +99,53 @@ DataBlockDefine.DataBlockVector = {
 
 	Reserve = function(this, space)
 		this.m_DataWrap.Capacity = space;
-		DataBlockDefine.DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
+		DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
 	end,
 
 	GetCount = function(this)
-		local __method_ret_1333_8_1336_9;
-		__method_ret_1333_8_1336_9 = this.m_DataWrap.Count;
-		return __method_ret_1333_8_1336_9;
+		local __method_ret_1334_8_1337_9;
+		__method_ret_1334_8_1337_9 = this.m_DataWrap.Count;
+		return __method_ret_1334_8_1337_9;
 	end,
 
 	GetData = function(this, T, index)
-		local __method_ret_1337_8_1343_9;
+		local __method_ret_1338_8_1344_9;
 		if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
-			__method_ret_1337_8_1343_9 = typecast(this.m_DataWrap[index + 1], T, TypeKind.TypeParameter);
-			return __method_ret_1337_8_1343_9;
+			__method_ret_1338_8_1344_9 = typecast(this.m_DataWrap[index + 1], T, TypeKind.TypeParameter);
+			return __method_ret_1338_8_1344_9;
 		end;
-		__method_ret_1337_8_1343_9 = nil;
-		return __method_ret_1337_8_1343_9;
+		__method_ret_1338_8_1344_9 = nil;
+		return __method_ret_1338_8_1344_9;
 	end,
 
 	SetData = function(this, index, data)
 		if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
 			this.m_DataWrap[index + 1] = data;
-			DataBlockDefine.DclApi.uint64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), callinterface(data, DataBlockDefine.IDataBlock, "GetDataBlockId"));
+			DclApi.uint64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), callinterface(data, DataBlockDefine.IDataBlock, "GetDataBlockId"));
 		end;
 	end,
 
 	IndexOf = function(this, data)
-		local __method_ret_1351_8_1354_9;
-		__method_ret_1351_8_1354_9 = this.m_DataWrap:IndexOf__T(data);
-		return __method_ret_1351_8_1354_9;
+		local __method_ret_1352_8_1355_9;
+		__method_ret_1352_8_1355_9 = this.m_DataWrap:IndexOf__T(data);
+		return __method_ret_1352_8_1355_9;
 	end,
 
 	GetLast = function(this, T)
-		local __method_ret_1355_8_1358_9;
-		__method_ret_1355_8_1358_9 = DataBlockDefine.DataBlockVector.GetData(this, T, (DataBlockDefine.DataBlockVector.GetCount(this) - 1));
-		return __method_ret_1355_8_1358_9;
+		local __method_ret_1356_8_1359_9;
+		__method_ret_1356_8_1359_9 = DataBlockDefine.DataBlockVector.GetData(this, T, (DataBlockDefine.DataBlockVector.GetCount(this) - 1));
+		return __method_ret_1356_8_1359_9;
 	end,
 
 	AddLast = function(this, data)
 		this.m_DataWrap:Add(data);
-		DataBlockDefine.DclApi.uint64_vector_push_back(this.m_DataBlockId, callinterface(data, DataBlockDefine.IDataBlock, "GetDataBlockId"));
+		DclApi.uint64_vector_push_back(this.m_DataBlockId, callinterface(data, DataBlockDefine.IDataBlock, "GetDataBlockId"));
 	end,
 
 	RemoveLast = function(this)
 		if (this.m_DataWrap.Count > 0) then 
 			this.m_DataWrap:RemoveAt((this.m_DataWrap.Count - 1));
-			DataBlockDefine.DclApi.uint64_vector_pop_back(this.m_DataBlockId);
+			DclApi.uint64_vector_pop_back(this.m_DataBlockId);
 		end;
 	end,
 
@@ -158,13 +158,13 @@ DataBlockDefine.DataBlockVector = {
 	RemoveAt = function(this, index)
 		if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
 			this.m_DataWrap:RemoveAt(index);
-			DataBlockDefine.DclApi.uint64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			DclApi.uint64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
 		end;
 	end,
 
 	Clear = function(this)
 		this.m_DataWrap:Clear();
-		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
+		DclApi.container_clear(this.m_DataBlockId);
 	end,
 
 	ctor = function(this)

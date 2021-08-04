@@ -36,36 +36,36 @@ class(DataBlockDefine.CString) {
 			callinstance(this, DataBlockDefine.CString, "SetString", str);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(str, System.String, TypeKind.Class, 0, true)],
 		GetDataBlockId = deffunc(1)args(this){
-			local(__method_ret_885_8_888_9);
-			__method_ret_885_8_888_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId");
-			return(__method_ret_885_8_888_9);
+			local(__method_ret_886_8_889_9);
+			__method_ret_886_8_889_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId");
+			return(__method_ret_886_8_889_9);
 		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true)];
 		Init = deffunc(0)args(this){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid"), 891_12_892_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid"), 892_12_893_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Release = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid"), System.Boolean, TypeKind.Struct), 897_12_898_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid"), System.Boolean, TypeKind.Struct), 898_12_899_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache", null);
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 900_12_903_13 ){
-				callstatic(DataBlockDefine.DclApi, "free_string", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"));
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 901_12_904_13 ){
+				callstatic(DclApi, "free_string", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"));
 				setinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId", 0);
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Attach = deffunc(0)args(this, dataBlockId){
-			if( getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid"), 908_12_909_23 ){
+			if( getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid"), 909_12_910_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId", dataBlockId);
 			setinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Struct, 0, true)];
 		Detach = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid"), System.Boolean, TypeKind.Struct), 915_12_916_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid"), System.Boolean, TypeKind.Struct), 916_12_917_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache", null);
@@ -73,19 +73,19 @@ class(DataBlockDefine.CString) {
 			setinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_IsValid", false);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		GetString = deffunc(1)args(this){
-			local(__method_ret_922_8_928_9);
-			if( execbinary("&&", execbinary("==", null, getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache"), System.String, System.String, TypeKind.Class, TypeKind.Class), execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 924_12_926_13 ){
-				getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache") = callstatic(DataBlockDefine.DclApi, "get_string", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"));
+			local(__method_ret_923_8_929_9);
+			if( execbinary("&&", execbinary("==", null, getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache"), System.String, System.String, TypeKind.Class, TypeKind.Class), execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), System.Boolean, System.Boolean, TypeKind.Struct, TypeKind.Struct), 925_12_927_13 ){
+				getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache") = callstatic(DclApi, "get_string", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"));
 			};
-			__method_ret_922_8_928_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache");
-			return(__method_ret_922_8_928_9);
+			__method_ret_923_8_929_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache");
+			return(__method_ret_923_8_929_9);
 		}options[needfuncinfo(false), rettype(return, System.String, TypeKind.Class, 0, true)];
 		SetString = deffunc(0)args(this, val){
 			setinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache", val);
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 932_12_934_13 ){
-				callstatic(DataBlockDefine.DclApi, "free_string", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"));
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 933_12_935_13 ){
+				callstatic(DclApi, "free_string", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId"));
 			};
-			getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId") = callstatic(DataBlockDefine.DclApi, "alloc_string", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache"));
+			getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_DataBlockId") = callstatic(DclApi, "alloc_string", getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "m_StringCache"));
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(val, System.String, TypeKind.Class, 0, true)];
 		__ctor = deffunc(0)args(this){
 			if(getinstance(SymbolKind.Field, this, DataBlockDefine.CString, "__ctor_called")){

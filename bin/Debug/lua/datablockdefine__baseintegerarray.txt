@@ -31,9 +31,9 @@ DataBlockDefine.BaseIntegerArray = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_578_8_581_9;
-		__method_ret_578_8_581_9 = this.m_DataBlockId;
-		return __method_ret_578_8_581_9;
+		local __method_ret_579_8_582_9;
+		__method_ret_579_8_582_9 = this.m_DataBlockId;
+		return __method_ret_579_8_582_9;
 	end,
 
 	Init = function(this)
@@ -48,7 +48,7 @@ DataBlockDefine.BaseIntegerArray = {
 			return;
 		end;
 		if (this.m_DataBlockId ~= 0) then 
-			DataBlockDefine.DclApi.free_array(this.m_DataBlockId);
+			DclApi.free_array(this.m_DataBlockId);
 			this.m_DataBlockId = 0;
 		end;
 		this.m_IsValid = false;
@@ -71,13 +71,13 @@ DataBlockDefine.BaseIntegerArray = {
 	end,
 
 	GetLength = function(this)
-		local __method_ret_612_8_620_9;
+		local __method_ret_613_8_621_9;
 		if (this.m_DataBlockId ~= 0) then 
-			__method_ret_612_8_620_9 = DataBlockDefine.DclApi.get_array_length(this.m_DataBlockId);
-			return __method_ret_612_8_620_9;
+			__method_ret_613_8_621_9 = DclApi.get_array_length(this.m_DataBlockId);
+			return __method_ret_613_8_621_9;
 		else
-			__method_ret_612_8_620_9 = 0;
-			return __method_ret_612_8_620_9;
+			__method_ret_613_8_621_9 = 0;
+			return __method_ret_613_8_621_9;
 		end;
 		return nil;
 	end,

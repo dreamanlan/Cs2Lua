@@ -15,6 +15,441 @@ class LuaConsole
     }
 }
 
+[Cs2Dsl.Ignore]
+public static class DclApi
+{
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dcl_per_thread_init();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dcl_per_thread_release();
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_all_per_thread_data();
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong begin_data_block_struct(int field_count);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void end_data_block_struct(ulong struct_id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void remove_all_data_block_struct();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void data_block_field_basic(ulong struct_id, int index, int field_type);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void data_block_field_struct(ulong struct_id, int index, int field_type, ulong field_struct_id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void data_block_field_max_size(ulong struct_id, uint index, uint max_size);
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void finalize_data_block(ulong structId, ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void finalize_jce_proto(int protoId, ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void handle_finalized_memory(int maxCountPerThread);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void clear_all_finalize_info();
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong alloc_data_block(int size);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_data_block(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_data_block_recursively(ulong structId, ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr get_data_block(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_data_block_size(ulong id);
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool get_data_block_bool(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern sbyte get_data_block_int8(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern short get_data_block_int16(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_data_block_int32(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long get_data_block_int64(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern byte get_data_block_uint8(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ushort get_data_block_uint16(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern uint get_data_block_uint32(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong get_data_block_uint64(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern float get_data_block_float(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern double get_data_block_double(ulong id, int offset);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_bool(ulong id, int offset, bool val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_int8(ulong id, int offset, sbyte val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_int16(ulong id, int offset, short val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_int32(ulong id, int offset, int val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_int64(ulong id, int offset, long val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_uint8(ulong id, int offset, byte val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_uint16(ulong id, int offset, ushort val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_uint32(ulong id, int offset, uint val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_uint64(ulong id, int offset, ulong val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_float(ulong id, int offset, float val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_data_block_double(ulong id, int offset, double val);
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong alloc_array(uint element_size, uint num, uint max_size);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_array(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_array_length(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_length(ulong id, int len);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_array_element_size(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern sbyte get_array_element_int8(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_int8(ulong id, uint index, sbyte data);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern short get_array_element_int16(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_int16(ulong id, uint index, short data);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_array_element_int32(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_int32(ulong id, uint index, int data);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long get_array_element_int64(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_int64(ulong id, uint index, long data);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern byte get_array_element_uint8(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_uint8(ulong id, uint index, byte data);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ushort get_array_element_uint16(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_uint16(ulong id, uint index, ushort data);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern uint get_array_element_uint32(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_uint32(ulong id, uint index, uint data);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong get_array_element_uint64(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_uint64(ulong id, uint index, ulong data);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern float get_array_element_float(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_float(ulong id, uint index, float data);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern double get_array_element_double(ulong id, uint index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool set_array_element_double(ulong id, uint index, double data);
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong alloc_empty_string();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong alloc_string(string str);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_string(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong duplicate_string(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr get_cstring(ulong id);
+    public unsafe static string get_string(ulong id)
+    {
+        IntPtr v = get_cstring(id);
+        if (v.ToPointer() == null) {
+            return null;
+        }
+        return Marshal.PtrToStringAnsi(v);
+    }
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_copy(ulong id, StringBuilder buf, ulong space);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_copy_substr(ulong id, StringBuilder buf, ulong space, ulong count, ulong pos);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_clear(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_reserve_space(ulong id, ulong space);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long string_get_length(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern sbyte string_get_char(ulong id, ulong pos);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int string_compare(ulong id, ulong other);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool string_contains(ulong id, ulong other);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long string_index_of(ulong id, ulong other, ulong pos);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long string_last_index_of(ulong id, ulong other, ulong pos);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_append(ulong id, ulong other);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_append_substr(ulong id, ulong other, ulong pos, ulong count);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_erase(ulong id, ulong pos, ulong count);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_insert(ulong id, ulong pos, ulong other);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_insert_substr(ulong id, ulong pos, ulong other, ulong other_pos, ulong count);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_replace(ulong id, ulong pos, ulong count, ulong other);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_replace_substr(ulong id, ulong pos, ulong count, ulong other, ulong pos2, ulong count2);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_replace_all(ulong id, ulong what, ulong with);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void string_swap(ulong id, ulong other);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_concat(ulong id, ulong other);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_substr(ulong id, ulong pos, ulong count);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool StrInt64MapIterateCallback(ulong key, long val);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool StrUInt64MapIterateCallback(ulong key, ulong val);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool StrDoubleMapIterateCallback(ulong key, double val);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool Int64Int64MapIterateCallback(long key, long val);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool Int64UInt64MapIterateCallback(long key, ulong val);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool Int64DoubleMapIterateCallback(long key, double val);
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong alloc_container(uint element_type);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_container(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void container_clear(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void container_reserve_space(ulong id, ulong space);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long container_get_size(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long int64_vector_index_of_element(ulong id, long val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long int64_vector_get_element(ulong id, ulong index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_vector_set_element(ulong id, ulong index, long val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_vector_push_back(ulong id, long val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_vector_pop_back(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_vector_erase(ulong id, ulong index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long uint64_vector_index_of_element(ulong id, ulong val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong uint64_vector_get_element(ulong id, ulong index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool uint64_vector_set_element(ulong id, ulong index, ulong val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool uint64_vector_push_back(ulong id, ulong val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool uint64_vector_pop_back(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool uint64_vector_erase(ulong id, ulong index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long uint64_vector_index_of_element_string(ulong id, ulong val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long double_vector_index_of_element(ulong id, double val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern double double_vector_get_element(ulong id, ulong index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool double_vector_set_element(ulong id, ulong index, double val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool double_vector_push_back(ulong id, double val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool double_vector_pop_back(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool double_vector_erase(ulong id, ulong index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool iterate_string_int64_map(ulong id, StrInt64MapIterateCallback callback);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long string_int64_map_get_element(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_int64_map_get_key(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_int64_map_set_element(ulong id, ulong key, long val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_int64_map_add_element(ulong id, ulong key, long val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool string_int64_map_remove_element(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool string_int64_map_contains(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool iterate_string_uint64_map(ulong id, StrUInt64MapIterateCallback callback);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_uint64_map_get_element(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_uint64_map_get_key(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_uint64_map_set_element(ulong id, ulong key, ulong val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_uint64_map_add_element(ulong id, ulong key, ulong val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool string_uint64_map_remove_element(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool string_uint64_map_contains(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool iterate_string_double_map(ulong id, StrDoubleMapIterateCallback callback);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern double string_double_map_get_element(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_double_map_get_key(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_double_map_set_element(ulong id, ulong key, double val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong string_double_map_add_element(ulong id, ulong key, double val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool string_double_map_remove_element(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool string_double_map_contains(ulong id, ulong key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool iterate_int64_int64_map(ulong id, Int64Int64MapIterateCallback callback);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern long int64_int64_map_get_element(ulong id, long key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_int64_map_set_element(ulong id, long key, long val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_int64_map_add_element(ulong id, long key, long val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_int64_map_remove_element(ulong id, long key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_int64_map_contains(ulong id, long key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool iterate_int64_uint64_map(ulong id, Int64UInt64MapIterateCallback callback);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong int64_uint64_map_get_element(ulong id, long key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_uint64_map_set_element(ulong id, long key, ulong val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_uint64_map_add_element(ulong id, long key, ulong val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_uint64_map_remove_element(ulong id, long key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_uint64_map_contains(ulong id, long key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool iterate_int64_double_map(ulong id, Int64DoubleMapIterateCallback callback);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern double int64_double_map_get_element(ulong id, long key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_double_map_set_element(ulong id, long key, double val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_double_map_add_element(ulong id, long key, double val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_double_map_remove_element(ulong id, long key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool int64_double_map_contains(ulong id, long key);
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void set_table_root_path(string rootPath);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong alloc_table(int fieldCount);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void set_table_field_name(ulong id, uint index, string fieldName);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void set_table_field_type(ulong id, uint index, int fieldType);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void finish_table_struct(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void load_table(ulong id, string file, string keyField);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_table_lookup_info();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_table(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_all_table();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong get_table_record_count(ulong id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong get_table_record(ulong id, ulong index);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_table_record_index_by_key_int(ulong id, int key);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_table_record_index_by_key_string(ulong id, ulong key);
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong begin_jce_protocol_struct(int field_count);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void end_jce_protocol_struct(ulong struct_id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void remove_all_jce_protocol_struct();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void jce_protocol_field_basic(ulong struct_id, int index, int tag, int field_type);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void jce_protocol_field_struct(ulong struct_id, int index, int tag, int field_type, ulong field_struct_id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void jce_protocol_field_default_value_uint64(ulong struct_id, int index, ulong def_val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void jce_protocol_field_default_value_double(ulong struct_id, int index, double def_val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void jce_protocol_field_default_value_string(ulong struct_id, int index, string def_val);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void jce_protocol_field_max_size(ulong struct_id, uint index, uint max_size);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void map_jce_protocol_struct(int proto_id, ulong struct_id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong query_jce_protocol_struct(int proto_id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong decode_jce_protocol(int proto_id, IntPtr buf, int size);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int encode_jce_protocol(int proto_id, ulong handle, IntPtr buf, int size);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool free_jce_protocol(int proto_id, ulong handle);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern ulong alloc_jce_protocol_from_pool(int proto_id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool recycle_jce_protocol_to_pool(int proto_id, ulong handle);
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void clear_post_transfer_station(bool onlyIfQueueIsEmpty);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void clear_receive_transfer_station(bool onlyIfQueueIsEmpty);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void post_jce_proto(int op, int proto_id, ulong data_block_id);
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int receive_jce_proto(out int proto_id, out ulong data_block_id);
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_all_const_string();
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_data_block_count();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_string_count();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_string_ref_count();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_readonly_data_block_count();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_const_string_count();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_table_count();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_jce_proto_struct_count();
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int get_data_block_struct_count();
+
+    [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int luaopen_dcl_api(IntPtr L);
+}
+
 namespace DataBlockDefine
 {
     public enum ContainerTypeEnum : uint
@@ -121,440 +556,6 @@ namespace DataBlockDefine
         PostAndRecycle
     }
     public delegate IDataBlock NewDataBlockDelegation();
-    [Cs2Dsl.Ignore]
-    public static class DclApi
-    {
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int dcl_per_thread_init();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void dcl_per_thread_release();
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_all_per_thread_data();
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong begin_data_block_struct(int field_count);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void end_data_block_struct(ulong struct_id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void remove_all_data_block_struct();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void data_block_field_basic(ulong struct_id, int index, int field_type);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void data_block_field_struct(ulong struct_id, int index, int field_type, ulong field_struct_id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void data_block_field_max_size(ulong struct_id, uint index, uint max_size);
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void finalize_data_block(ulong structId, ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void finalize_jce_proto(int protoId, ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void handle_finalized_memory(int maxCountPerThread);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void clear_all_finalize_info();
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong alloc_data_block(int size);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_data_block(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_data_block_recursively(ulong structId, ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr get_data_block(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_data_block_size(ulong id);
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool get_data_block_bool(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern sbyte get_data_block_int8(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern short get_data_block_int16(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_data_block_int32(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long get_data_block_int64(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern byte get_data_block_uint8(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ushort get_data_block_uint16(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern uint get_data_block_uint32(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong get_data_block_uint64(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern float get_data_block_float(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double get_data_block_double(ulong id, int offset);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_bool(ulong id, int offset, bool val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_int8(ulong id, int offset, sbyte val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_int16(ulong id, int offset, short val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_int32(ulong id, int offset, int val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_int64(ulong id, int offset, long val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_uint8(ulong id, int offset, byte val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_uint16(ulong id, int offset, ushort val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_uint32(ulong id, int offset, uint val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_uint64(ulong id, int offset, ulong val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_float(ulong id, int offset, float val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_data_block_double(ulong id, int offset, double val);
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong alloc_array(uint element_size, uint num, uint max_size);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_array(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_array_length(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_length(ulong id, int len);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_array_element_size(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern sbyte get_array_element_int8(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_int8(ulong id, uint index, sbyte data);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern short get_array_element_int16(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_int16(ulong id, uint index, short data);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_array_element_int32(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_int32(ulong id, uint index, int data);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long get_array_element_int64(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_int64(ulong id, uint index, long data);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern byte get_array_element_uint8(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_uint8(ulong id, uint index, byte data);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ushort get_array_element_uint16(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_uint16(ulong id, uint index, ushort data);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern uint get_array_element_uint32(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_uint32(ulong id, uint index, uint data);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong get_array_element_uint64(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_uint64(ulong id, uint index, ulong data);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern float get_array_element_float(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_float(ulong id, uint index, float data);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double get_array_element_double(ulong id, uint index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool set_array_element_double(ulong id, uint index, double data);
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong alloc_empty_string();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong alloc_string(string str);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_string(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong duplicate_string(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr get_cstring(ulong id);
-        public unsafe static string get_string(ulong id)
-        {
-            IntPtr v = get_cstring(id);
-            if (v.ToPointer() == null) {
-                return null;
-            }
-            return Marshal.PtrToStringAnsi(v);
-        }
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_copy(ulong id, StringBuilder buf, ulong space);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_copy_substr(ulong id, StringBuilder buf, ulong space, ulong count, ulong pos);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_clear(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_reserve_space(ulong id, ulong space);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long string_get_length(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern sbyte string_get_char(ulong id, ulong pos);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int string_compare(ulong id, ulong other);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool string_contains(ulong id, ulong other);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long string_index_of(ulong id, ulong other, ulong pos);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long string_last_index_of(ulong id, ulong other, ulong pos);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_append(ulong id, ulong other);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_append_substr(ulong id, ulong other, ulong pos, ulong count);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_erase(ulong id, ulong pos, ulong count);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_insert(ulong id, ulong pos, ulong other);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_insert_substr(ulong id, ulong pos, ulong other, ulong other_pos, ulong count);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_replace(ulong id, ulong pos, ulong count, ulong other);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_replace_substr(ulong id, ulong pos, ulong count, ulong other, ulong pos2, ulong count2);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_replace_all(ulong id, ulong what, ulong with);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void string_swap(ulong id, ulong other);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_concat(ulong id, ulong other);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_substr(ulong id, ulong pos, ulong count);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate bool StrInt64MapIterateCallback(ulong key, long val);
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate bool StrUInt64MapIterateCallback(ulong key, ulong val);
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate bool StrDoubleMapIterateCallback(ulong key, double val);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate bool Int64Int64MapIterateCallback(long key, long val);
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate bool Int64UInt64MapIterateCallback(long key, ulong val);
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate bool Int64DoubleMapIterateCallback(long key, double val);
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong alloc_container(uint element_type);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_container(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void container_clear(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void container_reserve_space(ulong id, ulong space);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long container_get_size(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long int64_vector_index_of_element(ulong id, long val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long int64_vector_get_element(ulong id, ulong index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_vector_set_element(ulong id, ulong index, long val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_vector_push_back(ulong id, long val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_vector_pop_back(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_vector_erase(ulong id, ulong index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long uint64_vector_index_of_element(ulong id, ulong val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong uint64_vector_get_element(ulong id, ulong index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool uint64_vector_set_element(ulong id, ulong index, ulong val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool uint64_vector_push_back(ulong id, ulong val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool uint64_vector_pop_back(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool uint64_vector_erase(ulong id, ulong index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long uint64_vector_index_of_element_string(ulong id, ulong val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long double_vector_index_of_element(ulong id, double val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double double_vector_get_element(ulong id, ulong index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool double_vector_set_element(ulong id, ulong index, double val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool double_vector_push_back(ulong id, double val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool double_vector_pop_back(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool double_vector_erase(ulong id, ulong index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool iterate_string_int64_map(ulong id, StrInt64MapIterateCallback callback);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long string_int64_map_get_element(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_int64_map_get_key(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_int64_map_set_element(ulong id, ulong key, long val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_int64_map_add_element(ulong id, ulong key, long val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool string_int64_map_remove_element(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool string_int64_map_contains(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool iterate_string_uint64_map(ulong id, StrUInt64MapIterateCallback callback);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_uint64_map_get_element(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_uint64_map_get_key(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_uint64_map_set_element(ulong id, ulong key, ulong val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_uint64_map_add_element(ulong id, ulong key, ulong val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool string_uint64_map_remove_element(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool string_uint64_map_contains(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool iterate_string_double_map(ulong id, StrDoubleMapIterateCallback callback);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double string_double_map_get_element(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_double_map_get_key(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_double_map_set_element(ulong id, ulong key, double val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong string_double_map_add_element(ulong id, ulong key, double val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool string_double_map_remove_element(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool string_double_map_contains(ulong id, ulong key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool iterate_int64_int64_map(ulong id, Int64Int64MapIterateCallback callback);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long int64_int64_map_get_element(ulong id, long key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_int64_map_set_element(ulong id, long key, long val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_int64_map_add_element(ulong id, long key, long val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_int64_map_remove_element(ulong id, long key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_int64_map_contains(ulong id, long key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool iterate_int64_uint64_map(ulong id, Int64UInt64MapIterateCallback callback);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong int64_uint64_map_get_element(ulong id, long key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_uint64_map_set_element(ulong id, long key, ulong val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_uint64_map_add_element(ulong id, long key, ulong val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_uint64_map_remove_element(ulong id, long key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_uint64_map_contains(ulong id, long key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool iterate_int64_double_map(ulong id, Int64DoubleMapIterateCallback callback);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern double int64_double_map_get_element(ulong id, long key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_double_map_set_element(ulong id, long key, double val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_double_map_add_element(ulong id, long key, double val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_double_map_remove_element(ulong id, long key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool int64_double_map_contains(ulong id, long key);
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void set_table_root_path(string rootPath);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong alloc_table(int fieldCount);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void set_table_field_name(ulong id, uint index, string fieldName);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void set_table_field_type(ulong id, uint index, int fieldType);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void finish_table_struct(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void load_table(ulong id, string file, string keyField);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_table_lookup_info();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_table(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_all_table();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong get_table_record_count(ulong id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong get_table_record(ulong id, ulong index);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_table_record_index_by_key_int(ulong id, int key);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_table_record_index_by_key_string(ulong id, ulong key);
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong begin_jce_protocol_struct(int field_count);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void end_jce_protocol_struct(ulong struct_id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void remove_all_jce_protocol_struct();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void jce_protocol_field_basic(ulong struct_id, int index, int tag, int field_type);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void jce_protocol_field_struct(ulong struct_id, int index, int tag, int field_type, ulong field_struct_id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void jce_protocol_field_default_value_uint64(ulong struct_id, int index, ulong def_val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void jce_protocol_field_default_value_double(ulong struct_id, int index, double def_val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void jce_protocol_field_default_value_string(ulong struct_id, int index, string def_val);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void jce_protocol_field_max_size(ulong struct_id, uint index, uint max_size);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void map_jce_protocol_struct(int proto_id, ulong struct_id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong query_jce_protocol_struct(int proto_id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong decode_jce_protocol(int proto_id, IntPtr buf, int size);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int encode_jce_protocol(int proto_id, ulong handle, IntPtr buf, int size);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool free_jce_protocol(int proto_id, ulong handle);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong alloc_jce_protocol_from_pool(int proto_id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool recycle_jce_protocol_to_pool(int proto_id, ulong handle);
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void clear_post_transfer_station(bool onlyIfQueueIsEmpty);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void clear_receive_transfer_station(bool onlyIfQueueIsEmpty);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void post_jce_proto(int op, int proto_id, ulong data_block_id);
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int receive_jce_proto(out int proto_id, out ulong data_block_id);
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void free_all_const_string();
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_data_block_count();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_string_count();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_string_ref_count();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_readonly_data_block_count();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_const_string_count();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_table_count();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_jce_proto_struct_count();
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int get_data_block_struct_count();
-
-        [DllImport("cppmodule", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int luaopen_dcl_api(IntPtr L);
-    }
     public interface IDataBlock
     {
         ulong GetDataBlockId();

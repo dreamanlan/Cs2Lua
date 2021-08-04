@@ -31,9 +31,9 @@ DataBlockDefine.JceStructArray = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_2554_8_2557_9;
-		__method_ret_2554_8_2557_9 = this.m_DataBlockId;
-		return __method_ret_2554_8_2557_9;
+		local __method_ret_2555_8_2558_9;
+		__method_ret_2555_8_2558_9 = this.m_DataBlockId;
+		return __method_ret_2555_8_2558_9;
 	end,
 
 	Init = function(this)
@@ -47,14 +47,14 @@ DataBlockDefine.JceStructArray = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_exp_2568_12_2570_13 = this.m_DataWrap;
-		for __foreach_ix_2568_12_2570_13 = 1, __foreach_exp_2568_12_2570_13.Count do
-			local obj = __foreach_exp_2568_12_2570_13[__foreach_ix_2568_12_2570_13];
+		local __foreach_exp_2569_12_2571_13 = this.m_DataWrap;
+		for __foreach_ix_2569_12_2571_13 = 1, __foreach_exp_2569_12_2571_13.Count do
+			local obj = __foreach_exp_2569_12_2571_13[__foreach_ix_2569_12_2571_13];
 			callinterface(obj, DataBlockDefine.IDataBlock, "Release");
 		end;
 		this.m_DataWrap:Clear();
 		if (this.m_DataBlockId ~= 0) then 
-			DataBlockDefine.DclApi.free_array(this.m_DataBlockId);
+			DclApi.free_array(this.m_DataBlockId);
 			this.m_DataBlockId = 0;
 		end;
 		this.m_IsValid = false;
@@ -67,13 +67,13 @@ DataBlockDefine.JceStructArray = {
 		this.m_DataBlockId = dataBlockId;
 		if (dataBlockId ~= 0) then 
 			local len;
-			len = DataBlockDefine.DclApi.get_array_length(dataBlockId);
+			len = DclApi.get_array_length(dataBlockId);
 			this.m_DataWrap.Capacity = len;
 			local ix;
 			ix = 0;
 			while (ix < len) do
 				local objId;
-				objId = DataBlockDefine.DclApi.get_array_element_uint64(dataBlockId, typecast(ix, System.UInt32, TypeKind.Struct));
+				objId = DclApi.get_array_element_uint64(dataBlockId, typecast(ix, System.UInt32, TypeKind.Struct));
 				local obj;
 				obj = this.OnNewDataBlock();
 				callinterface(obj, DataBlockDefine.IDataBlock, "Attach", objId);
@@ -88,9 +88,9 @@ DataBlockDefine.JceStructArray = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_exp_2599_12_2601_13 = this.m_DataWrap;
-		for __foreach_ix_2599_12_2601_13 = 1, __foreach_exp_2599_12_2601_13.Count do
-			local obj = __foreach_exp_2599_12_2601_13[__foreach_ix_2599_12_2601_13];
+		local __foreach_exp_2600_12_2602_13 = this.m_DataWrap;
+		for __foreach_ix_2600_12_2602_13 = 1, __foreach_exp_2600_12_2602_13.Count do
+			local obj = __foreach_exp_2600_12_2602_13[__foreach_ix_2600_12_2602_13];
 			callinterface(obj, DataBlockDefine.IDataBlock, "Detach");
 		end;
 		this.m_DataWrap:Clear();
@@ -99,28 +99,28 @@ DataBlockDefine.JceStructArray = {
 	end,
 
 	GetLength = function(this)
-		local __method_ret_2606_8_2614_9;
+		local __method_ret_2607_8_2615_9;
 		if (this.m_DataBlockId ~= 0) then 
-			__method_ret_2606_8_2614_9 = DataBlockDefine.DclApi.get_array_length(this.m_DataBlockId);
-			return __method_ret_2606_8_2614_9;
+			__method_ret_2607_8_2615_9 = DclApi.get_array_length(this.m_DataBlockId);
+			return __method_ret_2607_8_2615_9;
 		else
-			__method_ret_2606_8_2614_9 = 0;
-			return __method_ret_2606_8_2614_9;
+			__method_ret_2607_8_2615_9 = 0;
+			return __method_ret_2607_8_2615_9;
 		end;
 		return nil;
 	end,
 
 	Reset = function(this, size)
 		if (this.m_DataBlockId ~= 0) then 
-			local __foreach_exp_2619_16_2621_17 = this.m_DataWrap;
-			for __foreach_ix_2619_16_2621_17 = 1, __foreach_exp_2619_16_2621_17.Count do
-				local obj = __foreach_exp_2619_16_2621_17[__foreach_ix_2619_16_2621_17];
+			local __foreach_exp_2620_16_2622_17 = this.m_DataWrap;
+			for __foreach_ix_2620_16_2622_17 = 1, __foreach_exp_2620_16_2622_17.Count do
+				local obj = __foreach_exp_2620_16_2622_17[__foreach_ix_2620_16_2622_17];
 				callinterface(obj, DataBlockDefine.IDataBlock, "Release");
 			end;
 			this.m_DataWrap:Clear();
-			DataBlockDefine.DclApi.free_array(this.m_DataBlockId);
+			DclApi.free_array(this.m_DataBlockId);
 		end;
-		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_array(8, size, size);
+		this.m_DataBlockId = DclApi.alloc_array(8, size, size);
 		this.m_DataWrap.Capacity = typecast(size, System.Int32, TypeKind.Struct);
 		local ix;
 		ix = 0;
@@ -133,13 +133,13 @@ DataBlockDefine.JceStructArray = {
 	end,
 
 	GetData = function(this, T, index)
-		local __method_ret_2632_8_2640_9;
+		local __method_ret_2633_8_2641_9;
 		if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
-			__method_ret_2632_8_2640_9 = typecast(this.m_DataWrap[index + 1], T, TypeKind.TypeParameter);
-			return __method_ret_2632_8_2640_9;
+			__method_ret_2633_8_2641_9 = typecast(this.m_DataWrap[index + 1], T, TypeKind.TypeParameter);
+			return __method_ret_2633_8_2641_9;
 		else
-			__method_ret_2632_8_2640_9 = nil;
-			return __method_ret_2632_8_2640_9;
+			__method_ret_2633_8_2641_9 = nil;
+			return __method_ret_2633_8_2641_9;
 		end;
 		return nil;
 	end,
@@ -149,7 +149,7 @@ DataBlockDefine.JceStructArray = {
 			if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
 				this.m_DataWrap[index + 1] = val;
 			end;
-			DataBlockDefine.DclApi.set_array_element_uint64(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct), callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId"));
+			DclApi.set_array_element_uint64(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct), callinterface(val, DataBlockDefine.IDataBlock, "GetDataBlockId"));
 		end;
 	end,
 

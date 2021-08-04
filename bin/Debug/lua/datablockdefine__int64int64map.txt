@@ -31,16 +31,16 @@ DataBlockDefine.Int64Int64Map = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_1396_8_1399_9;
-		__method_ret_1396_8_1399_9 = this.m_DataBlockId;
-		return __method_ret_1396_8_1399_9;
+		local __method_ret_1397_8_1400_9;
+		__method_ret_1397_8_1400_9 = this.m_DataBlockId;
+		return __method_ret_1397_8_1400_9;
 	end,
 
 	Init = function(this)
 		if this.m_IsValid then 
 			return;
 		end;
-		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_container(7);
+		this.m_DataBlockId = DclApi.alloc_container(7);
 		this.m_IsValid = true;
 	end,
 
@@ -48,7 +48,7 @@ DataBlockDefine.Int64Int64Map = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
+		DclApi.free_container(this.m_DataBlockId);
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
 	end,
@@ -70,44 +70,44 @@ DataBlockDefine.Int64Int64Map = {
 	end,
 
 	GetCount = function(this)
-		local __method_ret_1430_8_1433_9;
-		__method_ret_1430_8_1433_9 = typecast(DataBlockDefine.DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
-		return __method_ret_1430_8_1433_9;
+		local __method_ret_1431_8_1434_9;
+		__method_ret_1431_8_1434_9 = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		return __method_ret_1431_8_1434_9;
 	end,
 
 	GetData = function(this, key)
-		local __method_ret_1434_8_1437_9;
-		__method_ret_1434_8_1437_9 = DataBlockDefine.DclApi.int64_int64_map_get_element(this.m_DataBlockId, key);
-		return __method_ret_1434_8_1437_9;
+		local __method_ret_1435_8_1438_9;
+		__method_ret_1435_8_1438_9 = DclApi.int64_int64_map_get_element(this.m_DataBlockId, key);
+		return __method_ret_1435_8_1438_9;
 	end,
 
 	SetData = function(this, key, val)
-		DataBlockDefine.DclApi.int64_int64_map_set_element(this.m_DataBlockId, key, val);
+		DclApi.int64_int64_map_set_element(this.m_DataBlockId, key, val);
 	end,
 
 	Add = function(this, key, val)
-		DataBlockDefine.DclApi.int64_int64_map_add_element(this.m_DataBlockId, key, val);
+		DclApi.int64_int64_map_add_element(this.m_DataBlockId, key, val);
 	end,
 
 	Remove = function(this, key)
-		DataBlockDefine.DclApi.int64_int64_map_remove_element(this.m_DataBlockId, key);
+		DclApi.int64_int64_map_remove_element(this.m_DataBlockId, key);
 	end,
 
 	Contains = function(this, key)
-		local __method_ret_1450_8_1453_9;
-		__method_ret_1450_8_1453_9 = DataBlockDefine.DclApi.int64_int64_map_contains(this.m_DataBlockId, key);
-		return __method_ret_1450_8_1453_9;
+		local __method_ret_1451_8_1454_9;
+		__method_ret_1451_8_1454_9 = DclApi.int64_int64_map_contains(this.m_DataBlockId, key);
+		return __method_ret_1451_8_1454_9;
 	end,
 
 	Clear = function(this)
-		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
+		DclApi.container_clear(this.m_DataBlockId);
 	end,
 
 	Iterate = function(this, callback)
-		DataBlockDefine.DclApi.iterate_int64_int64_map(this.m_DataBlockId, function(k, v)
-			local __method_ret_1460_58_1460_94;
-			__method_ret_1460_58_1460_94 = callback(k, v);
-			return __method_ret_1460_58_1460_94;
+		DclApi.iterate_int64_int64_map(this.m_DataBlockId, function(k, v)
+			local __method_ret_1461_58_1461_94;
+			__method_ret_1461_58_1461_94 = callback(k, v);
+			return __method_ret_1461_58_1461_94;
 		end);
 	end,
 

@@ -31,9 +31,9 @@ DataBlockDefine.StringArrayField = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_2376_8_2379_9;
-		__method_ret_2376_8_2379_9 = this.m_DataBlockId;
-		return __method_ret_2376_8_2379_9;
+		local __method_ret_2377_8_2380_9;
+		__method_ret_2377_8_2380_9 = this.m_DataBlockId;
+		return __method_ret_2377_8_2380_9;
 	end,
 
 	Init = function(this)
@@ -47,14 +47,14 @@ DataBlockDefine.StringArrayField = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_exp_2390_12_2392_13 = this.m_DataWrap;
-		for __foreach_ix_2390_12_2392_13 = 1, __foreach_exp_2390_12_2392_13.Count do
-			local str = __foreach_exp_2390_12_2392_13[__foreach_ix_2390_12_2392_13];
+		local __foreach_exp_2391_12_2393_13 = this.m_DataWrap;
+		for __foreach_ix_2391_12_2393_13 = 1, __foreach_exp_2391_12_2393_13.Count do
+			local str = __foreach_exp_2391_12_2393_13[__foreach_ix_2391_12_2393_13];
 			DataBlockDefine.CString.Release(str);
 		end;
 		this.m_DataWrap:Clear();
 		if (this.m_DataBlockId ~= 0) then 
-			DataBlockDefine.DclApi.free_array(this.m_DataBlockId);
+			DclApi.free_array(this.m_DataBlockId);
 			this.m_DataBlockId = 0;
 		end;
 		this.m_IsValid = false;
@@ -66,13 +66,13 @@ DataBlockDefine.StringArrayField = {
 		end;
 		this.m_DataBlockId = dataBlockId;
 		local len;
-		len = DataBlockDefine.DclApi.get_array_length(this.m_DataBlockId);
+		len = DclApi.get_array_length(this.m_DataBlockId);
 		local ix;
 		ix = 0;
 		while (ix < typecast(len, System.UInt32, TypeKind.Struct)) do
 			local str;
 			str = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
-			DataBlockDefine.CString.Attach(str, DataBlockDefine.DclApi.get_array_element_uint64(this.m_DataBlockId, ix));
+			DataBlockDefine.CString.Attach(str, DclApi.get_array_element_uint64(this.m_DataBlockId, ix));
 			this.m_DataWrap:Add(str);
 			ix = (ix + 1);
 		end;
@@ -83,9 +83,9 @@ DataBlockDefine.StringArrayField = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_exp_2417_12_2419_13 = this.m_DataWrap;
-		for __foreach_ix_2417_12_2419_13 = 1, __foreach_exp_2417_12_2419_13.Count do
-			local str = __foreach_exp_2417_12_2419_13[__foreach_ix_2417_12_2419_13];
+		local __foreach_exp_2418_12_2420_13 = this.m_DataWrap;
+		for __foreach_ix_2418_12_2420_13 = 1, __foreach_exp_2418_12_2420_13.Count do
+			local str = __foreach_exp_2418_12_2420_13[__foreach_ix_2418_12_2420_13];
 			DataBlockDefine.CString.Detach(str);
 		end;
 		this.m_DataWrap:Clear();
@@ -94,25 +94,25 @@ DataBlockDefine.StringArrayField = {
 	end,
 
 	GetLength = function(this)
-		local __method_ret_2424_8_2432_9;
+		local __method_ret_2425_8_2433_9;
 		if (this.m_DataBlockId ~= 0) then 
-			__method_ret_2424_8_2432_9 = DataBlockDefine.DclApi.get_array_length(this.m_DataBlockId);
-			return __method_ret_2424_8_2432_9;
+			__method_ret_2425_8_2433_9 = DclApi.get_array_length(this.m_DataBlockId);
+			return __method_ret_2425_8_2433_9;
 		else
-			__method_ret_2424_8_2432_9 = 0;
-			return __method_ret_2424_8_2432_9;
+			__method_ret_2425_8_2433_9 = 0;
+			return __method_ret_2425_8_2433_9;
 		end;
 		return nil;
 	end,
 
 	GetData = function(this, index)
-		local __method_ret_2433_8_2441_9;
+		local __method_ret_2434_8_2442_9;
 		if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
-			__method_ret_2433_8_2441_9 = this.m_DataWrap[index + 1];
-			return __method_ret_2433_8_2441_9;
+			__method_ret_2434_8_2442_9 = this.m_DataWrap[index + 1];
+			return __method_ret_2434_8_2442_9;
 		else
-			__method_ret_2433_8_2441_9 = nil;
-			return __method_ret_2433_8_2441_9;
+			__method_ret_2434_8_2442_9 = nil;
+			return __method_ret_2434_8_2442_9;
 		end;
 		return nil;
 	end,

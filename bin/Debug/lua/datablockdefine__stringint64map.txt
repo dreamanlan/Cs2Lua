@@ -31,16 +31,16 @@ DataBlockDefine.StringInt64Map = {
 	------ instance methods -------
 	-------------------------------
 	GetDataBlockId = function(this)
-		local __method_ret_1756_8_1759_9;
-		__method_ret_1756_8_1759_9 = this.m_DataBlockId;
-		return __method_ret_1756_8_1759_9;
+		local __method_ret_1757_8_1760_9;
+		__method_ret_1757_8_1760_9 = this.m_DataBlockId;
+		return __method_ret_1757_8_1760_9;
 	end,
 
 	Init = function(this)
 		if this.m_IsValid then 
 			return;
 		end;
-		this.m_DataBlockId = DataBlockDefine.DclApi.alloc_container(4);
+		this.m_DataBlockId = DclApi.alloc_container(4);
 		this.m_DataWrap:Clear();
 		this.m_IsValid = true;
 	end,
@@ -50,7 +50,7 @@ DataBlockDefine.StringInt64Map = {
 			return;
 		end;
 		DataBlockDefine.StringInt64Map.Clear(this);
-		DataBlockDefine.DclApi.free_container(this.m_DataBlockId);
+		DclApi.free_container(this.m_DataBlockId);
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
 	end,
@@ -61,14 +61,14 @@ DataBlockDefine.StringInt64Map = {
 		end;
 		this.m_DataBlockId = dataBlockId;
 		if (dataBlockId ~= 0) then 
-			DataBlockDefine.DclApi.iterate_string_int64_map(dataBlockId, function(k, v)
-				local __method_ret_1783_61_1788_17;
+			DclApi.iterate_string_int64_map(dataBlockId, function(k, v)
+				local __method_ret_1784_61_1789_17;
 				local key;
 				key = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
 				DataBlockDefine.CString.Attach(key, k);
 				this.m_DataWrap:Add(k, key);
-				__method_ret_1783_61_1788_17 = true;
-				return __method_ret_1783_61_1788_17;
+				__method_ret_1784_61_1789_17 = true;
+				return __method_ret_1784_61_1789_17;
 			end);
 		end;
 		this.m_IsValid = true;
@@ -83,8 +83,8 @@ DataBlockDefine.StringInt64Map = {
 		if (not this.m_IsValid) then 
 			return;
 		end;
-		local __foreach_1796_12_1799_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
-		for pair in getiterator(__foreach_1796_12_1799_13) do
+		local __foreach_1797_12_1800_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_1797_12_1800_13) do
 			if pair == __cs2lua_nil then
 				pair = nil;
 			end;
@@ -92,41 +92,41 @@ DataBlockDefine.StringInt64Map = {
 			key = pair.Value;
 			DataBlockDefine.CString.Detach(key);
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_1796_12_1799_13);
+		recycleiterator(__cs2lua_func_info, __foreach_1797_12_1800_13);
 		this.m_DataWrap:Clear();
 		this.m_DataBlockId = 0;
 		this.m_IsValid = false;
 	end,
 
 	GetCount = function(this)
-		local __method_ret_1805_8_1808_9;
-		__method_ret_1805_8_1808_9 = this.m_DataWrap.Count;
-		return __method_ret_1805_8_1808_9;
+		local __method_ret_1806_8_1809_9;
+		__method_ret_1806_8_1809_9 = this.m_DataWrap.Count;
+		return __method_ret_1806_8_1809_9;
 	end,
 
 	GetData = function(this, key)
-		local __method_ret_1809_8_1812_9;
-		__method_ret_1809_8_1812_9 = DataBlockDefine.DclApi.string_int64_map_get_element(this.m_DataBlockId, DataBlockDefine.StringInt64Map.condexp_1811_70_1811_108(this, key));
-		return __method_ret_1809_8_1812_9;
+		local __method_ret_1810_8_1813_9;
+		__method_ret_1810_8_1813_9 = DclApi.string_int64_map_get_element(this.m_DataBlockId, DataBlockDefine.StringInt64Map.condexp_1812_70_1812_108(this, key));
+		return __method_ret_1810_8_1813_9;
 	end,
-	condexp_1811_70_1811_108 = function(this, key)
-		local retval_1811_70_1811_108 = nil;
-		if isequal(nil, key) then retval_1811_70_1811_108 = 0 else retval_1811_70_1811_108 = DataBlockDefine.CString.GetDataBlockId(key) end;
-		return retval_1811_70_1811_108;
+	condexp_1812_70_1812_108 = function(this, key)
+		local retval_1812_70_1812_108 = nil;
+		if isequal(nil, key) then retval_1812_70_1812_108 = 0 else retval_1812_70_1812_108 = DataBlockDefine.CString.GetDataBlockId(key) end;
+		return retval_1812_70_1812_108;
 	end,
 
 	SetData = function(this, key, val)
 		if ((not isequal(nil, key)) and (DataBlockDefine.CString.GetDataBlockId(key) ~= 0)) then 
 			local oldKey;
-			oldKey = DataBlockDefine.DclApi.string_int64_map_get_key(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
+			oldKey = DclApi.string_int64_map_get_key(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
 			local mapKey;
-			mapKey = DataBlockDefine.DclApi.string_int64_map_set_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key), val);
+			mapKey = DclApi.string_int64_map_set_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key), val);
 			if (oldKey ~= mapKey) then 
 				local oldKeyObj;
 				--
-				local __invoke_1820_24_1820_69;
-				__invoke_1820_24_1820_69,oldKeyObj = this.m_DataWrap:TryGetValue(oldKey, __cs2lua_out);
-				if __invoke_1820_24_1820_69 then
+				local __invoke_1821_24_1821_69;
+				__invoke_1821_24_1821_69,oldKeyObj = this.m_DataWrap:TryGetValue(oldKey, __cs2lua_out);
+				if __invoke_1821_24_1821_69 then
 
 					DataBlockDefine.CString.Release(oldKeyObj);
 				end;
@@ -145,7 +145,7 @@ DataBlockDefine.StringInt64Map = {
 	Add = function(this, key, val)
 		if ((not isequal(nil, key)) and (DataBlockDefine.CString.GetDataBlockId(key) ~= 0)) then 
 			local mapKey;
-			mapKey = DataBlockDefine.DclApi.string_int64_map_add_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key), val);
+			mapKey = DclApi.string_int64_map_add_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key), val);
 			local newKey;
 			newKey = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
 			DataBlockDefine.CString.Attach(newKey, mapKey);
@@ -156,27 +156,27 @@ DataBlockDefine.StringInt64Map = {
 	Remove = function(this, key)
 		if ((not isequal(nil, key)) and (DataBlockDefine.CString.GetDataBlockId(key) ~= 0)) then 
 			local mapKey;
-			mapKey = DataBlockDefine.DclApi.string_int64_map_get_key(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
+			mapKey = DclApi.string_int64_map_get_key(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
 			local keyObj;
 			--
-			local __invoke_1848_20_1848_62;
-			__invoke_1848_20_1848_62,keyObj = this.m_DataWrap:TryGetValue(mapKey, __cs2lua_out);
-			if __invoke_1848_20_1848_62 then
+			local __invoke_1849_20_1849_62;
+			__invoke_1849_20_1849_62,keyObj = this.m_DataWrap:TryGetValue(mapKey, __cs2lua_out);
+			if __invoke_1849_20_1849_62 then
 
 				DataBlockDefine.CString.Release(keyObj);
 			end;
-			DataBlockDefine.DclApi.string_int64_map_remove_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
+			DclApi.string_int64_map_remove_element(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
 		end;
 	end,
 
 	Contains = function(this, key)
-		local __method_ret_1854_8_1860_9;
+		local __method_ret_1855_8_1861_9;
 		if ((not isequal(nil, key)) and (DataBlockDefine.CString.GetDataBlockId(key) ~= 0)) then 
-			__method_ret_1854_8_1860_9 = DataBlockDefine.DclApi.string_int64_map_contains(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
-			return __method_ret_1854_8_1860_9;
+			__method_ret_1855_8_1861_9 = DclApi.string_int64_map_contains(this.m_DataBlockId, DataBlockDefine.CString.GetDataBlockId(key));
+			return __method_ret_1855_8_1861_9;
 		end;
-		__method_ret_1854_8_1860_9 = false;
-		return __method_ret_1854_8_1860_9;
+		__method_ret_1855_8_1861_9 = false;
+		return __method_ret_1855_8_1861_9;
 	end,
 
 	Clear = function(this)
@@ -185,8 +185,8 @@ DataBlockDefine.StringInt64Map = {
 		__cs2lua_func_info = luafinalize(__cs2lua_func_info);
 	end,
 	__ori_Clear = function(this, __cs2lua_func_info)
-		local __foreach_1863_12_1866_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
-		for pair in getiterator(__foreach_1863_12_1866_13) do
+		local __foreach_1864_12_1867_13 = newiterator(__cs2lua_func_info, this.m_DataWrap, System.Collections.Generic.Dictionary_TKey_TValue, System.Collections.Generic.Dictionary_TKey_TValue, true);
+		for pair in getiterator(__foreach_1864_12_1867_13) do
 			if pair == __cs2lua_nil then
 				pair = nil;
 			end;
@@ -194,25 +194,25 @@ DataBlockDefine.StringInt64Map = {
 			key = pair.Value;
 			DataBlockDefine.CString.Release(key);
 		end;
-		recycleiterator(__cs2lua_func_info, __foreach_1863_12_1866_13);
+		recycleiterator(__cs2lua_func_info, __foreach_1864_12_1867_13);
 		this.m_DataWrap:Clear();
-		DataBlockDefine.DclApi.container_clear(this.m_DataBlockId);
+		DclApi.container_clear(this.m_DataBlockId);
 	end,
 
 	Iterate = function(this, callback)
-		DataBlockDefine.DclApi.iterate_string_int64_map(this.m_DataBlockId, function(k, v)
-			local __method_ret_1872_59_1878_13;
+		DclApi.iterate_string_int64_map(this.m_DataBlockId, function(k, v)
+			local __method_ret_1873_59_1879_13;
 			local kObj;
 			--
-			local __invoke_1874_20_1874_55;
-			__invoke_1874_20_1874_55,kObj = this.m_DataWrap:TryGetValue(k, __cs2lua_out);
-			if __invoke_1874_20_1874_55 then
+			local __invoke_1875_20_1875_55;
+			__invoke_1875_20_1875_55,kObj = this.m_DataWrap:TryGetValue(k, __cs2lua_out);
+			if __invoke_1875_20_1875_55 then
 
-				__method_ret_1872_59_1878_13 = callback(kObj, v);
-				return __method_ret_1872_59_1878_13;
+				__method_ret_1873_59_1879_13 = callback(kObj, v);
+				return __method_ret_1873_59_1879_13;
 			else
-				__method_ret_1872_59_1878_13 = false;
-				return __method_ret_1872_59_1878_13;
+				__method_ret_1873_59_1879_13 = false;
+				return __method_ret_1873_59_1879_13;
 			end;
 			return nil;
 		end);

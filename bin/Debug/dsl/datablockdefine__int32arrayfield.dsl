@@ -30,13 +30,13 @@ class(DataBlockDefine.Int32ArrayField, DataBlockDefine.BaseIntegerArray, false) 
 
 	instance_methods {
 		GetData = deffunc(1)args(this, index){
-			local(__method_ret_2340_8_2348_9);
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2342_12_2347_13 ){
-				__method_ret_2340_8_2348_9 = callstatic(DataBlockDefine.DclApi, "get_array_element_int32", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), typecast(index, System.UInt32, TypeKind.Struct));
-				return(__method_ret_2340_8_2348_9);
+			local(__method_ret_2341_8_2349_9);
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2343_12_2348_13 ){
+				__method_ret_2341_8_2349_9 = callstatic(DclApi, "get_array_element_int32", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), typecast(index, System.UInt32, TypeKind.Struct));
+				return(__method_ret_2341_8_2349_9);
 			}else{
-				__method_ret_2340_8_2348_9 = 0;
-				return(__method_ret_2340_8_2348_9);
+				__method_ret_2341_8_2349_9 = 0;
+				return(__method_ret_2341_8_2349_9);
 			};
 			return(null);
 		}options[needfuncinfo(false), rettype(return, System.Int64, TypeKind.Struct, 0, true), paramtype(index, System.Int32, TypeKind.Struct, 0, true)];
