@@ -12,202 +12,42 @@ namespace RoslynTool.CsToDsl
 {
     internal partial class CsDslTranslater
     {
-        #region vs2017新增语法特性
-        public override void VisitCasePatternSwitchLabel(CasePatternSwitchLabelSyntax node)
+        #region 预处理的功能Roslyn库已经实现，这些接口是提供预处理相关信息，我们不需要处理
+        public override void VisitIfDirectiveTrivia(IfDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitConstantPattern(ConstantPatternSyntax node)
+        public override void VisitEndIfDirectiveTrivia(EndIfDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitDeclarationExpression(DeclarationExpressionSyntax node)
+        public override void VisitDefineDirectiveTrivia(DefineDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitDeclarationPattern(DeclarationPatternSyntax node)
+        public override void VisitUndefDirectiveTrivia(UndefDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitDiscardDesignation(DiscardDesignationSyntax node)
+        public override void VisitElifDirectiveTrivia(ElifDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitForEachVariableStatement(ForEachVariableStatementSyntax node)
+        public override void VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitIsPatternExpression(IsPatternExpressionSyntax node)
+        public override void VisitErrorDirectiveTrivia(ErrorDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitLocalFunctionStatement(LocalFunctionStatementSyntax node)
+        public override void VisitWarningDirectiveTrivia(WarningDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
-        }        
-        public override void VisitImplicitStackAllocArrayCreationExpression(ImplicitStackAllocArrayCreationExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitParenthesizedVariableDesignation(ParenthesizedVariableDesignationSyntax node)
+        public override void VisitBadDirectiveTrivia(BadDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitRefExpression(RefExpressionSyntax node)
+        public override void VisitLineDirectiveTrivia(LineDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitRefType(RefTypeSyntax node)
+        public override void VisitPragmaWarningDirectiveTrivia(PragmaWarningDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitSingleVariableDesignation(SingleVariableDesignationSyntax node)
+        public override void VisitPragmaChecksumDirectiveTrivia(PragmaChecksumDirectiveTriviaSyntax node)
         {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitThrowExpression(ThrowExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitTupleElement(TupleElementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitTupleExpression(TupleExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitTupleType(TupleTypeSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitWhenClause(WhenClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-
-        #endregion
-
-        #region 未计划支持的语法特性
-        public override void VisitDestructorDeclaration(DestructorDeclarationSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitMakeRefExpression(MakeRefExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitRefTypeExpression(RefTypeExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitRefValueExpression(RefValueExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitLabeledStatement(LabeledStatementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitGotoStatement(GotoStatementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitPointerType(PointerTypeSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitNullableType(NullableTypeSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitOmittedTypeArgument(OmittedTypeArgumentSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitFixedStatement(FixedStatementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitCheckedStatement(CheckedStatementSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitCheckedExpression(CheckedExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitStackAllocArrayCreationExpression(StackAllocArrayCreationExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitIncompleteMember(IncompleteMemberSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitAwaitExpression(AwaitExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitTypeCref(TypeCrefSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitQualifiedCref(QualifiedCrefSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitNameMemberCref(NameMemberCrefSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitIndexerMemberCref(IndexerMemberCrefSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitOperatorMemberCref(OperatorMemberCrefSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitConversionOperatorMemberCref(ConversionOperatorMemberCrefSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitCrefParameterList(CrefParameterListSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitCrefBracketedParameterList(CrefBracketedParameterListSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitCrefParameter(CrefParameterSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitOmittedArraySizeExpression(OmittedArraySizeExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolatedStringText(InterpolatedStringTextSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolation(InterpolationSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolationAlignmentClause(InterpolationAlignmentClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
-        }
-        public override void VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
-        {
-            Log(node, "Unsupported Syntax !");
         }
         #endregion
 
@@ -336,42 +176,354 @@ namespace RoslynTool.CsToDsl
         { }
         #endregion
 
-        #region 预处理的功能Roslyn库已经实现，这些接口是提供预处理相关信息，我们不需要处理
-        public override void VisitIfDirectiveTrivia(IfDirectiveTriviaSyntax node)
+        #region 未计划支持的语法特性
+        public override void VisitDestructorDeclaration(DestructorDeclarationSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitEndIfDirectiveTrivia(EndIfDirectiveTriviaSyntax node)
+        public override void VisitMakeRefExpression(MakeRefExpressionSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitDefineDirectiveTrivia(DefineDirectiveTriviaSyntax node)
+        public override void VisitRefTypeExpression(RefTypeExpressionSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitUndefDirectiveTrivia(UndefDirectiveTriviaSyntax node)
+        public override void VisitRefValueExpression(RefValueExpressionSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitElifDirectiveTrivia(ElifDirectiveTriviaSyntax node)
+        public override void VisitLabeledStatement(LabeledStatementSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
+        public override void VisitGotoStatement(GotoStatementSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitErrorDirectiveTrivia(ErrorDirectiveTriviaSyntax node)
+        public override void VisitPointerType(PointerTypeSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitWarningDirectiveTrivia(WarningDirectiveTriviaSyntax node)
+        public override void VisitNullableType(NullableTypeSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitBadDirectiveTrivia(BadDirectiveTriviaSyntax node)
+        public override void VisitOmittedTypeArgument(OmittedTypeArgumentSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitLineDirectiveTrivia(LineDirectiveTriviaSyntax node)
+        public override void VisitFixedStatement(FixedStatementSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitPragmaWarningDirectiveTrivia(PragmaWarningDirectiveTriviaSyntax node)
+        public override void VisitCheckedStatement(CheckedStatementSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
         }
-        public override void VisitPragmaChecksumDirectiveTrivia(PragmaChecksumDirectiveTriviaSyntax node)
+        public override void VisitCheckedExpression(CheckedExpressionSyntax node)
         {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitStackAllocArrayCreationExpression(StackAllocArrayCreationExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitIncompleteMember(IncompleteMemberSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitAwaitExpression(AwaitExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitTypeCref(TypeCrefSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitQualifiedCref(QualifiedCrefSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitNameMemberCref(NameMemberCrefSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitIndexerMemberCref(IndexerMemberCrefSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitOperatorMemberCref(OperatorMemberCrefSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitConversionOperatorMemberCref(ConversionOperatorMemberCrefSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitCrefParameterList(CrefParameterListSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitCrefBracketedParameterList(CrefBracketedParameterListSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitCrefParameter(CrefParameterSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitOmittedArraySizeExpression(OmittedArraySizeExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolatedStringText(InterpolatedStringTextSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolation(InterpolationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolationAlignmentClause(InterpolationAlignmentClauseSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        #endregion
+
+        #region vs2017新增语法特性
+        public override void VisitCasePatternSwitchLabel(CasePatternSwitchLabelSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitConstantPattern(ConstantPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitDeclarationExpression(DeclarationExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitDeclarationPattern(DeclarationPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitDiscardDesignation(DiscardDesignationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitForEachVariableStatement(ForEachVariableStatementSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitIsPatternExpression(IsPatternExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitLocalFunctionStatement(LocalFunctionStatementSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }        
+        public override void VisitImplicitStackAllocArrayCreationExpression(ImplicitStackAllocArrayCreationExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitParenthesizedVariableDesignation(ParenthesizedVariableDesignationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitRefExpression(RefExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitRefType(RefTypeSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitSingleVariableDesignation(SingleVariableDesignationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitThrowExpression(ThrowExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitTupleElement(TupleElementSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitTupleExpression(TupleExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitTupleType(TupleTypeSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+        public override void VisitWhenClause(WhenClauseSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        #endregion
+
+        #region vs2019~vs2022新增语法特性
+        public override void VisitFunctionPointerType(FunctionPointerTypeSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitFunctionPointerParameterList(FunctionPointerParameterListSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitFunctionPointerCallingConvention(FunctionPointerCallingConventionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitFunctionPointerUnmanagedCallingConventionList(FunctionPointerUnmanagedCallingConventionListSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitFunctionPointerUnmanagedCallingConvention(FunctionPointerUnmanagedCallingConventionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitRangeExpression(RangeExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitExpressionColon(ExpressionColonSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitImplicitObjectCreationExpression(ImplicitObjectCreationExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitWithExpression(WithExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitDiscardPattern(DiscardPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitVarPattern(VarPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitRecursivePattern(RecursivePatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitPositionalPatternClause(PositionalPatternClauseSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitPropertyPatternClause(PropertyPatternClauseSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitSubpattern(SubpatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitParenthesizedPattern(ParenthesizedPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitRelationalPattern(RelationalPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitTypePattern(TypePatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitBinaryPattern(BinaryPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitUnaryPattern(UnaryPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitSwitchExpression(SwitchExpressionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitSwitchExpressionArm(SwitchExpressionArmSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitFileScopedNamespaceDeclaration(FileScopedNamespaceDeclarationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitRecordDeclaration(RecordDeclarationSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitPrimaryConstructorBaseType(PrimaryConstructorBaseTypeSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitDefaultConstraint(DefaultConstraintSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitFunctionPointerParameter(FunctionPointerParameterSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitLineDirectivePosition(LineDirectivePositionSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitLineSpanDirectiveTrivia(LineSpanDirectiveTriviaSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitNullableDirectiveTrivia(NullableDirectiveTriviaSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
         }
         #endregion
     }
