@@ -742,77 +742,156 @@ namespace DslExpression
             return ToObject();
         }
 
-        public T Get<T>()
+        public T CastTo<T>()
         {
-            switch (Type) {
-                case c_ObjectType:
-                    return CalculatorValueConverter.From<T>(ObjectVal);
-                case c_StringType:
-                    return CalculatorValueConverter.From<T>(StringVal);
-                case c_BoolType:
-                    return CalculatorValueConverter.From<T>(Union.BoolVal);
-                case c_CharType:
-                    return CalculatorValueConverter.From<T>(Union.CharVal);
-                case c_SByteType:
-                    return CalculatorValueConverter.From<T>(Union.SByteVal);
-                case c_ShortType:
-                    return CalculatorValueConverter.From<T>(Union.ShortVal);
-                case c_IntType:
-                    return CalculatorValueConverter.From<T>(Union.IntVal);
-                case c_LongType:
-                    return CalculatorValueConverter.From<T>(Union.LongVal);
-                case c_ByteType:
-                    return CalculatorValueConverter.From<T>(Union.ByteVal);
-                case c_UShortType:
-                    return CalculatorValueConverter.From<T>(Union.UShortVal);
-                case c_UIntType:
-                    return CalculatorValueConverter.From<T>(Union.UIntVal);
-                case c_ULongType:
-                    return CalculatorValueConverter.From<T>(Union.ULongVal);
-                case c_FloatType:
-                    return CalculatorValueConverter.From<T>(Union.FloatVal);
-                case c_DoubleType:
-                    return CalculatorValueConverter.From<T>(Union.DoubleVal);
-                case c_DecimalType:
-                    return CalculatorValueConverter.From<T>(Union.DecimalVal);
-            }
-            return default(T);
+            Type t = typeof(T);
+            if (t == typeof(object))
+                return CalculatorValueConverter.From<T>(ToObject());
+            else if (t == typeof(string))
+                return CalculatorValueConverter.From<T>(ToString());
+            else if (t == typeof(bool))
+                return CalculatorValueConverter.From<T>(ToBool());
+            else if (t == typeof(char))
+                return CalculatorValueConverter.From<T>(ToChar());
+            else if (t == typeof(sbyte))
+                return CalculatorValueConverter.From<T>(ToSByte());
+            else if (t == typeof(short))
+                return CalculatorValueConverter.From<T>(ToShort());
+            else if (t == typeof(int))
+                return CalculatorValueConverter.From<T>(ToInt());
+            else if (t == typeof(long))
+                return CalculatorValueConverter.From<T>(ToLong());
+            else if (t == typeof(byte))
+                return CalculatorValueConverter.From<T>(ToByte());
+            else if (t == typeof(ushort))
+                return CalculatorValueConverter.From<T>(ToUShort());
+            else if (t == typeof(uint))
+                return CalculatorValueConverter.From<T>(ToUInt());
+            else if (t == typeof(ulong))
+                return CalculatorValueConverter.From<T>(ToULong());
+            else if (t == typeof(float))
+                return CalculatorValueConverter.From<T>(ToFloat());
+            else if (t == typeof(double))
+                return CalculatorValueConverter.From<T>(ToDouble());
+            else if (t == typeof(decimal))
+                return CalculatorValueConverter.From<T>(ToDecimal());
+            else if (t == typeof(CalculatorValue))
+                return CalculatorValueConverter.From<T>(this);
+            else
+                return CalculatorValueConverter.CastTo<T>(ToObject());
         }
-        public object Get(Type t)
+        public object CastTo(Type t)
         {
-            switch (Type) {
-                case c_ObjectType:
-                    return GetObject();
-                case c_StringType:
-                    return GetString();
-                case c_BoolType:
-                    return GetBool();
-                case c_CharType:
-                    return GetChar();
-                case c_SByteType:
-                    return GetSByte();
-                case c_ShortType:
-                    return GetShort();
-                case c_IntType:
-                    return GetInt();
-                case c_LongType:
-                    return GetLong();
-                case c_ByteType:
-                    return GetByte();
-                case c_UShortType:
-                    return GetUShort();
-                case c_UIntType:
-                    return GetUInt();
-                case c_ULongType:
-                    return GetULong();
-                case c_FloatType:
-                    return GetFloat();
-                case c_DoubleType:
-                    return GetDouble();
-                case c_DecimalType:
-                    return GetDecimal();
-            }
-            return null;
+            if (t == typeof(object))
+                return ToObject();
+            else if (t == typeof(string))
+                return ToString();
+            else if (t == typeof(bool))
+                return ToBool();
+            else if (t == typeof(char))
+                return ToChar();
+            else if (t == typeof(sbyte))
+                return ToSByte();
+            else if (t == typeof(short))
+                return ToShort();
+            else if (t == typeof(int))
+                return ToInt();
+            else if (t == typeof(long))
+                return ToLong();
+            else if (t == typeof(byte))
+                return ToByte();
+            else if (t == typeof(ushort))
+                return ToUShort();
+            else if (t == typeof(uint))
+                return ToUInt();
+            else if (t == typeof(ulong))
+                return ToULong();
+            else if (t == typeof(float))
+                return ToFloat();
+            else if (t == typeof(double))
+                return ToDouble();
+            else if (t == typeof(decimal))
+                return ToDecimal();
+            else if (t == typeof(CalculatorValue))
+                return this;
+            else
+                return Convert.ChangeType(ToObject(), t);
+        }
+        public void GenericSet<T>(T val)
+        {
+            Type t = typeof(T);
+            if (t == typeof(object))
+                Set(CalculatorValueConverter.ToObject<T>(val));
+            else if (t == typeof(string))
+                Set(CalculatorValueConverter.ToString<T>(val));
+            else if (t == typeof(bool))
+                Set(CalculatorValueConverter.ToBool<T>(val));
+            else if (t == typeof(char))
+                Set(CalculatorValueConverter.ToChar<T>(val));
+            else if (t == typeof(sbyte))
+                Set(CalculatorValueConverter.ToSByte<T>(val));
+            else if (t == typeof(short))
+                Set(CalculatorValueConverter.ToShort<T>(val));
+            else if (t == typeof(int))
+                Set(CalculatorValueConverter.ToInt<T>(val));
+            else if (t == typeof(long))
+                Set(CalculatorValueConverter.ToLong<T>(val));
+            else if (t == typeof(byte))
+                Set(CalculatorValueConverter.ToByte<T>(val));
+            else if (t == typeof(ushort))
+                Set(CalculatorValueConverter.ToUShort<T>(val));
+            else if (t == typeof(uint))
+                Set(CalculatorValueConverter.ToUInt<T>(val));
+            else if (t == typeof(ulong))
+                Set(CalculatorValueConverter.ToULong<T>(val));
+            else if (t == typeof(float))
+                Set(CalculatorValueConverter.ToFloat<T>(val));
+            else if (t == typeof(double))
+                Set(CalculatorValueConverter.ToDouble<T>(val));
+            else if (t == typeof(decimal))
+                Set(CalculatorValueConverter.ToDecimal<T>(val));
+            else if (t == typeof(CalculatorValue))
+                this = CalculatorValueConverter.ToCalculatorValue<T>(val);
+            else
+                SetObject(val);
+        }
+        public void GenericSet(Type t, object val)
+        {
+            t = val.GetType();
+            if (t == typeof(object))
+                SetObject(val);
+            else if (t == typeof(string))
+                Set((string)val);
+            else if (t == typeof(bool))
+                Set((bool)val);
+            else if (t == typeof(char))
+                Set((char)val);
+            else if (t == typeof(sbyte))
+                Set((sbyte)val);
+            else if (t == typeof(short))
+                Set((short)val);
+            else if (t == typeof(int))
+                Set((int)val);
+            else if (t == typeof(long))
+                Set((long)val);
+            else if (t == typeof(byte))
+                Set((byte)val);
+            else if (t == typeof(ushort))
+                Set((ushort)val);
+            else if (t == typeof(uint))
+                Set((uint)val);
+            else if (t == typeof(ulong))
+                Set((ulong)val);
+            else if (t == typeof(float))
+                Set((float)val);
+            else if (t == typeof(double))
+                Set((double)val);
+            else if (t == typeof(decimal))
+                Set((decimal)val);
+            else if (t == typeof(CalculatorValue))
+                this = (CalculatorValue)val;
+            else
+                SetObject(val);
         }
 
         public void CopyFrom(CalculatorValue other)
@@ -1805,7 +1884,7 @@ namespace DslExpression
         protected static T CastTo<T>(object obj)
         {
             if (obj is CalculatorValue) {
-                return ((CalculatorValue)obj).Get<T>();
+                return ((CalculatorValue)obj).CastTo<T>();
             }
             else if (obj is T) {
                 return (T)obj;
@@ -1828,7 +1907,7 @@ namespace DslExpression
                 return null;
             Type st = obj.GetType();
             if (obj is CalculatorValue) {
-                return ((CalculatorValue)obj).Get(t);
+                return ((CalculatorValue)obj).CastTo(t);
             }
             else if (t.IsAssignableFrom(st) || st.IsSubclassOf(t)) {
                 return obj;
@@ -3447,7 +3526,7 @@ namespace DslExpression
                         else {
                             Type t = Type.GetType(type);
                             if (null != t) {
-                                ret = CalculatorValue.FromObject(obj.Get(t));
+                                ret = CalculatorValue.FromObject(obj.CastTo(t));
                             }
                             else {
                                 Calculator.Log("null == Type.GetType({0})", type);

@@ -4288,7 +4288,7 @@ namespace DslExpression
             ValueData r = null;
             if (operands.Count >= 2) {
                 var data = operands[0].As<Dsl.StatementData>();
-                var index = operands[1].Get<int>();
+                var index = operands[1].GetInt();
                 if (null != data && index >= 0 && index < data.GetFunctionNum()) {
                     r = data.GetFunction(index).AsValue;
                 }
@@ -4303,7 +4303,7 @@ namespace DslExpression
             FunctionData r = null;
             if (operands.Count >= 2) {
                 var data = operands[0].As<Dsl.StatementData>();
-                var index = operands[1].Get<int>();
+                var index = operands[1].GetInt();
                 if (null != data && index >= 0 && index < data.GetFunctionNum()) {
                     r = data.GetFunction(index).AsFunction;
                 }
@@ -4430,7 +4430,7 @@ namespace DslExpression
             ISyntaxComponent r = null;
             if (operands.Count >= 2) {
                 var data = operands[0].As<Dsl.FunctionData>();
-                var index = operands[1].Get<int>();
+                var index = operands[1].GetInt();
                 if (null != data && index >= 0 && index < data.GetParamNum()) {
                     r = data.GetParam(index);
                 }
@@ -4473,7 +4473,7 @@ namespace DslExpression
             string r = string.Empty;
             if (operands.Count >= 2) {
                 var data = operands[0].As<Dsl.FunctionData>();
-                var index = operands[1].Get<int>();
+                var index = operands[1].GetInt();
                 if (null != data && index >= 0 && index < data.GetParamNum()) {
                     var arg = data.GetParam(index);
                     r = Generator.LuaGenerator.CalcTypeString(arg);
@@ -4489,8 +4489,8 @@ namespace DslExpression
             string r = string.Empty;
             if (operands.Count >= 3) {
                 var data = operands[0].As<Dsl.FunctionData>();
-                var index = operands[1].Get<int>();
-                var subindex = operands[2].Get<int>();
+                var index = operands[1].GetInt();
+                var subindex = operands[2].GetInt();
                 if (null != data && index >= 0 && index < data.GetParamNum()) {
                     var arg = data.GetParam(index) as Dsl.FunctionData;
                     if (null != arg && subindex >= 0 && subindex < arg.GetParamNum()) {
@@ -4514,7 +4514,7 @@ namespace DslExpression
                     if (operands.Count > 1 && null != fmt) {
                         var arrayList = new System.Collections.ArrayList();
                         for (int i = 1; i < operands.Count; ++i) {
-                            arrayList.Add(operands[i].Get<object>());
+                            arrayList.Add(operands[i].GetObject());
                         }
                         Generator.LuaGenerator.Log(string.Format(fmt, arrayList.ToArray()));
                         Console.WriteLine(fmt, arrayList.ToArray());
@@ -4544,7 +4544,7 @@ namespace DslExpression
             bool r = false;
             if (operands.Count >= 2) {
                 var sb = operands[0].As<StringBuilder>();
-                var indent = operands[1].Get<int>();
+                var indent = operands[1].GetInt();
                 if (null != sb && indent >= 0) {
                     string str = Generator.LuaGenerator.GetIndentString(indent);
                     sb.Append(str);
@@ -4561,7 +4561,7 @@ namespace DslExpression
             bool r = false;
             if (operands.Count >= 2) {
                 var sb = operands[0].As<StringBuilder>();
-                var name = operands[1].Get<string>();
+                var name = operands[1].GetString();
                 if (null != sb && null != name) {
                     sb.Append(name);
                 }
@@ -4576,7 +4576,7 @@ namespace DslExpression
             bool r = false;
             if (operands.Count >= 2) {
                 var sb = operands[0].As<StringBuilder>();
-                var str = operands[1].Get<string>();
+                var str = operands[1].GetString();
                 if (null != sb && null != str) {
                     sb.AppendFormat("\"{0}\"", Generator.LuaGenerator.Escape(str));
                 }
@@ -4597,11 +4597,11 @@ namespace DslExpression
                 int start = 0;
                 List<int> iargs = null;
                 if (operands.Count >= 4)
-                    indent = operands[3].Get<int>();
+                    indent = operands[3].GetInt();
                 if (operands.Count >= 5) {
                     var opd = operands[4];
                     if (opd.IsInteger) {
-                        start = opd.Get<int>();
+                        start = opd.GetInt();
                     }
                     else {
                         var enumer = opd.As<System.Collections.IEnumerable>();
@@ -4647,12 +4647,12 @@ namespace DslExpression
                         var funcData = m_FuncDataExp.Calc().As<FunctionData>();
                         var funcOpts = m_FuncOptsExp.Calc().As<Generator.LuaGenerator.FunctionOptions>();
                         var sb = m_StringBuilderExp.Calc().As<StringBuilder>();
-                        int indent = m_IndentExp.Calc().Get<int>();
+                        int indent = m_IndentExp.Calc().GetInt();
                         var opd = m_StartOrIgnoreArgs.Calc();
                         int start = 0;
                         List<int> iargs = null;
                         if (opd.IsInteger) {
-                            start = opd.Get<int>();
+                            start = opd.GetInt();
                         }
                         else {
                             var enumer = opd.As<System.Collections.IEnumerable>();
