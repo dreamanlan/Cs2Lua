@@ -583,7 +583,7 @@ namespace Generator
             Dsl.FunctionData f = cfgInfo as Dsl.FunctionData;
             Dsl.StatementData info = cfgInfo as Dsl.StatementData;
             if (null == f && null != info) {
-                f = info.First;
+                f = info.First.AsFunction;
             }
             if (null == f)
                 return;
@@ -600,7 +600,7 @@ namespace Generator
                 }
                 if (null != info) {
                     for (int i = 1; i < info.GetFunctionNum(); ++i) {
-                        f = info.GetFunction(i);
+                        f = info.GetFunction(i).AsFunction;
                         if (null != f) {
                             string fid = f.GetId();
                             if (fid == "match") {
@@ -635,7 +635,7 @@ namespace Generator
                 }
                 if (null != info) {
                     for (int i = 1; i < info.GetFunctionNum(); ++i) {
-                        f = info.GetFunction(i);
+                        f = info.GetFunction(i).AsFunction;
                         if (null != f) {
                             string fid = f.GetId();
                             if (fid == "list") {
@@ -703,7 +703,7 @@ namespace Generator
                 }
                 if (null != info) {
                     for (int i = 1; i < info.GetFunctionNum(); ++i) {
-                        f = info.GetFunction(i);
+                        f = info.GetFunction(i).AsFunction;
                         if (null != f) {
                             string fid = f.GetId();
                             if (fid == "list") {

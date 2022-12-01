@@ -73,7 +73,7 @@ DataBlockDefine.JceStringArray = {
 			ix = 0;
 			while (ix < len) do
 				local strId;
-				strId = DclApi.get_array_element_uint64(dataBlockId, typecast(ix, System.UInt32, TypeKind.Struct));
+				strId = DclApi.get_array_element_uint64(dataBlockId, typecast(ix, System.UInt32, TypeKind.Structure));
 				local cstr;
 				cstr = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
 				DataBlockDefine.CString.Attach(cstr, strId);
@@ -121,7 +121,7 @@ DataBlockDefine.JceStringArray = {
 			DclApi.free_array(this.m_DataBlockId);
 		end;
 		this.m_DataBlockId = DclApi.alloc_array(8, size, size);
-		this.m_DataWrap.Capacity = typecast(size, System.Int32, TypeKind.Struct);
+		this.m_DataWrap.Capacity = typecast(size, System.Int32, TypeKind.Structure);
 		local ix;
 		ix = 0;
 		while (ix < size) do
@@ -149,7 +149,7 @@ DataBlockDefine.JceStringArray = {
 			if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
 				this.m_DataWrap[index + 1] = val;
 			end;
-			DclApi.set_array_element_uint64(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct), DataBlockDefine.CString.GetDataBlockId(val));
+			DclApi.set_array_element_uint64(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Structure), DataBlockDefine.CString.GetDataBlockId(val));
 		end;
 	end,
 

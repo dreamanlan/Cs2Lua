@@ -228,7 +228,7 @@ DataBlockDefine.StringDoubleMap = {
 		else
 			this.__ctor_called = true;
 		end;
-		this.m_DataWrap = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_CString_TypeArgs", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_CString_TypeArgs") or {System.UInt64, DataBlockDefine.CString}), buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_CString_TypeKinds", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_CString_TypeKinds") or {TypeKind.Struct, TypeKind.Class}), "ctor", 0, {});
+		this.m_DataWrap = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_CString_TypeArgs", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_CString_TypeArgs") or {System.UInt64, DataBlockDefine.CString}), buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_CString_TypeKinds", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_CString_TypeKinds") or {TypeKind.Structure, TypeKind.Class}), "ctor", 0, {});
 	end,
 	-------------------------------
 	------ instance fields -------

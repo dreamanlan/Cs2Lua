@@ -309,7 +309,7 @@ DataBlockDefine.StringDataBlockMap = {
 		else
 			this.__ctor_called = true;
 		end;
-		this.m_DataWrap = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeArgs", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeArgs") or {System.UInt64, DataBlockDefine.StringDataBlockMap.KeyValue}), buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeKinds", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeKinds") or {TypeKind.Struct, TypeKind.Struct}), "ctor", 0, {});
+		this.m_DataWrap = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeArgs", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeArgs") or {System.UInt64, DataBlockDefine.StringDataBlockMap.KeyValue}), buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeKinds", getglobalinfo("g_System_Collections_Generic_Dictionary_System_UInt64_DataBlockDefine_StringDataBlockMap_KeyValue_TypeKinds") or {TypeKind.Structure, TypeKind.Structure}), "ctor", 0, {});
 	end,
 	-------------------------------
 	------ instance fields -------

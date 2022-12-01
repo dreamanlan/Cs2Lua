@@ -1,6 +1,9 @@
 System.Boolean
+System.Console
 System.Double
 System.Int32
 System.Int64
+System.Object
+System.String
 System.UInt32
 System.UInt64

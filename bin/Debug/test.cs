@@ -2654,5 +2654,18 @@ namespace DataBlockDefine
         private ulong m_DataBlockId;
         private List<IDataBlock> m_DataWrap = new List<IDataBlock>();
     }
+    static class TestClass
+    {
+        public static void test(string? str)
+        {
+            Console.WriteLine("{0}", str?.Length);
+        }
+        public static void Call()
+        {
+            string? abc = null;
+            abc = "test";
+            test(abc);
+        }
+    }
 }
 

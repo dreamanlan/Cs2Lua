@@ -71,7 +71,7 @@ DataBlockDefine.Int64DoubleMap = {
 
 	GetCount = function(this)
 		local __method_ret_1503_8_1506_9;
-		__method_ret_1503_8_1506_9 = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		__method_ret_1503_8_1506_9 = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Structure);
 		return __method_ret_1503_8_1506_9;
 	end,
 

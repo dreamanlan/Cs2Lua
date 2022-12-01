@@ -61,12 +61,12 @@ DataBlockDefine.StringVector = {
 		end;
 		this.m_DataBlockId = dataBlockId;
 		local ct;
-		ct = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		ct = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Structure);
 		local ix;
 		ix = 0;
 		while (ix < ct) do
 			local strId;
-			strId = DclApi.uint64_vector_get_element(this.m_DataBlockId, typecast(ix, System.UInt64, TypeKind.Struct));
+			strId = DclApi.uint64_vector_get_element(this.m_DataBlockId, typecast(ix, System.UInt64, TypeKind.Structure));
 			local cstr;
 			cstr = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
 			DataBlockDefine.CString.Attach(cstr, strId);
@@ -92,7 +92,7 @@ DataBlockDefine.StringVector = {
 
 	Reserve = function(this, space)
 		this.m_DataWrap.Capacity = space;
-		DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
+		DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Structure));
 	end,
 
 	GetCount = function(this)
@@ -119,7 +119,7 @@ DataBlockDefine.StringVector = {
 				DataBlockDefine.CString.Release(oldData);
 			end;
 			this.m_DataWrap[index + 1] = data;
-			DclApi.uint64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), DataBlockDefine.StringVector.condexp_1205_78_1205_118(this, data));
+			DclApi.uint64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Structure), DataBlockDefine.StringVector.condexp_1205_78_1205_118(this, data));
 		end;
 	end,
 	condexp_1205_78_1205_118 = function(this, data)
@@ -196,7 +196,7 @@ DataBlockDefine.StringVector = {
 				DataBlockDefine.CString.Release(oldData);
 			end;
 			this.m_DataWrap:RemoveAt(index);
-			DclApi.uint64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			DclApi.uint64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Structure));
 		end;
 	end,
 

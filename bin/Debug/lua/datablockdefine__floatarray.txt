@@ -41,7 +41,7 @@ DataBlockDefine.FloatArray = {
 	GetData = function(this, index)
 		local __method_ret_835_8_843_9;
 		if (this.m_DataBlockId ~= 0) then 
-			__method_ret_835_8_843_9 = DclApi.get_array_element_float(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct));
+			__method_ret_835_8_843_9 = DclApi.get_array_element_float(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Structure));
 			return __method_ret_835_8_843_9;
 		else
 			__method_ret_835_8_843_9 = 0;
@@ -52,7 +52,7 @@ DataBlockDefine.FloatArray = {
 
 	SetData = function(this, index, val)
 		if (this.m_DataBlockId ~= 0) then 
-			DclApi.set_array_element_float(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct), val);
+			DclApi.set_array_element_float(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Structure), val);
 		end;
 	end,
 

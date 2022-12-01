@@ -69,7 +69,7 @@ DataBlockDefine.StringArrayField = {
 		len = DclApi.get_array_length(this.m_DataBlockId);
 		local ix;
 		ix = 0;
-		while (ix < typecast(len, System.UInt32, TypeKind.Struct)) do
+		while (ix < typecast(len, System.UInt32, TypeKind.Structure)) do
 			local str;
 			str = newobject(DataBlockDefine.CString, nil, nil, "ctor", 0, nil);
 			DataBlockDefine.CString.Attach(str, DclApi.get_array_element_uint64(this.m_DataBlockId, ix));

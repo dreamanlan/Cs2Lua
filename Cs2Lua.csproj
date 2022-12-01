@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RoslynTool</RootNamespace>
     <AssemblyName>Cs2Lua</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -76,7 +76,6 @@
     <Compile Include="CsToDsl\CsToDsl_Statement.cs" />
     <Compile Include="CsToDsl\Logger.cs" />
     <Compile Include="dep\DslCalculator.cs" />
-
     <Compile Include="Generator\LuaGenerator.cs" />
     <Compile Include="Generator\LuaGenerator_Helper.cs" />
     <Compile Include="Generator\LuaGenerator_Main.cs" />

@@ -188,7 +188,7 @@ DataBlockDefine.Int64DataBlockMap = {
 		else
 			this.__ctor_called = true;
 		end;
-		this.m_DataWrap = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeArgs", getglobalinfo("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeArgs") or {System.Int64, DataBlockDefine.IDataBlock}), buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeKinds", getglobalinfo("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeKinds") or {TypeKind.Struct, TypeKind.Interface}), "ctor", 0, {});
+		this.m_DataWrap = newexterndictionary(System.Collections.Generic.Dictionary_TKey_TValue, buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeArgs", getglobalinfo("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeArgs") or {System.Int64, DataBlockDefine.IDataBlock}), buildglobalinfoonce("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeKinds", getglobalinfo("g_System_Collections_Generic_Dictionary_System_Int64_DataBlockDefine_IDataBlock_TypeKinds") or {TypeKind.Structure, TypeKind.Interface}), "ctor", 0, {});
 	end,
 	-------------------------------
 	------ instance fields -------

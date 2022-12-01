@@ -71,7 +71,7 @@ DataBlockDefine.Int64Int64Map = {
 
 	GetCount = function(this)
 		local __method_ret_1431_8_1434_9;
-		__method_ret_1431_8_1434_9 = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		__method_ret_1431_8_1434_9 = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Structure);
 		return __method_ret_1431_8_1434_9;
 	end,
 

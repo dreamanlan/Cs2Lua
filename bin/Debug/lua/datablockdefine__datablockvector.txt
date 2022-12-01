@@ -74,7 +74,7 @@ DataBlockDefine.DataBlockVector = {
 		while (ix < ct) do
 			local elem;
 			elem = this.OnNewDataBlock();
-			callinterface(elem, DataBlockDefine.IDataBlock, "Attach", DclApi.uint64_vector_get_element(dataBlockId, typecast(ix, System.UInt64, TypeKind.Struct)));
+			callinterface(elem, DataBlockDefine.IDataBlock, "Attach", DclApi.uint64_vector_get_element(dataBlockId, typecast(ix, System.UInt64, TypeKind.Structure)));
 			this.m_DataWrap:Add(elem);
 			ix = (ix + 1);
 		end;
@@ -99,7 +99,7 @@ DataBlockDefine.DataBlockVector = {
 
 	Reserve = function(this, space)
 		this.m_DataWrap.Capacity = space;
-		DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
+		DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Structure));
 	end,
 
 	GetCount = function(this)
@@ -121,7 +121,7 @@ DataBlockDefine.DataBlockVector = {
 	SetData = function(this, index, data)
 		if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
 			this.m_DataWrap[index + 1] = data;
-			DclApi.uint64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), callinterface(data, DataBlockDefine.IDataBlock, "GetDataBlockId"));
+			DclApi.uint64_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Structure), callinterface(data, DataBlockDefine.IDataBlock, "GetDataBlockId"));
 		end;
 	end,
 
@@ -158,7 +158,7 @@ DataBlockDefine.DataBlockVector = {
 	RemoveAt = function(this, index)
 		if ((index >= 0) and (index < this.m_DataWrap.Count)) then 
 			this.m_DataWrap:RemoveAt(index);
-			DclApi.uint64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			DclApi.uint64_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Structure));
 		end;
 	end,
 

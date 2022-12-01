@@ -1,0 +1,68 @@
+require "cs2lua__namespaces"; 
+
+DataBlockDefine.TestClass = {
+	-------------------------------
+	-------- class methods --------
+	-------------------------------
+	test = function(str)
+		System.Console.WriteLine__String__Object(luastrtocsstr("{0}"), ((str) and (str.Length) or nil));
+	end,
+
+	Call = function()
+		local abc;
+		abc = nil;
+		abc = "test";
+		DataBlockDefine.TestClass.test(abc);
+	end,
+
+	cctor = function()
+		DataBlockDefine.TestClass.__cctor();
+	end,
+
+	__cctor = function()
+		if DataBlockDefine.TestClass.__cctor_called then 
+			return;
+		else
+			DataBlockDefine.TestClass.__cctor_called = true;
+		end;
+	end,
+
+	-------------------------------
+	-------- class fields --------
+	-------------------------------
+	__cctor_called = false,
+
+
+	-------------------------------
+	--- define class and object ---
+	-------------------------------
+	__define_class = function()
+		Utility.Warn("DataBlockDefine.TestClass::__define_class begin");
+
+		local class = DataBlockDefine.TestClass;
+		local obj_methods = nil;
+		local tmp_obj_method = nil;
+
+		local __defineclass_return = defineclass(nil, "DataBlockDefine.TestClass", "TestClass", class, obj_methods, false, false);
+		Utility.Warn("DataBlockDefine.TestClass::__define_class end");
+		return __defineclass_return;
+	end,
+
+	-------------------------------
+	--------- fields info ---------
+	-------------------------------
+	__class_fields = {
+		__cctor_called = true,
+	},
+
+
+	-------------------------------
+	-------- metadata info --------
+	-------------------------------
+};
+
+
+require "cs2lua__syslib";
+require "cs2lua__externenums";
+require "cs2lua__interfaces";
+settempmetatable(DataBlockDefine.TestClass);

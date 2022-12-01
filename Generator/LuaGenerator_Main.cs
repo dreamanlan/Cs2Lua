@@ -303,11 +303,11 @@ namespace Generator
                                     fdef = cdef.GetParam(0) as Dsl.StatementData;
                                 }
                                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
-                                    var first = fdef.First;
-                                    var second = fdef.Second;
+                                    var first = fdef.First.AsFunction;
+                                    var second = fdef.Second.AsFunction;
                                     var funcOpts = new FunctionOptions();
                                     if (fdef.GetFunctionNum() >= 3) {
-                                        var opts = fdef.Third;
+                                        var opts = fdef.Third.AsFunction;
                                         ParseFunctionOptions(opts, funcOpts);
                                     }
                                     int rct;
@@ -429,8 +429,8 @@ namespace Generator
                             while (s_TryUsingFuncs.Count > 0) {
                                 var fdef = s_TryUsingFuncs.Dequeue();
                                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
-                                    var first = fdef.First;
-                                    var second = fdef.Second;
+                                    var first = fdef.First.AsFunction;
+                                    var second = fdef.Second.AsFunction;
                                     var funcOpts = new FunctionOptions();
                                     ParseFunctionOptions(second, funcOpts);
                                     if (first.HaveStatement()) {
@@ -462,8 +462,8 @@ namespace Generator
                             while (s_CondExpFuncs.Count > 0) {
                                 var fdef = s_CondExpFuncs.Dequeue();
                                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
-                                    var first = fdef.First;
-                                    var second = fdef.Second;
+                                    var first = fdef.First.AsFunction;
+                                    var second = fdef.Second.AsFunction;
                                     var funcOpts = new FunctionOptions();
                                     ParseFunctionOptions(second, funcOpts);
                                     if (first.HaveStatement()) {
@@ -545,11 +545,11 @@ namespace Generator
                                     fdef = cdef.GetParam(0) as Dsl.StatementData;
                                 }
                                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
-                                    var first = fdef.First;
-                                    var second = fdef.Second;
+                                    var first = fdef.First.AsFunction;
+                                    var second = fdef.Second.AsFunction;
                                     var funcOpts = new FunctionOptions();
                                     if (fdef.GetFunctionNum() >= 3) {
-                                        var opts = fdef.Third;
+                                        var opts = fdef.Third.AsFunction;
                                         ParseFunctionOptions(opts, funcOpts);
                                     }
                                     int rct;
@@ -681,8 +681,8 @@ namespace Generator
                             while (s_TryUsingFuncs.Count > 0) {
                                 var fdef = s_TryUsingFuncs.Dequeue();
                                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
-                                    var first = fdef.First;
-                                    var second = fdef.Second;
+                                    var first = fdef.First.AsFunction;
+                                    var second = fdef.Second.AsFunction;
                                     var funcOpts = new FunctionOptions();
                                     ParseFunctionOptions(second, funcOpts);
                                     if (first.HaveStatement()) {
@@ -716,8 +716,8 @@ namespace Generator
                             while (s_CondExpFuncs.Count > 0) {
                                 var fdef = s_CondExpFuncs.Dequeue();
                                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
-                                    var first = fdef.First;
-                                    var second = fdef.Second;
+                                    var first = fdef.First.AsFunction;
+                                    var second = fdef.Second.AsFunction;
                                     var funcOpts = new FunctionOptions();
                                     ParseFunctionOptions(second, funcOpts);
                                     if (first.HaveStatement()) {
@@ -991,6 +991,7 @@ namespace Generator
             };
             calculator.Init();
             calculator.Register("statementgetfunctionnum", new DslExpression.ExpressionFactoryHelper<DslExpression.StatementGetFunctionNumExp>());
+            calculator.Register("statementgetvalue", new DslExpression.ExpressionFactoryHelper<DslExpression.StatementGetValueExp>());
             calculator.Register("statementgetfunction", new DslExpression.ExpressionFactoryHelper<DslExpression.StatementGetFunctionExp>());
             calculator.Register("functionishighorder", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionIsHighOrderExp>());
             calculator.Register("functionhaveparam", new DslExpression.ExpressionFactoryHelper<DslExpression.FunctionHaveParamExp>());
@@ -1232,10 +1233,10 @@ namespace Generator
                         Dsl.FunctionData postCodeBlock = null;
                         if (null != _sd) {
                             //带有前置与后置代码块的情形（代码块内容可能为空）
-                            var codeBlocks = _sd.First;
+                            var codeBlocks = _sd.First.AsFunction;
                             preCodeBlock = codeBlocks.GetParam(0) as Dsl.FunctionData;
                             postCodeBlock = codeBlocks.GetParam(1) as Dsl.FunctionData;
-                            cd = _sd.Second;
+                            cd = _sd.Second.AsFunction;
                         }
                         if (null != preCodeBlock) {
                             GenerateStatements(preCodeBlock, sb, indent, funcOpts, calculator);
@@ -1435,7 +1436,7 @@ namespace Generator
                         }
                     }
                     else if (id == "=" && rightParamId == "condexpfunc" && null != sd2) {
-                        var condExp = sd2.First.GetParam(0) as Dsl.FunctionData;
+                        var condExp = sd2.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                         GenerateAssignmentCondExp(param1, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
                         handled = true;
                     }
@@ -1461,13 +1462,13 @@ namespace Generator
             else if ((id == "setstatic" || id == "setexternstatic") && GetParamIdAfterRemoveParenthesis(data, 3, out condExpFuncParam) == "condexpfunc") {
                 int condIx = 3;
                 var condExpFunc = condExpFuncParam as Dsl.StatementData;
-                var condExp = condExpFunc.First.GetParam(0) as Dsl.FunctionData;
+                var condExp = condExpFunc.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                 GenerateMemberAssignmentCondExp(data, condIx, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
             }
             else if ((id == "setinstance" || id == "setexterninstance") && GetParamIdAfterRemoveParenthesis(data, 4, out condExpFuncParam) == "condexpfunc") {
                 int condIx = 4;
                 var condExpFunc = condExpFuncParam as Dsl.StatementData;
-                var condExp = condExpFunc.First.GetParam(0) as Dsl.FunctionData;
+                var condExp = condExpFunc.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                 GenerateMemberAssignmentCondExp(data, condIx, condExp, sb, indent, firstLineUseIndent, funcOpts, calculator);
             }
             else {
@@ -3318,7 +3319,8 @@ namespace Generator
             }
             if (id == "linq") {
                 string prestr = string.Empty;
-                foreach (var funcData in data.Functions) {
+                foreach (var fd in data.Functions) {
+                    var funcData = fd.AsFunction;
                     var fcall = funcData;
                     if (funcData.IsHighOrder)
                         fcall = funcData.LowerOrderFunction;
@@ -3343,7 +3345,8 @@ namespace Generator
                 }
             }
             else if (id == "do") {
-                foreach (var funcData in data.Functions) {
+                foreach (var fd in data.Functions) {
+                    var funcData = fd.AsFunction;
                     var fcall = funcData;
                     if (funcData.IsHighOrder)
                         fcall = funcData.LowerOrderFunction;
@@ -3428,7 +3431,7 @@ namespace Generator
                 }
             }
             else if (id == "if") {
-                var fdata = data.First;
+                var fdata = data.First.AsFunction;
                 var fcall = fdata.LowerOrderFunction;
                 var condExp = fcall.GetParam(0);
                 var postfix = string.Empty;
@@ -3506,7 +3509,7 @@ namespace Generator
                 }
                 else {
                     for (int ix = 1; ix < data.GetFunctionNum(); ++ix) {
-                        var funcData = data.GetFunction(ix);
+                        var funcData = data.GetFunction(ix).AsFunction;
                         var fcd = funcData;
                         if (funcData.IsHighOrder) {
                             fcd = funcData.LowerOrderFunction;
@@ -3563,11 +3566,11 @@ namespace Generator
                 ++s_NestedFunctionCount;
                 var fdef = data;
                 if (null != fdef && fdef.GetFunctionNum() >= 2) {
-                    var first = fdef.First;
-                    var second = fdef.Second;
+                    var first = fdef.First.AsFunction;
+                    var second = fdef.Second.AsFunction;
                     var newFuncOpts = new FunctionOptions();
                     if (fdef.GetFunctionNum() >= 3) {
-                        var opts = fdef.Third;
+                        var opts = fdef.Third.AsFunction;
                         ParseFunctionOptions(opts, newFuncOpts);
                     }
                     int rct;
@@ -3602,8 +3605,8 @@ namespace Generator
                     sb.Append("luausing");
                 else
                     sb.Append("luatry");
-                var first = data.First;
-                var second = data.Second;
+                var first = data.First.AsFunction;
+                var second = data.Second.AsFunction;
                 var fcall = first;
                 var fbody = first;
                 if (first.IsHighOrder) {
@@ -3771,8 +3774,8 @@ namespace Generator
                 }
             }
             else if (id == "condexpfunc") {
-                var first = data.First;
-                var second = data.Second;
+                var first = data.First.AsFunction;
+                var second = data.Second.AsFunction;
                 var fcall = first;
                 if (first.IsHighOrder) {
                     fcall = first.LowerOrderFunction;
@@ -3806,7 +3809,7 @@ namespace Generator
                     sb.Append(")");
                 }
                 else {
-                    var condExp = data.First.GetParam(0) as Dsl.FunctionData;
+                    var condExp = data.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                     var p1 = condExp.GetParam(0);
                     var p2 = condExp.GetParamId(1);
                     var p3 = condExp.GetParam(2);
@@ -3830,7 +3833,8 @@ namespace Generator
                 }
             }
             else {
-                foreach (var funcData in data.Functions) {
+                foreach (var fd in data.Functions) {
+                    var funcData = fd.AsFunction;
                     var fcall = funcData;
                     if (funcData.IsHighOrder)
                         fcall = funcData.LowerOrderFunction;
@@ -3869,7 +3873,7 @@ namespace Generator
             bool p5IsCondExp = false;
             if (p2 == "false" && null != p3Stm && p3Stm.GetId() == "condexpfunc") {
                 p3IsCondExp = true;
-                p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
+                p3Func = p3Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
             }
             else if (p2 == "false" && null != p3Func) {
                 var func = p3Func.GetParam(0) as Dsl.FunctionData;
@@ -3880,7 +3884,7 @@ namespace Generator
                     var tp3n = RemoveParenthesis(func.GetParam(0));
                     if (tp3n.GetId() == "condexpfunc") {
                         p3Stm = tp3n as Dsl.StatementData;
-                        p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
+                        p3Func = p3Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                         p3IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p3Func)) {
@@ -3891,7 +3895,7 @@ namespace Generator
             }
             if (p4 == "false" && null != p5Stm && p5Stm.GetId() == "condexpfunc") {
                 p5IsCondExp = true;
-                p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
+                p5Func = p5Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
             }
             else if (p4 == "false" && null != p5Func) {
                 var func = p5Func.GetParam(0) as Dsl.FunctionData;
@@ -3902,7 +3906,7 @@ namespace Generator
                     var tp5n = RemoveParenthesis(func.GetParam(0));
                     if (tp5n.GetId() == "condexpfunc") {
                         p5Stm = tp5n as Dsl.StatementData;
-                        p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
+                        p5Func = p5Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                         p5IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p5Func)) {
@@ -3968,7 +3972,7 @@ namespace Generator
             bool p5IsCondExp = false;
             if (p2 == "false" && null != p3Stm && p3Stm.GetId() == "condexpfunc") {
                 p3IsCondExp = true;
-                p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
+                p3Func = p3Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
             }
             else if (p2 == "false" && null != p3Func) {
                 var func = p3Func.GetParam(0) as Dsl.FunctionData;
@@ -3979,7 +3983,7 @@ namespace Generator
                     var tp3n = RemoveParenthesis(func.GetParam(0));
                     if (tp3n.GetId() == "condexpfunc") {
                         p3Stm = tp3n as Dsl.StatementData;
-                        p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
+                        p3Func = p3Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                         p3IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p3Func)) {
@@ -3990,7 +3994,7 @@ namespace Generator
             }
             if (p4 == "false" && null != p5Stm && p5Stm.GetId() == "condexpfunc") {
                 p5IsCondExp = true;
-                p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
+                p5Func = p5Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
             }
             else if (p4 == "false" && null != p5Func) {
                 var func = p5Func.GetParam(0) as Dsl.FunctionData;
@@ -4001,7 +4005,7 @@ namespace Generator
                     var tp5n = RemoveParenthesis(func.GetParam(0));
                     if (tp5n.GetId() == "condexpfunc") {
                         p5Stm = tp5n as Dsl.StatementData;
-                        p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
+                        p5Func = p5Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                         p5IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p5Func)) {
@@ -4073,7 +4077,7 @@ namespace Generator
             bool p5IsCondExp = false;
             if (p2 == "false" && null != p3Stm && p3Stm.GetId() == "condexpfunc") {
                 p3IsCondExp = true;
-                p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
+                p3Func = p3Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
             }
             else if (p2 == "false" && null != p3Func) {
                 var func = p3Func.GetParam(0) as Dsl.FunctionData;
@@ -4084,7 +4088,7 @@ namespace Generator
                     var tp3n = RemoveParenthesis(func.GetParam(0));
                     if (tp3n.GetId() == "condexpfunc") {
                         p3Stm = tp3n as Dsl.StatementData;
-                        p3Func = p3Stm.First.GetParam(0) as Dsl.FunctionData;
+                        p3Func = p3Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                         p3IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p3Func)) {
@@ -4095,7 +4099,7 @@ namespace Generator
             }
             if (p4 == "false" && null != p5Stm && p5Stm.GetId() == "condexpfunc") {
                 p5IsCondExp = true;
-                p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
+                p5Func = p5Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
             }
             else if (p4 == "false" && null != p5Func) {
                 var func = p5Func.GetParam(0) as Dsl.FunctionData;
@@ -4106,7 +4110,7 @@ namespace Generator
                     var tp5n = RemoveParenthesis(func.GetParam(0));
                     if (tp5n.GetId() == "condexpfunc") {
                         p5Stm = tp5n as Dsl.StatementData;
-                        p5Func = p5Stm.First.GetParam(0) as Dsl.FunctionData;
+                        p5Func = p5Stm.First.AsFunction.GetParam(0) as Dsl.FunctionData;
                         p5IsCondExp = true;
                     }
                     else if (!ExistEmbedFunctionObject(p5Func)) {
@@ -4277,6 +4281,21 @@ namespace DslExpression
             return r;
         }
     }
+    internal sealed class StatementGetValueExp : SimpleExpressionBase
+    {
+        protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
+        {
+            ValueData r = null;
+            if (operands.Count >= 2) {
+                var data = operands[0].As<Dsl.StatementData>();
+                var index = operands[1].Get<int>();
+                if (null != data && index >= 0 && index < data.GetFunctionNum()) {
+                    r = data.GetFunction(index).AsValue;
+                }
+            }
+            return CalculatorValue.FromObject(r);
+        }
+    }
     internal sealed class StatementGetFunctionExp : SimpleExpressionBase
     {
         protected override CalculatorValue OnCalc(IList<CalculatorValue> operands)
@@ -4286,7 +4305,7 @@ namespace DslExpression
                 var data = operands[0].As<Dsl.StatementData>();
                 var index = operands[1].Get<int>();
                 if (null != data && index >= 0 && index < data.GetFunctionNum()) {
-                    r = data.GetFunction(index);
+                    r = data.GetFunction(index).AsFunction;
                 }
             }
             return CalculatorValue.FromObject(r);
@@ -4303,7 +4322,7 @@ namespace DslExpression
                     r = data.IsHighOrder;
                 }
             }
-            return CalculatorValue.FromBool(r);
+            return CalculatorValue.From(r);
         }
     }
     internal sealed class FunctionHaveParamExp : SimpleExpressionBase
@@ -4317,7 +4336,7 @@ namespace DslExpression
                     r = data.HaveParam();
                 }
             }
-            return CalculatorValue.FromBool(r);
+            return CalculatorValue.From(r);
         }
     }
     internal sealed class FunctionHaveStatementExp : SimpleExpressionBase
@@ -4331,7 +4350,7 @@ namespace DslExpression
                     r = data.HaveStatement();
                 }
             }
-            return CalculatorValue.FromBool(r);
+            return CalculatorValue.From(r);
         }
     }
     internal sealed class FunctionHaveScriptExp : SimpleExpressionBase
@@ -4345,7 +4364,7 @@ namespace DslExpression
                     r = data.HaveExternScript();
                 }
             }
-            return CalculatorValue.FromBool(r);
+            return CalculatorValue.From(r);
         }
     }
     internal sealed class FunctionGetLowerOrderExp : SimpleExpressionBase

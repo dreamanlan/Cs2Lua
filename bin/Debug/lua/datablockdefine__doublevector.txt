@@ -70,19 +70,19 @@ DataBlockDefine.DoubleVector = {
 	end,
 
 	Reserve = function(this, space)
-		DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Struct));
+		DclApi.container_reserve_space(this.m_DataBlockId, typecast(space, System.UInt64, TypeKind.Structure));
 	end,
 
 	GetCount = function(this)
 		local __method_ret_1080_8_1083_9;
-		__method_ret_1080_8_1083_9 = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Struct);
+		__method_ret_1080_8_1083_9 = typecast(DclApi.container_get_size(this.m_DataBlockId), System.Int32, TypeKind.Structure);
 		return __method_ret_1080_8_1083_9;
 	end,
 
 	GetData = function(this, index)
 		local __method_ret_1084_8_1090_9;
 		if ((index >= 0) and (index < DataBlockDefine.DoubleVector.GetCount(this))) then 
-			__method_ret_1084_8_1090_9 = DclApi.double_vector_get_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			__method_ret_1084_8_1090_9 = DclApi.double_vector_get_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Structure));
 			return __method_ret_1084_8_1090_9;
 		end;
 		__method_ret_1084_8_1090_9 = 0;
@@ -91,13 +91,13 @@ DataBlockDefine.DoubleVector = {
 
 	SetData = function(this, index, data)
 		if ((index >= 0) and (index < DataBlockDefine.DoubleVector.GetCount(this))) then 
-			DclApi.double_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct), data);
+			DclApi.double_vector_set_element(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Structure), data);
 		end;
 	end,
 
 	IndexOf = function(this, data)
 		local __method_ret_1097_8_1100_9;
-		__method_ret_1097_8_1100_9 = typecast(DclApi.double_vector_index_of_element(this.m_DataBlockId, data), System.Int32, TypeKind.Struct);
+		__method_ret_1097_8_1100_9 = typecast(DclApi.double_vector_index_of_element(this.m_DataBlockId, data), System.Int32, TypeKind.Structure);
 		return __method_ret_1097_8_1100_9;
 	end,
 
@@ -123,7 +123,7 @@ DataBlockDefine.DoubleVector = {
 
 	RemoveAt = function(this, index)
 		if ((index >= 0) and (index < DataBlockDefine.DoubleVector.GetCount(this))) then 
-			DclApi.double_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Struct));
+			DclApi.double_vector_erase(this.m_DataBlockId, typecast(index, System.UInt64, TypeKind.Structure));
 		end;
 	end,
 

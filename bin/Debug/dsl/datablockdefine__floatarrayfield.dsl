@@ -31,15 +31,15 @@ class(DataBlockDefine.FloatArrayField, DataBlockDefine.BaseIntegerArray, false) 
 	instance_methods {
 		GetData = deffunc(1)args(this, index){
 			local(__method_ret_2365_8_2373_9);
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 2367_12_2372_13 ){
-				__method_ret_2365_8_2373_9 = callstatic(DclApi, "get_array_element_float", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), typecast(index, System.UInt32, TypeKind.Struct));
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Structure, TypeKind.Structure), 2367_12_2372_13 ){
+				__method_ret_2365_8_2373_9 = callstatic(DclApi, "get_array_element_float", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), typecast(index, System.UInt32, TypeKind.Structure));
 				return(__method_ret_2365_8_2373_9);
 			}else{
 				__method_ret_2365_8_2373_9 = 0;
 				return(__method_ret_2365_8_2373_9);
 			};
 			return(null);
-		}options[needfuncinfo(false), rettype(return, System.Single, TypeKind.Struct, 0, true), paramtype(index, System.Int32, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Single, TypeKind.Structure, 0, true), paramtype(index, System.Int32, TypeKind.Structure, 0, true)];
 		ctor = deffunc(0)args(this){
 			buildbaseobj(this, DataBlockDefine.FloatArrayField, DataBlockDefine.BaseIntegerArray, "ctor", 0);
 			callinstance(this, DataBlockDefine.FloatArrayField, "__ctor");

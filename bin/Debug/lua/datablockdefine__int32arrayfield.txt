@@ -34,7 +34,7 @@ DataBlockDefine.Int32ArrayField = {
 	GetData = function(this, index)
 		local __method_ret_2341_8_2349_9;
 		if (this.m_DataBlockId ~= 0) then 
-			__method_ret_2341_8_2349_9 = DclApi.get_array_element_int32(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Struct));
+			__method_ret_2341_8_2349_9 = DclApi.get_array_element_int32(this.m_DataBlockId, typecast(index, System.UInt32, TypeKind.Structure));
 			return __method_ret_2341_8_2349_9;
 		else
 			__method_ret_2341_8_2349_9 = 0;

@@ -525,6 +525,21 @@ namespace RoslynTool.CsToDsl
         {
             Log(node, "Unsupported Syntax !");
         }
+
+        public override void VisitListPattern(ListPatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitScopedType(ScopedTypeSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
+
+        public override void VisitSlicePattern(SlicePatternSyntax node)
+        {
+            Log(node, "Unsupported Syntax !");
+        }
         #endregion
     }
 }

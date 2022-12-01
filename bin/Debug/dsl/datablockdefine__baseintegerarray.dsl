@@ -31,7 +31,7 @@ class(DataBlockDefine.BaseIntegerArray) {
 			local(__method_ret_579_8_582_9);
 			__method_ret_579_8_582_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId");
 			return(__method_ret_579_8_582_9);
-		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Structure, 0, true)];
 		Init = deffunc(0)args(this){
 			if( getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), 585_12_586_23 ){
 				return();
@@ -39,10 +39,10 @@ class(DataBlockDefine.BaseIntegerArray) {
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Release = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 591_12_592_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), System.Boolean, TypeKind.Structure), 591_12_592_23 ){
 				return();
 			};
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 593_12_596_13 ){
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Structure, TypeKind.Structure), 593_12_596_13 ){
 				callstatic(DclApi, "free_array", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"));
 				setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId", 0);
 			};
@@ -54,9 +54,9 @@ class(DataBlockDefine.BaseIntegerArray) {
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId", dataBlockId);
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid", true);
-		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Structure, 0, true)];
 		Detach = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), System.Boolean, TypeKind.Struct), 608_12_609_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_IsValid"), System.Boolean, TypeKind.Structure), 608_12_609_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId", 0);
@@ -64,7 +64,7 @@ class(DataBlockDefine.BaseIntegerArray) {
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		GetLength = deffunc(1)args(this){
 			local(__method_ret_613_8_621_9);
-			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Struct, TypeKind.Struct), 615_12_620_13 ){
+			if( execbinary("!=", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"), 0, System.UInt64, System.UInt64, TypeKind.Structure, TypeKind.Structure), 615_12_620_13 ){
 				__method_ret_613_8_621_9 = callstatic(DclApi, "get_array_length", getinstance(SymbolKind.Field, this, DataBlockDefine.BaseIntegerArray, "m_DataBlockId"));
 				return(__method_ret_613_8_621_9);
 			}else{
@@ -72,7 +72,7 @@ class(DataBlockDefine.BaseIntegerArray) {
 				return(__method_ret_613_8_621_9);
 			};
 			return(null);
-		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Structure, 0, true)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, DataBlockDefine.BaseIntegerArray, "__ctor");
 		};

@@ -1,5 +1,7 @@
 ============<<<Semantic Warning:test>>>============
-test.cs(4,1): hidden CS8019: Unnecessary using directive.
-test.cs(2,1): hidden CS8019: Unnecessary using directive.
+test.cs(2659,39): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+test.cs(2665,19): warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 test.cs(8,1): hidden CS8019: Unnecessary using directive.
 test.cs(5,1): hidden CS8019: Unnecessary using directive.
+test.cs(4,1): hidden CS8019: Unnecessary using directive.
+test.cs(2,1): hidden CS8019: Unnecessary using directive.

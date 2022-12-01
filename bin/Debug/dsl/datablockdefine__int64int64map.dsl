@@ -31,7 +31,7 @@ class(DataBlockDefine.Int64Int64Map) {
 			local(__method_ret_1397_8_1400_9);
 			__method_ret_1397_8_1400_9 = getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId");
 			return(__method_ret_1397_8_1400_9);
-		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.UInt64, TypeKind.Structure, 0, true)];
 		Init = deffunc(0)args(this){
 			if( getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_IsValid"), 1403_12_1404_23 ){
 				return();
@@ -40,7 +40,7 @@ class(DataBlockDefine.Int64Int64Map) {
 			setinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_IsValid", true);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		Release = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_IsValid"), System.Boolean, TypeKind.Struct), 1410_12_1411_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_IsValid"), System.Boolean, TypeKind.Structure), 1410_12_1411_23 ){
 				return();
 			};
 			callstatic(DclApi, "free_container", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId"));
@@ -53,9 +53,9 @@ class(DataBlockDefine.Int64Int64Map) {
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId", dataBlockId);
 			setinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_IsValid", true);
-		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(dataBlockId, System.UInt64, TypeKind.Structure, 0, true)];
 		Detach = deffunc(0)args(this){
-			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_IsValid"), System.Boolean, TypeKind.Struct), 1425_12_1426_23 ){
+			if( execunary("!", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_IsValid"), System.Boolean, TypeKind.Structure), 1425_12_1426_23 ){
 				return();
 			};
 			setinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId", 0);
@@ -63,28 +63,28 @@ class(DataBlockDefine.Int64Int64Map) {
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		GetCount = deffunc(1)args(this){
 			local(__method_ret_1431_8_1434_9);
-			__method_ret_1431_8_1434_9 = typecast(callstatic(DclApi, "container_get_size", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId")), System.Int32, TypeKind.Struct);
+			__method_ret_1431_8_1434_9 = typecast(callstatic(DclApi, "container_get_size", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId")), System.Int32, TypeKind.Structure);
 			return(__method_ret_1431_8_1434_9);
-		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Int32, TypeKind.Structure, 0, true)];
 		GetData = deffunc(1)args(this, key){
 			local(__method_ret_1435_8_1438_9);
 			__method_ret_1435_8_1438_9 = callstatic(DclApi, "int64_int64_map_get_element", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId"), key);
 			return(__method_ret_1435_8_1438_9);
-		}options[needfuncinfo(false), rettype(return, System.Int64, TypeKind.Struct, 0, true), paramtype(key, System.Int64, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Int64, TypeKind.Structure, 0, true), paramtype(key, System.Int64, TypeKind.Structure, 0, true)];
 		SetData = deffunc(0)args(this, key, val){
 			callstatic(DclApi, "int64_int64_map_set_element", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId"), key, val);
-		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(key, System.Int64, TypeKind.Struct, 0, true), paramtype(val, System.Int64, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(key, System.Int64, TypeKind.Structure, 0, true), paramtype(val, System.Int64, TypeKind.Structure, 0, true)];
 		Add = deffunc(0)args(this, key, val){
 			callstatic(DclApi, "int64_int64_map_add_element", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId"), key, val);
-		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(key, System.Int64, TypeKind.Struct, 0, true), paramtype(val, System.Int64, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(key, System.Int64, TypeKind.Structure, 0, true), paramtype(val, System.Int64, TypeKind.Structure, 0, true)];
 		Remove = deffunc(0)args(this, key){
 			callstatic(DclApi, "int64_int64_map_remove_element", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId"), key);
-		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(key, System.Int64, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(key, System.Int64, TypeKind.Structure, 0, true)];
 		Contains = deffunc(1)args(this, key){
 			local(__method_ret_1451_8_1454_9);
 			__method_ret_1451_8_1454_9 = callstatic(DclApi, "int64_int64_map_contains", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId"), key);
 			return(__method_ret_1451_8_1454_9);
-		}options[needfuncinfo(false), rettype(return, System.Boolean, TypeKind.Struct, 0, true), paramtype(key, System.Int64, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(false), rettype(return, System.Boolean, TypeKind.Structure, 0, true), paramtype(key, System.Int64, TypeKind.Structure, 0, true)];
 		Clear = deffunc(0)args(this){
 			callstatic(DclApi, "container_clear", getinstance(SymbolKind.Field, this, DataBlockDefine.Int64Int64Map, "m_DataBlockId"));
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
@@ -93,7 +93,7 @@ class(DataBlockDefine.Int64Int64Map) {
 				local(__method_ret_1461_58_1461_94);
 				__method_ret_1461_58_1461_94 = callexterndelegation(callback, "System.Func_T1_T2_TResult.Invoke", k, v);
 				return(__method_ret_1461_58_1461_94);
-			}options[needfuncinfo(false), rettype(return, System.Boolean, TypeKind.Struct, 0, true), paramtype(k, System.Int64, TypeKind.Struct, 0, true), paramtype(v, System.Int64, TypeKind.Struct, 0, true)]);
+			}options[needfuncinfo(false), rettype(return, System.Boolean, TypeKind.Structure, 0, true), paramtype(k, System.Int64, TypeKind.Structure, 0, true), paramtype(v, System.Int64, TypeKind.Structure, 0, true)]);
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(callback, System.Func_T1_T2_TResult, TypeKind.Delegate, 0, true)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, DataBlockDefine.Int64Int64Map, "__ctor");
