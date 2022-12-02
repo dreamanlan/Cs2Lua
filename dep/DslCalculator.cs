@@ -448,7 +448,7 @@ namespace DslExpression
 
         public static implicit operator CalculatorValue(Type v)
         {
-            return CalculatorValue.From(v);
+            return CalculatorValue.FromObject(v);
         }
         public static implicit operator Type(CalculatorValue v)
         {
@@ -456,7 +456,7 @@ namespace DslExpression
         }
         public static implicit operator CalculatorValue(ArrayList v)
         {
-            return CalculatorValue.From(v);
+            return CalculatorValue.FromObject(v);
         }
         public static implicit operator ArrayList(CalculatorValue v)
         {
@@ -670,15 +670,50 @@ namespace DslExpression
             Type = c_StringType;
             StringVal = v;
         }
-        public void Set(object v)
+        public void SetObject(object val)
         {
-            Type = c_ObjectType;
-            ObjectVal = v;
+            if (null == val) {
+                SetWithObjectType(val);
+                return;
+            }
+            Type t = val.GetType();
+            if (t == typeof(string))
+                Set((string)val);
+            else if (t == typeof(bool))
+                Set((bool)val);
+            else if (t == typeof(char))
+                Set((char)val);
+            else if (t == typeof(sbyte))
+                Set((sbyte)val);
+            else if (t == typeof(short))
+                Set((short)val);
+            else if (t == typeof(int))
+                Set((int)val);
+            else if (t == typeof(long))
+                Set((long)val);
+            else if (t == typeof(byte))
+                Set((byte)val);
+            else if (t == typeof(ushort))
+                Set((ushort)val);
+            else if (t == typeof(uint))
+                Set((uint)val);
+            else if (t == typeof(ulong))
+                Set((ulong)val);
+            else if (t == typeof(float))
+                Set((float)val);
+            else if (t == typeof(double))
+                Set((double)val);
+            else if (t == typeof(decimal))
+                Set((decimal)val);
+            else if (t == typeof(CalculatorValue))
+                this = (CalculatorValue)val;
+            else
+                SetWithObjectType(val);
         }
-        public void SetObject(object v)
+        public void SetWithObjectType(object val)
         {
             Type = c_ObjectType;
-            ObjectVal = v;
+            ObjectVal = val;
         }
 
         public bool GetBool()
@@ -745,9 +780,7 @@ namespace DslExpression
         public T CastTo<T>()
         {
             Type t = typeof(T);
-            if (t == typeof(object))
-                return CalculatorValueConverter.From<T>(ToObject());
-            else if (t == typeof(string))
+            if (t == typeof(string))
                 return CalculatorValueConverter.From<T>(ToString());
             else if (t == typeof(bool))
                 return CalculatorValueConverter.From<T>(ToBool());
@@ -777,14 +810,14 @@ namespace DslExpression
                 return CalculatorValueConverter.From<T>(ToDecimal());
             else if (t == typeof(CalculatorValue))
                 return CalculatorValueConverter.From<T>(this);
+            else if(t == typeof(object))
+                return CalculatorValueConverter.From<T>(ToObject());
             else
                 return CalculatorValueConverter.CastTo<T>(ToObject());
         }
         public object CastTo(Type t)
         {
-            if (t == typeof(object))
-                return ToObject();
-            else if (t == typeof(string))
+            if (t == typeof(string))
                 return ToString();
             else if (t == typeof(bool))
                 return ToBool();
@@ -814,15 +847,15 @@ namespace DslExpression
                 return ToDecimal();
             else if (t == typeof(CalculatorValue))
                 return this;
+            else if (t == typeof(object))
+                return ToObject();
             else
                 return Convert.ChangeType(ToObject(), t);
         }
         public void GenericSet<T>(T val)
         {
             Type t = typeof(T);
-            if (t == typeof(object))
-                Set(CalculatorValueConverter.ToObject<T>(val));
-            else if (t == typeof(string))
+            if (t == typeof(string))
                 Set(CalculatorValueConverter.ToString<T>(val));
             else if (t == typeof(bool))
                 Set(CalculatorValueConverter.ToBool<T>(val));
@@ -852,15 +885,22 @@ namespace DslExpression
                 Set(CalculatorValueConverter.ToDecimal<T>(val));
             else if (t == typeof(CalculatorValue))
                 this = CalculatorValueConverter.ToCalculatorValue<T>(val);
+            else if (t == typeof(object))
+                SetWithObjectType(CalculatorValueConverter.ToObject<T>(val));
             else
-                SetObject(val);
+                SetWithObjectType(val);
         }
         public void GenericSet(Type t, object val)
         {
+            if (null == val) {
+                if (t == typeof(string))
+                    Set((string)val);
+                else
+                    SetWithObjectType(val);
+                return;
+            }
             t = val.GetType();
-            if (t == typeof(object))
-                SetObject(val);
-            else if (t == typeof(string))
+            if (t == typeof(string))
                 Set((string)val);
             else if (t == typeof(bool))
                 Set((bool)val);
@@ -891,7 +931,7 @@ namespace DslExpression
             else if (t == typeof(CalculatorValue))
                 this = (CalculatorValue)val;
             else
-                SetObject(val);
+                SetWithObjectType(val);
         }
 
         public void CopyFrom(CalculatorValue other)
@@ -1675,16 +1715,10 @@ namespace DslExpression
             bv.Set(v);
             return bv;
         }
-        public static CalculatorValue From(object v)
-        {
-            CalculatorValue bv = new CalculatorValue();
-            bv.Set(v);
-            return bv;
-        }
         public static CalculatorValue FromObject(object v)
         {
             CalculatorValue bv = new CalculatorValue();
-            bv.Set(v);
+            bv.SetObject(v);
             return bv;
         }
 
@@ -3196,7 +3230,7 @@ namespace DslExpression
             }
             IEnumerator enumer = list.GetEnumerator();
             while (enumer.MoveNext()) {
-                var val = CalculatorValue.From(enumer.Current);
+                var val = CalculatorValue.FromObject(enumer.Current);
                 Calculator.SetVariable("$$", val);
                 for (int index = 0; index < m_Expressions.Count; ++index) {
                     v = m_Expressions[index].Calc();
