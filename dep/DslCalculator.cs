@@ -5988,6 +5988,18 @@ namespace DslExpression
             m_NamedGlobalVariableIndexes.Clear();
             m_GlobalVariables.Clear();
         }
+        public IEnumerable<string> GlobalVariableNames
+        {
+            get { return m_NamedGlobalVariableIndexes.Keys; }
+        }
+        public void RemoveGlobalVariable(string v)
+        {
+            int index;
+            if (m_NamedGlobalVariableIndexes.TryGetValue(v, out index)) {
+                SetGlobalVaraibleByIndex(index, CalculatorValue.NullObject);
+                m_NamedGlobalVariableIndexes.Remove(v);
+            }
+        }
         public bool TryGetGlobalVariable(string v, out CalculatorValue result)
         {
             int index;
