@@ -24,3 +24,13 @@ Cs2Lua场景是演示启动场景。在GameRoot上挂了Game.cs脚本，用来�
 这个例子同时演示了一种可能，亦即基于unity3d的工程整体上采用插件架构，脚本用来实现具体插件，然后可以首先实现C#版本的插件（IOS下也可以，不拆分为独立dll），然后在需要更新时动态变更为dll版本的插件(android mono情形)或lua脚本插件(il2cpp或ios mono aot情形)。
 
 这有可能提供一种性能与功能灵活性的平衡，就是说每次更新一个大版本将获得最好的性能，然后逐渐更新后部分功能替换为脚本实现，性能会有所下降，到下一次大版本更新再提升到最佳性能。并且也允许玩家一直不更新大版本，在性能稍差的情况下不影响游戏功能。
+
+******
+编译步骤：（升级unity3d版本时需要操作一遍）
+1、编译dep\SluaManaged\SluaManaged.sln，如果unity3d支持更高版本的visual studio，相应升级工程，拷贝SluaManaged.dll到Test\TestUnity\Assets\Plugins目录下
+2、编译Test\Cs2LuaScript\Cs2LuaScript.sln，同1按需升级工程，拷贝Cs2LuaScript.dll与Cs2DslUtility.dll到Test\TestUnity\Assets\StreamingAssets目录下;拷贝
+CustomApi.dll到Test\TestUnity\Assets\Plugins目录下
+3、删除Test\TestUnity\Assets\Slua\LuaObject目录下的所有文件
+4、使用unity3d编辑器打开Test\TestUnity目录的工程，然后执行Slua菜单下的make，生成lua api的代码文件（保存在Test\TestUnity\Assets\Slua\LuaObject目录）
+5、执行Test\cs2lua.bat，生成相关lua文件
+6、使用unity3d编辑器打开Test\TestUnity\Assets\Scene\Cs2Lua.unity场景，运行即可看到效果
