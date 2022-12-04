@@ -115,6 +115,37 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_selectedSprite(IntPtr l) {
+		try {
+			UnityEngine.UI.SpriteState self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.selectedSprite);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_selectedSprite(IntPtr l) {
+		try {
+			UnityEngine.UI.SpriteState self;
+			checkValueType(l,1,out self);
+			UnityEngine.Sprite v;
+			checkType(l,2,out v);
+			self.selectedSprite=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_disabledSprite(IntPtr l) {
 		try {
 			UnityEngine.UI.SpriteState self;
@@ -152,6 +183,7 @@ public class Lua_UnityEngine_UI_SpriteState : LuaObject {
 		addMember(l,Equals__Object);
 		addMember(l,"highlightedSprite",get_highlightedSprite,set_highlightedSprite,true);
 		addMember(l,"pressedSprite",get_pressedSprite,set_pressedSprite,true);
+		addMember(l,"selectedSprite",get_selectedSprite,set_selectedSprite,true);
 		addMember(l,"disabledSprite",get_disabledSprite,set_disabledSprite,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.UI.SpriteState),typeof(System.ValueType));
 	}

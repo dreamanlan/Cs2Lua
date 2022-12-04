@@ -101,6 +101,22 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ConvertUIToolkitPointerId(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
+			UnityEngine.EventSystems.PointerEventData a1;
+			checkType(l,2,out a1);
+			var ret=self.ConvertUIToolkitPointerId(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_input(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.BaseInputModule self=(UnityEngine.EventSystems.BaseInputModule)checkSelf(l);
@@ -150,6 +166,7 @@ public class Lua_UnityEngine_EventSystems_BaseInputModule : LuaObject {
 		addMember(l,ActivateModule);
 		addMember(l,UpdateModule);
 		addMember(l,IsModuleSupported);
+		addMember(l,ConvertUIToolkitPointerId);
 		addMember(l,"input",get_input,null,true);
 		addMember(l,"inputOverride",get_inputOverride,set_inputOverride,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.BaseInputModule),typeof(UnityEngine.EventSystems.UIBehaviour));

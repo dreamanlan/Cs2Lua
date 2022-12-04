@@ -253,6 +253,25 @@ public class Lua_UnityEngine_Rect : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.Rect self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MinMaxRect_s(IntPtr l) {
 		try {
 			System.Single a1;
@@ -772,6 +791,7 @@ public class Lua_UnityEngine_Rect : LuaObject {
 		addMember(l,Equals__Rect);
 		addMember(l,ToString);
 		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,MinMaxRect_s);
 		addMember(l,NormalizedToPoint_s);
 		addMember(l,PointToNormalized_s);

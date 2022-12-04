@@ -125,7 +125,7 @@ Mandelbrot = {
 		else
 			this.__ctor_called = true;
 		end;
-		this.colors = wrap_color_array(__cs2lua_func_info, UnityEngine.Color, TypeKind.Struct, get_unity_color_red(__cs2lua_func_info), get_unity_color_blue(__cs2lua_func_info), get_unity_color_green(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info), get_unity_color_yellow(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info));
+		this.colors = wraparray({get_unity_color_red(__cs2lua_func_info), get_unity_color_blue(__cs2lua_func_info), get_unity_color_green(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info), get_unity_color_yellow(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info)}, nil, UnityEngine.Color, TypeKind.Structure);
 	end,
 	-------------------------------
 	------ instance fields -------

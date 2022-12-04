@@ -104,6 +104,23 @@ public class Lua_UnityEngine_Physics : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetIgnoreCollision_s(IntPtr l) {
+		try {
+			UnityEngine.Collider a1;
+			checkType(l,1,out a1);
+			UnityEngine.Collider a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.Physics.GetIgnoreCollision(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Raycast__Ray_s(IntPtr l) {
 		try {
 			UnityEngine.Ray a1;
@@ -3072,6 +3089,22 @@ public class Lua_UnityEngine_Physics : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int BakeMesh_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			UnityEngine.Physics.BakeMesh(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_IgnoreRaycastLayer(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -3264,6 +3297,32 @@ public class Lua_UnityEngine_Physics : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_defaultMaxDepenetrationVelocity(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Physics.defaultMaxDepenetrationVelocity);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_defaultMaxDepenetrationVelocity(IntPtr l) {
+		try {
+			float v;
+			checkType(l,2,out v);
+			UnityEngine.Physics.defaultMaxDepenetrationVelocity=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_defaultSolverIterations(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -3307,6 +3366,58 @@ public class Lua_UnityEngine_Physics : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			UnityEngine.Physics.defaultSolverVelocityIterations=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_defaultMaxAngularSpeed(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Physics.defaultMaxAngularSpeed);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_defaultMaxAngularSpeed(IntPtr l) {
+		try {
+			float v;
+			checkType(l,2,out v);
+			UnityEngine.Physics.defaultMaxAngularSpeed=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_improvedPatchFriction(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Physics.improvedPatchFriction);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_improvedPatchFriction(IntPtr l) {
+		try {
+			bool v;
+			checkType(l,2,out v);
+			UnityEngine.Physics.improvedPatchFriction=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -3482,6 +3593,32 @@ public class Lua_UnityEngine_Physics : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_clothGravity(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Physics.clothGravity);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_clothGravity(IntPtr l) {
+		try {
+			UnityEngine.Vector3 v;
+			checkType(l,2,out v);
+			UnityEngine.Physics.clothGravity=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Physics");
@@ -3491,6 +3628,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		addMember(l,IgnoreLayerCollision__Int32__Int32_s);
 		addMember(l,IgnoreLayerCollision__Int32__Int32__Boolean_s);
 		addMember(l,GetIgnoreLayerCollision_s);
+		addMember(l,GetIgnoreCollision_s);
 		addMember(l,Raycast__Ray_s);
 		addMember(l,Raycast__Vector3__Vector3_s);
 		addMember(l,Raycast__Ray__O_RaycastHit_s);
@@ -3628,6 +3766,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		addMember(l,OverlapCapsuleNonAlloc__Vector3__Vector3__Single__A_Collider__Int32_s);
 		addMember(l,OverlapCapsuleNonAlloc__Vector3__Vector3__Single__A_Collider__Int32__QueryTriggerInteraction_s);
 		addMember(l,RebuildBroadphaseRegions_s);
+		addMember(l,BakeMesh_s);
 		addMember(l,"IgnoreRaycastLayer",get_IgnoreRaycastLayer,null,false);
 		addMember(l,"DefaultRaycastLayers",get_DefaultRaycastLayers,null,false);
 		addMember(l,"AllLayers",get_AllLayers,null,false);
@@ -3637,8 +3776,11 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		addMember(l,"queriesHitTriggers",get_queriesHitTriggers,set_queriesHitTriggers,false);
 		addMember(l,"queriesHitBackfaces",get_queriesHitBackfaces,set_queriesHitBackfaces,false);
 		addMember(l,"bounceThreshold",get_bounceThreshold,set_bounceThreshold,false);
+		addMember(l,"defaultMaxDepenetrationVelocity",get_defaultMaxDepenetrationVelocity,set_defaultMaxDepenetrationVelocity,false);
 		addMember(l,"defaultSolverIterations",get_defaultSolverIterations,set_defaultSolverIterations,false);
 		addMember(l,"defaultSolverVelocityIterations",get_defaultSolverVelocityIterations,set_defaultSolverVelocityIterations,false);
+		addMember(l,"defaultMaxAngularSpeed",get_defaultMaxAngularSpeed,set_defaultMaxAngularSpeed,false);
+		addMember(l,"improvedPatchFriction",get_improvedPatchFriction,set_improvedPatchFriction,false);
 		addMember(l,"defaultPhysicsScene",get_defaultPhysicsScene,null,false);
 		addMember(l,"autoSimulation",get_autoSimulation,set_autoSimulation,false);
 		addMember(l,"autoSyncTransforms",get_autoSyncTransforms,set_autoSyncTransforms,false);
@@ -3646,6 +3788,7 @@ public class Lua_UnityEngine_Physics : LuaObject {
 		addMember(l,"interCollisionDistance",get_interCollisionDistance,set_interCollisionDistance,false);
 		addMember(l,"interCollisionStiffness",get_interCollisionStiffness,set_interCollisionStiffness,false);
 		addMember(l,"interCollisionSettingsToggle",get_interCollisionSettingsToggle,set_interCollisionSettingsToggle,false);
+		addMember(l,"clothGravity",get_clothGravity,set_clothGravity,false);
 		createTypeMetatable(l,null, typeof(UnityEngine.Physics));
 	}
 }

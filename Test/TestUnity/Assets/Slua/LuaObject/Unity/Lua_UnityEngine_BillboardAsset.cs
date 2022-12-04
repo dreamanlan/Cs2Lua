@@ -33,37 +33,7 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetImageTexCoords__List_1_Vector4(IntPtr l) {
-		try {
-			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.Vector4> a1;
-			checkType(l,2,out a1);
-			self.GetImageTexCoords(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetImageTexCoords__List_1_Vector4(IntPtr l) {
-		try {
-			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.Vector4> a1;
-			checkType(l,2,out a1);
-			self.SetImageTexCoords(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetImageTexCoords__A_Vector4(IntPtr l) {
+	static public int SetImageTexCoords(IntPtr l) {
 		try {
 			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
 			UnityEngine.Vector4[] a1;
@@ -92,37 +62,7 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetVertices__List_1_Vector2(IntPtr l) {
-		try {
-			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.Vector2> a1;
-			checkType(l,2,out a1);
-			self.GetVertices(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetVertices__List_1_Vector2(IntPtr l) {
-		try {
-			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.Vector2> a1;
-			checkType(l,2,out a1);
-			self.SetVertices(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetVertices__A_Vector2(IntPtr l) {
+	static public int SetVertices(IntPtr l) {
 		try {
 			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
 			UnityEngine.Vector2[] a1;
@@ -151,37 +91,7 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetIndices__List_1_UInt16(IntPtr l) {
-		try {
-			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-			System.Collections.Generic.List<System.UInt16> a1;
-			checkType(l,2,out a1);
-			self.GetIndices(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetIndices__List_1_UInt16(IntPtr l) {
-		try {
-			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
-			System.Collections.Generic.List<System.UInt16> a1;
-			checkType(l,2,out a1);
-			self.SetIndices(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetIndices__A_UInt16(IntPtr l) {
+	static public int SetIndices(IntPtr l) {
 		try {
 			UnityEngine.BillboardAsset self=(UnityEngine.BillboardAsset)checkSelf(l);
 			System.UInt16[] a1;
@@ -350,17 +260,11 @@ public class Lua_UnityEngine_BillboardAsset : LuaObject {
 		getTypeTable(l,"UnityEngine.BillboardAsset");
 		addMember(l,ctor_s);
 		addMember(l,GetImageTexCoords);
-		addMember(l,GetImageTexCoords__List_1_Vector4);
-		addMember(l,SetImageTexCoords__List_1_Vector4);
-		addMember(l,SetImageTexCoords__A_Vector4);
+		addMember(l,SetImageTexCoords);
 		addMember(l,GetVertices);
-		addMember(l,GetVertices__List_1_Vector2);
-		addMember(l,SetVertices__List_1_Vector2);
-		addMember(l,SetVertices__A_Vector2);
+		addMember(l,SetVertices);
 		addMember(l,GetIndices);
-		addMember(l,GetIndices__List_1_UInt16);
-		addMember(l,SetIndices__List_1_UInt16);
-		addMember(l,SetIndices__A_UInt16);
+		addMember(l,SetIndices);
 		addMember(l,"width",get_width,set_width,true);
 		addMember(l,"height",get_height,set_height,true);
 		addMember(l,"bottom",get_bottom,set_bottom,true);

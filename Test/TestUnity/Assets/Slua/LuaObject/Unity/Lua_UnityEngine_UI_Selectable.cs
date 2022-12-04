@@ -209,10 +209,37 @@ public class Lua_UnityEngine_UI_Selectable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_allSelectables(IntPtr l) {
+	static public int AllSelectablesNoAlloc_s(IntPtr l) {
+		try {
+			UnityEngine.UI.Selectable[] a1;
+			checkArray(l,1,out a1);
+			var ret=UnityEngine.UI.Selectable.AllSelectablesNoAlloc(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_allSelectablesArray(IntPtr l) {
 		try {
 			pushValue(l,true);
-			pushValue(l,UnityEngine.UI.Selectable.allSelectables);
+			pushValue(l,UnityEngine.UI.Selectable.allSelectablesArray);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_allSelectableCount(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.UI.Selectable.allSelectableCount);
 			return 2;
 		}
 		catch(Exception e) {
@@ -473,7 +500,9 @@ public class Lua_UnityEngine_UI_Selectable : LuaObject {
 		addMember(l,OnSelect);
 		addMember(l,OnDeselect);
 		addMember(l,Select);
-		addMember(l,"allSelectables",get_allSelectables,null,false);
+		addMember(l,AllSelectablesNoAlloc_s);
+		addMember(l,"allSelectablesArray",get_allSelectablesArray,null,false);
+		addMember(l,"allSelectableCount",get_allSelectableCount,null,false);
 		addMember(l,"navigation",get_navigation,set_navigation,true);
 		addMember(l,"transition",get_transition,set_transition,true);
 		addMember(l,"colors",get_colors,set_colors,true);

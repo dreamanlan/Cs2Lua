@@ -112,11 +112,64 @@ public class Lua_UnityEngine_RectInt : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Overlaps(IntPtr l) {
+		try {
+			UnityEngine.RectInt self;
+			checkValueType(l,1,out self);
+			UnityEngine.RectInt a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Overlaps(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static new public int ToString(IntPtr l) {
 		try {
 			UnityEngine.RectInt self;
 			checkValueType(l,1,out self);
 			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String(IntPtr l) {
+		try {
+			UnityEngine.RectInt self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.RectInt self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -568,7 +621,10 @@ public class Lua_UnityEngine_RectInt : LuaObject {
 		addMember(l,SetMinMax);
 		addMember(l,ClampToBounds);
 		addMember(l,Contains);
+		addMember(l,Overlaps);
 		addMember(l,ToString);
+		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,Equals__RectInt);
 		addMember(l,Equals__Object);
 		addMember(l,"x",get_x,set_x,true);

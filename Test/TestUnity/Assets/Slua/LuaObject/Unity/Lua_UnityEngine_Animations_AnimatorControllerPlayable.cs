@@ -539,7 +539,7 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetCurrentAnimatorClipInfo__Int32(IntPtr l) {
+	static public int GetCurrentAnimatorClipInfo(IntPtr l) {
 		try {
 			UnityEngine.Animations.AnimatorControllerPlayable self;
 			checkValueType(l,1,out self);
@@ -549,61 +549,6 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetCurrentAnimatorClipInfo__Int32__List_1_AnimatorClipInfo(IntPtr l) {
-		try {
-			UnityEngine.Animations.AnimatorControllerPlayable self;
-			checkValueType(l,1,out self);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.AnimatorClipInfo> a2;
-			checkType(l,3,out a2);
-			self.GetCurrentAnimatorClipInfo(a1,a2);
-			pushValue(l,true);
-			setBack(l,(object)self);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetNextAnimatorClipInfo__Int32(IntPtr l) {
-		try {
-			UnityEngine.Animations.AnimatorControllerPlayable self;
-			checkValueType(l,1,out self);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			var ret=self.GetNextAnimatorClipInfo(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetNextAnimatorClipInfo__Int32__List_1_AnimatorClipInfo(IntPtr l) {
-		try {
-			UnityEngine.Animations.AnimatorControllerPlayable self;
-			checkValueType(l,1,out self);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.AnimatorClipInfo> a2;
-			checkType(l,3,out a2);
-			self.GetNextAnimatorClipInfo(a1,a2);
-			pushValue(l,true);
-			setBack(l,(object)self);
-			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -635,6 +580,23 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 			System.Int32 a1;
 			checkType(l,2,out a1);
 			var ret=self.GetNextAnimatorClipInfoCount(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetNextAnimatorClipInfo(IntPtr l) {
+		try {
+			UnityEngine.Animations.AnimatorControllerPlayable self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetNextAnimatorClipInfo(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -1284,12 +1246,10 @@ public class Lua_UnityEngine_Animations_AnimatorControllerPlayable : LuaObject {
 		addMember(l,GetCurrentAnimatorStateInfo);
 		addMember(l,GetNextAnimatorStateInfo);
 		addMember(l,GetAnimatorTransitionInfo);
-		addMember(l,GetCurrentAnimatorClipInfo__Int32);
-		addMember(l,GetCurrentAnimatorClipInfo__Int32__List_1_AnimatorClipInfo);
-		addMember(l,GetNextAnimatorClipInfo__Int32);
-		addMember(l,GetNextAnimatorClipInfo__Int32__List_1_AnimatorClipInfo);
+		addMember(l,GetCurrentAnimatorClipInfo);
 		addMember(l,GetCurrentAnimatorClipInfoCount);
 		addMember(l,GetNextAnimatorClipInfoCount);
+		addMember(l,GetNextAnimatorClipInfo);
 		addMember(l,IsInTransition);
 		addMember(l,GetParameterCount);
 		addMember(l,GetParameter);

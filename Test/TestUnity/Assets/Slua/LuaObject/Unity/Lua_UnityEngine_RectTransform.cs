@@ -319,6 +319,19 @@ public class Lua_UnityEngine_RectTransform : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_drivenByObject(IntPtr l) {
+		try {
+			UnityEngine.RectTransform self=(UnityEngine.RectTransform)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.drivenByObject);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RectTransform");
@@ -336,6 +349,7 @@ public class Lua_UnityEngine_RectTransform : LuaObject {
 		addMember(l,"anchoredPosition3D",get_anchoredPosition3D,set_anchoredPosition3D,true);
 		addMember(l,"offsetMin",get_offsetMin,set_offsetMin,true);
 		addMember(l,"offsetMax",get_offsetMax,set_offsetMax,true);
+		addMember(l,"drivenByObject",get_drivenByObject,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.RectTransform),typeof(UnityEngine.Transform));
 	}
 }

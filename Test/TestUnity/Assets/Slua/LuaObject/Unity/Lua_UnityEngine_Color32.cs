@@ -73,6 +73,25 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.Color32 self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Implicit__Color32__Color_s(IntPtr l) {
 		try {
 			UnityEngine.Color a1;
@@ -263,6 +282,41 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int getItem(IntPtr l) {
+		try {
+			UnityEngine.Color32 self;
+			checkValueType(l,1,out self);
+			int v;
+			checkType(l,2,out v);
+			var ret = self[v];
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int setItem(IntPtr l) {
+		try {
+			UnityEngine.Color32 self;
+			checkValueType(l,1,out self);
+			int v;
+			checkType(l,2,out v);
+			System.Byte c;
+			checkType(l,3,out c);
+			self[v]=c;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Color32");
@@ -270,10 +324,13 @@ public class Lua_UnityEngine_Color32 : LuaObject {
 		addMember(l,ctor__Byte__Byte__Byte__Byte_s);
 		addMember(l,ToString);
 		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,op_Implicit__Color32__Color_s);
 		addMember(l,op_Implicit__Color__Color32_s);
 		addMember(l,Lerp_s);
 		addMember(l,LerpUnclamped_s);
+		addMember(l,getItem);
+		addMember(l,setItem);
 		addMember(l,"r",get_r,set_r,true);
 		addMember(l,"g",get_g,set_g,true);
 		addMember(l,"b",get_b,set_b,true);

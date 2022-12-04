@@ -1,15 +1,15 @@
 __cs2lua__AllAttrs = {};
 __cs2lua__AllAttrs["Cs2LuaType"] = {
 	GetFullName = {
-		{"Cs2Dsl.TranslateToAttribute", {luaModuleName = "Cs2LuaTypeImpl", targetMethodName = "Cs2LuaTypeImpl.GetFullName"}, {}};
+		{"Cs2Dsl.TranslateToAttribute", {scriptModuleName = "Cs2LuaTypeImpl", targetMethodName = "Cs2LuaTypeImpl.GetFullName"}, {}};
 	};
 	GetName = {
-		{"Cs2Dsl.TranslateToAttribute", {luaModuleName = "Cs2LuaTypeImpl", targetMethodName = "Cs2LuaTypeImpl.GetName"}, {}};
+		{"Cs2Dsl.TranslateToAttribute", {scriptModuleName = "Cs2LuaTypeImpl", targetMethodName = "Cs2LuaTypeImpl.GetName"}, {}};
 	};
 };
 __cs2lua__AllAttrs["Program"] = {
 	Class = {
-		{"Cs2Dsl.RequireAttribute", {luaModuleNames = ""}, {}};
+		{"Cs2Dsl.RequireAttribute", {scriptModuleNames = ""}, {}};
 		{"Cs2Dsl.EntryAttribute", {}, {}};
 	};
 };

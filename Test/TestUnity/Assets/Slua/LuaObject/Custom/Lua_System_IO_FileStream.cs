@@ -542,28 +542,6 @@ public class Lua_System_IO_FileStream : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ReadAsync(IntPtr l) {
-		try {
-			System.IO.FileStream self=(System.IO.FileStream)checkSelf(l);
-			System.Byte[] a1;
-			checkArray(l,2,out a1);
-			System.Int32 a2;
-			checkType(l,3,out a2);
-			System.Int32 a3;
-			checkType(l,4,out a3);
-			System.Threading.CancellationToken a4;
-			checkValueType(l,5,out a4);
-			var ret=self.ReadAsync(a1,a2,a3,a4);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int WriteAsync(IntPtr l) {
 		try {
 			System.IO.FileStream self=(System.IO.FileStream)checkSelf(l);
@@ -734,7 +712,6 @@ public class Lua_System_IO_FileStream : LuaObject {
 		addMember(l,GetAccessControl);
 		addMember(l,SetAccessControl);
 		addMember(l,FlushAsync);
-		addMember(l,ReadAsync);
 		addMember(l,WriteAsync);
 		addMember(l,"CanRead",get_CanRead,null,true);
 		addMember(l,"CanWrite",get_CanWrite,null,true);

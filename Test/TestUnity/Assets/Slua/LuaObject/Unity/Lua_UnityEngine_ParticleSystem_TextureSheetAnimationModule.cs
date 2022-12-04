@@ -306,12 +306,12 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_useRandomRow(IntPtr l) {
+	static public int get_rowMode(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.TextureSheetAnimationModule self;
 			checkValueType(l,1,out self);
 			pushValue(l,true);
-			pushValue(l,self.useRandomRow);
+			pushEnum(l,(int)self.rowMode);
 			return 2;
 		}
 		catch(Exception e) {
@@ -320,13 +320,13 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int set_useRandomRow(IntPtr l) {
+	static public int set_rowMode(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.TextureSheetAnimationModule self;
 			checkValueType(l,1,out self);
-			bool v;
-			checkType(l,2,out v);
-			self.useRandomRow=v;
+			UnityEngine.ParticleSystemAnimationRowMode v;
+			checkEnum(l,2,out v);
+			self.rowMode=v;
 			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
@@ -612,7 +612,7 @@ public class Lua_UnityEngine_ParticleSystem_TextureSheetAnimationModule : LuaObj
 		addMember(l,"numTilesX",get_numTilesX,set_numTilesX,true);
 		addMember(l,"numTilesY",get_numTilesY,set_numTilesY,true);
 		addMember(l,"animation",get_animation,set_animation,true);
-		addMember(l,"useRandomRow",get_useRandomRow,set_useRandomRow,true);
+		addMember(l,"rowMode",get_rowMode,set_rowMode,true);
 		addMember(l,"frameOverTime",get_frameOverTime,set_frameOverTime,true);
 		addMember(l,"frameOverTimeMultiplier",get_frameOverTimeMultiplier,set_frameOverTimeMultiplier,true);
 		addMember(l,"startFrame",get_startFrame,set_startFrame,true);

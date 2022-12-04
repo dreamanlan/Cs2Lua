@@ -5,8 +5,9 @@ using System.Collections.Generic;
 public class Lua_Unity_Collections_NativeLeakDetectionMode : LuaObject {
 	static public void reg(IntPtr l) {
 		getEnumTable(l,"Unity.Collections.NativeLeakDetectionMode");
-		addMember(l,0,"Enabled");
 		addMember(l,1,"Disabled");
+		addMember(l,2,"Enabled");
+		addMember(l,3,"EnabledWithStackTrace");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

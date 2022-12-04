@@ -44,7 +44,7 @@ namespace SLua
             _gcBeforeCapture = GUILayout.Toggle(_gcBeforeCapture, new GUIContent("gc before capture"));
             _includeLuaSnapshot = GUILayout.Toggle(_includeLuaSnapshot, new GUIContent("include lua snapshot"));
             if (GUILayout.Button("Capture")) {
-                LuaSnapshot.Capture(_gcBeforeCapture, _includeLuaSnapshot ? ()=> { CsLibrary.LogicModuleProxy.ScriptProxy.EvalLua("takesnapshot()"); } : (System.Action)null);
+                LuaSnapshot.Capture(_gcBeforeCapture, _includeLuaSnapshot ? (System.Action)(()=> { }) : (System.Action)null);
             }
 
             if (GUILayout.Button("Copy")) {

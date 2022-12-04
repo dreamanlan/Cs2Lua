@@ -172,6 +172,21 @@ public class Lua_UnityEngine_Resources : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int InstanceIDToObject_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Resources.InstanceIDToObject(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Resources");
@@ -186,6 +201,7 @@ public class Lua_UnityEngine_Resources : LuaObject {
 		addMember(l,GetBuiltinResource_s);
 		addMember(l,UnloadAsset_s);
 		addMember(l,UnloadUnusedAssets_s);
+		addMember(l,InstanceIDToObject_s);
 		createTypeMetatable(l,null, typeof(UnityEngine.Resources));
 	}
 }

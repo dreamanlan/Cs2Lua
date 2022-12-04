@@ -5,6 +5,88 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_AudioSource : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int PlayOnGamepad(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.PlayOnGamepad(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DisableGamepadOutput(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			var ret=self.DisableGamepadOutput();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetGamepadSpeakerMixLevel(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			var ret=self.SetGamepadSpeakerMixLevel(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetGamepadSpeakerMixLevelDefault(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.SetGamepadSpeakerMixLevelDefault(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetGamepadSpeakerRestrictedAudio(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			var ret=self.SetGamepadSpeakerRestrictedAudio(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Play(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -54,6 +136,38 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 			System.Double a1;
 			checkType(l,2,out a1);
 			self.PlayScheduled(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayOneShot__AudioClip(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			UnityEngine.AudioClip a1;
+			checkType(l,2,out a1);
+			self.PlayOneShot(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int PlayOneShot__AudioClip__Single(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			UnityEngine.AudioClip a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			self.PlayOneShot(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -123,38 +237,6 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
 			self.UnPause();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int PlayOneShot__AudioClip(IntPtr l) {
-		try {
-			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
-			UnityEngine.AudioClip a1;
-			checkType(l,2,out a1);
-			self.PlayOneShot(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int PlayOneShot__AudioClip__Single(IntPtr l) {
-		try {
-			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
-			UnityEngine.AudioClip a1;
-			checkType(l,2,out a1);
-			System.Single a2;
-			checkType(l,3,out a2);
-			self.PlayOneShot(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -269,6 +351,24 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetAmbisonicDecoderFloat(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			var ret=self.GetAmbisonicDecoderFloat(a1,out a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a2);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetAmbisonicDecoderFloat(IntPtr l) {
 		try {
 			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
@@ -287,17 +387,14 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetAmbisonicDecoderFloat(IntPtr l) {
+	static public int GamepadSpeakerSupportsOutputType_s(IntPtr l) {
 		try {
-			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Single a2;
-			var ret=self.GetAmbisonicDecoderFloat(a1,out a2);
+			UnityEngine.GamepadSpeakerOutputType a1;
+			checkEnum(l,1,out a1);
+			var ret=UnityEngine.AudioSource.GamepadSpeakerSupportsOutputType(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
-			pushValue(l,a2);
-			return 3;
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -498,6 +595,34 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 			UnityEngine.Audio.AudioMixerGroup v;
 			checkType(l,2,out v);
 			self.outputAudioMixerGroup=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_gamepadSpeakerOutputType(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.gamepadSpeakerOutputType);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_gamepadSpeakerOutputType(IntPtr l) {
+		try {
+			UnityEngine.AudioSource self=(UnityEngine.AudioSource)checkSelf(l);
+			UnityEngine.GamepadSpeakerOutputType v;
+			checkEnum(l,2,out v);
+			self.gamepadSpeakerOutputType=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -1094,25 +1219,31 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioSource");
+		addMember(l,PlayOnGamepad);
+		addMember(l,DisableGamepadOutput);
+		addMember(l,SetGamepadSpeakerMixLevel);
+		addMember(l,SetGamepadSpeakerMixLevelDefault);
+		addMember(l,SetGamepadSpeakerRestrictedAudio);
 		addMember(l,Play);
 		addMember(l,Play__UInt64);
 		addMember(l,PlayDelayed);
 		addMember(l,PlayScheduled);
+		addMember(l,PlayOneShot__AudioClip);
+		addMember(l,PlayOneShot__AudioClip__Single);
 		addMember(l,SetScheduledStartTime);
 		addMember(l,SetScheduledEndTime);
 		addMember(l,Stop);
 		addMember(l,Pause);
 		addMember(l,UnPause);
-		addMember(l,PlayOneShot__AudioClip);
-		addMember(l,PlayOneShot__AudioClip__Single);
 		addMember(l,SetCustomCurve);
 		addMember(l,GetCustomCurve);
 		addMember(l,GetOutputData);
 		addMember(l,GetSpectrumData);
 		addMember(l,SetSpatializerFloat);
 		addMember(l,GetSpatializerFloat);
-		addMember(l,SetAmbisonicDecoderFloat);
 		addMember(l,GetAmbisonicDecoderFloat);
+		addMember(l,SetAmbisonicDecoderFloat);
+		addMember(l,GamepadSpeakerSupportsOutputType_s);
 		addMember(l,PlayClipAtPoint__AudioClip__Vector3_s);
 		addMember(l,PlayClipAtPoint__AudioClip__Vector3__Single_s);
 		addMember(l,"volume",get_volume,set_volume,true);
@@ -1121,6 +1252,7 @@ public class Lua_UnityEngine_AudioSource : LuaObject {
 		addMember(l,"timeSamples",get_timeSamples,set_timeSamples,true);
 		addMember(l,"clip",get_clip,set_clip,true);
 		addMember(l,"outputAudioMixerGroup",get_outputAudioMixerGroup,set_outputAudioMixerGroup,true);
+		addMember(l,"gamepadSpeakerOutputType",get_gamepadSpeakerOutputType,set_gamepadSpeakerOutputType,true);
 		addMember(l,"isPlaying",get_isPlaying,null,true);
 		addMember(l,"isVirtual",get_isVirtual,null,true);
 		addMember(l,"loop",get_loop,set_loop,true);

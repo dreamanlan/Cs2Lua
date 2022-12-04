@@ -33,6 +33,20 @@ public class Lua_UnityEngine_RaycastHit : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_colliderInstanceID(IntPtr l) {
+		try {
+			UnityEngine.RaycastHit self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.colliderInstanceID);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_point(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit self;
@@ -227,6 +241,20 @@ public class Lua_UnityEngine_RaycastHit : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_articulationBody(IntPtr l) {
+		try {
+			UnityEngine.RaycastHit self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.articulationBody);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_lightmapCoord(IntPtr l) {
 		try {
 			UnityEngine.RaycastHit self;
@@ -244,6 +272,7 @@ public class Lua_UnityEngine_RaycastHit : LuaObject {
 		getTypeTable(l,"UnityEngine.RaycastHit");
 		addMember(l,ctor_s);
 		addMember(l,"collider",get_collider,null,true);
+		addMember(l,"colliderInstanceID",get_colliderInstanceID,null,true);
 		addMember(l,"point",get_point,set_point,true);
 		addMember(l,"normal",get_normal,set_normal,true);
 		addMember(l,"barycentricCoordinate",get_barycentricCoordinate,set_barycentricCoordinate,true);
@@ -253,6 +282,7 @@ public class Lua_UnityEngine_RaycastHit : LuaObject {
 		addMember(l,"textureCoord2",get_textureCoord2,null,true);
 		addMember(l,"transform",get_transform,null,true);
 		addMember(l,"rigidbody",get_rigidbody,null,true);
+		addMember(l,"articulationBody",get_articulationBody,null,true);
 		addMember(l,"lightmapCoord",get_lightmapCoord,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.RaycastHit),typeof(System.ValueType));
 	}

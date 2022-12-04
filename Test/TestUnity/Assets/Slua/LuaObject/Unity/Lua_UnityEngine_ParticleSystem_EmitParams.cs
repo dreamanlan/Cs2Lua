@@ -154,6 +154,52 @@ public class Lua_UnityEngine_ParticleSystem_EmitParams : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ResetMeshIndex(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.EmitParams self;
+			checkValueType(l,1,out self);
+			self.ResetMeshIndex();
+			pushValue(l,true);
+			setBack(l,(object)self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_particle(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.EmitParams self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.particle);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_particle(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.EmitParams self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystem.Particle v;
+			checkValueType(l,2,out v);
+			self.particle=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_position(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.EmitParams self;
@@ -555,6 +601,23 @@ public class Lua_UnityEngine_ParticleSystem_EmitParams : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_meshIndex(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.EmitParams self;
+			checkValueType(l,1,out self);
+			int v;
+			checkType(l,2,out v);
+			self.meshIndex=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.EmitParams");
@@ -568,6 +631,8 @@ public class Lua_UnityEngine_ParticleSystem_EmitParams : LuaObject {
 		addMember(l,ResetStartColor);
 		addMember(l,ResetRandomSeed);
 		addMember(l,ResetStartLifetime);
+		addMember(l,ResetMeshIndex);
+		addMember(l,"particle",get_particle,set_particle,true);
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"applyShapeToPosition",get_applyShapeToPosition,set_applyShapeToPosition,true);
 		addMember(l,"velocity",get_velocity,set_velocity,true);
@@ -581,6 +646,7 @@ public class Lua_UnityEngine_ParticleSystem_EmitParams : LuaObject {
 		addMember(l,"angularVelocity3D",get_angularVelocity3D,set_angularVelocity3D,true);
 		addMember(l,"startColor",get_startColor,set_startColor,true);
 		addMember(l,"randomSeed",get_randomSeed,set_randomSeed,true);
+		addMember(l,"meshIndex",null,set_meshIndex,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.EmitParams),typeof(System.ValueType));
 	}
 }

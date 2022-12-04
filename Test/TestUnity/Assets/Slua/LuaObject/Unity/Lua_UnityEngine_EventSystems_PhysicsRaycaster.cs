@@ -5,23 +5,6 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_EventSystems_PhysicsRaycaster : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Raycast(IntPtr l) {
-		try {
-			UnityEngine.EventSystems.PhysicsRaycaster self=(UnityEngine.EventSystems.PhysicsRaycaster)checkSelf(l);
-			UnityEngine.EventSystems.PointerEventData a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult> a2;
-			checkType(l,3,out a2);
-			self.Raycast(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_eventCamera(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.PhysicsRaycaster self=(UnityEngine.EventSystems.PhysicsRaycaster)checkSelf(l);
@@ -118,7 +101,6 @@ public class Lua_UnityEngine_EventSystems_PhysicsRaycaster : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.PhysicsRaycaster");
-		addMember(l,Raycast);
 		addMember(l,"eventCamera",get_eventCamera,null,true);
 		addMember(l,"depth",get_depth,null,true);
 		addMember(l,"finalEventMask",get_finalEventMask,null,true);

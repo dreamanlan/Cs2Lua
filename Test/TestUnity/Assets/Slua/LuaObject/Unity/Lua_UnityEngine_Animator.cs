@@ -1,7 +1,7 @@
 ﻿using System;
 using SLua;
 using System.Collections.Generic;
-using UnityEngine.Experimental.Animations;
+using UnityEngine.Animations;
 [UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_Animator : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -826,7 +826,7 @@ public class Lua_UnityEngine_Animator : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetCurrentAnimatorClipInfo__Int32(IntPtr l) {
+	static public int GetCurrentAnimatorClipInfo(IntPtr l) {
 		try {
 			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
 			System.Int32 a1;
@@ -842,24 +842,7 @@ public class Lua_UnityEngine_Animator : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetCurrentAnimatorClipInfo__Int32__List_1_AnimatorClipInfo(IntPtr l) {
-		try {
-			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.AnimatorClipInfo> a2;
-			checkType(l,3,out a2);
-			self.GetCurrentAnimatorClipInfo(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetNextAnimatorClipInfo__Int32(IntPtr l) {
+	static public int GetNextAnimatorClipInfo(IntPtr l) {
 		try {
 			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
 			System.Int32 a1;
@@ -868,23 +851,6 @@ public class Lua_UnityEngine_Animator : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetNextAnimatorClipInfo__Int32__List_1_AnimatorClipInfo(IntPtr l) {
-		try {
-			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.AnimatorClipInfo> a2;
-			checkType(l,3,out a2);
-			self.GetNextAnimatorClipInfo(a1,a2);
-			pushValue(l,true);
-			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -963,6 +929,33 @@ public class Lua_UnityEngine_Animator : LuaObject {
 			System.Single a6;
 			checkType(l,7,out a6);
 			self.MatchTarget(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int MatchTarget__Vector3__Quaternion__AvatarTarget__MatchTargetWeightMask__Single__Single__Boolean(IntPtr l) {
+		try {
+			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Quaternion a2;
+			checkType(l,3,out a2);
+			UnityEngine.AvatarTarget a3;
+			checkEnum(l,4,out a3);
+			UnityEngine.MatchTargetWeightMask a4;
+			checkValueType(l,5,out a4);
+			System.Single a5;
+			checkType(l,6,out a5);
+			System.Single a6;
+			checkType(l,7,out a6);
+			System.Boolean a7;
+			checkType(l,8,out a7);
+			self.MatchTarget(a1,a2,a3,a4,a5,a6,a7);
 			pushValue(l,true);
 			return 1;
 		}
@@ -1537,21 +1530,6 @@ public class Lua_UnityEngine_Animator : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetMaxSkipNum(IntPtr l) {
-		try {
-			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			self.SetMaxSkipNum(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int SetTarget(IntPtr l) {
 		try {
 			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
@@ -1698,6 +1676,21 @@ public class Lua_UnityEngine_Animator : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int AddJobDependency(IntPtr l) {
+		try {
+			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
+			Unity.Jobs.JobHandle a2;
+			checkValueType(l,2,out a2);
+			self.AddJobDependency(a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int BindStreamTransform(IntPtr l) {
 		try {
 			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
@@ -1746,6 +1739,24 @@ public class Lua_UnityEngine_Animator : LuaObject {
 			System.Boolean a5;
 			checkType(l,5,out a5);
 			var ret=self.BindStreamProperty(a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int BindCustomStreamProperty(IntPtr l) {
+		try {
+			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
+			System.String a2;
+			checkType(l,2,out a2);
+			UnityEngine.Animations.CustomStreamPropertyType a3;
+			checkEnum(l,3,out a3);
+			var ret=self.BindCustomStreamProperty(a2,a3);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -1817,7 +1828,7 @@ public class Lua_UnityEngine_Animator : LuaObject {
 	static public int OpenAnimationStream(IntPtr l) {
 		try {
 			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
-			UnityEngine.Experimental.Animations.AnimationStream a2;
+			UnityEngine.Animations.AnimationStream a2;
 			checkValueType(l,2,out a2);
 			var ret=self.OpenAnimationStream(ref a2);
 			pushValue(l,true);
@@ -1834,7 +1845,7 @@ public class Lua_UnityEngine_Animator : LuaObject {
 	static public int CloseAnimationStream(IntPtr l) {
 		try {
 			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
-			UnityEngine.Experimental.Animations.AnimationStream a2;
+			UnityEngine.Animations.AnimationStream a2;
 			checkValueType(l,2,out a2);
 			self.CloseAnimationStream(ref a2);
 			pushValue(l,true);
@@ -1864,6 +1875,32 @@ public class Lua_UnityEngine_Animator : LuaObject {
 		try {
 			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
 			self.ResolveAllSceneHandles();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int UnbindAllStreamHandles(IntPtr l) {
+		try {
+			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
+			self.UnbindAllStreamHandles();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int UnbindAllSceneHandles(IntPtr l) {
+		try {
+			UnityEngine.Animator self=(UnityEngine.Animator)checkSelf(l);
+			self.UnbindAllSceneHandles();
 			pushValue(l,true);
 			return 1;
 		}
@@ -2782,14 +2819,13 @@ public class Lua_UnityEngine_Animator : LuaObject {
 		addMember(l,GetAnimatorTransitionInfo);
 		addMember(l,GetCurrentAnimatorClipInfoCount);
 		addMember(l,GetNextAnimatorClipInfoCount);
-		addMember(l,GetCurrentAnimatorClipInfo__Int32);
-		addMember(l,GetCurrentAnimatorClipInfo__Int32__List_1_AnimatorClipInfo);
-		addMember(l,GetNextAnimatorClipInfo__Int32);
-		addMember(l,GetNextAnimatorClipInfo__Int32__List_1_AnimatorClipInfo);
+		addMember(l,GetCurrentAnimatorClipInfo);
+		addMember(l,GetNextAnimatorClipInfo);
 		addMember(l,IsInTransition);
 		addMember(l,GetParameter);
 		addMember(l,MatchTarget__Vector3__Quaternion__AvatarTarget__MatchTargetWeightMask__Single);
 		addMember(l,MatchTarget__Vector3__Quaternion__AvatarTarget__MatchTargetWeightMask__Single__Single);
+		addMember(l,MatchTarget__Vector3__Quaternion__AvatarTarget__MatchTargetWeightMask__Single__Single__Boolean);
 		addMember(l,InterruptMatchTarget);
 		addMember(l,InterruptMatchTarget__Boolean);
 		addMember(l,CrossFadeInFixedTime__String__Single);
@@ -2821,7 +2857,6 @@ public class Lua_UnityEngine_Animator : LuaObject {
 		addMember(l,Play__Int32__Int32);
 		addMember(l,Play__String__Int32__Single);
 		addMember(l,Play__Int32__Int32__Single);
-		addMember(l,SetMaxSkipNum);
 		addMember(l,SetTarget);
 		addMember(l,GetBoneTransform);
 		addMember(l,StartPlayback);
@@ -2832,9 +2867,11 @@ public class Lua_UnityEngine_Animator : LuaObject {
 		addMember(l,Update);
 		addMember(l,Rebind);
 		addMember(l,ApplyBuiltinRootMotion);
+		addMember(l,AddJobDependency);
 		addMember(l,BindStreamTransform);
 		addMember(l,BindStreamProperty__Animator__Transform__Type__String);
 		addMember(l,BindStreamProperty__Animator__Transform__Type__String__Boolean);
+		addMember(l,BindCustomStreamProperty);
 		addMember(l,BindSceneTransform);
 		addMember(l,BindSceneProperty__Animator__Transform__Type__String);
 		addMember(l,BindSceneProperty__Animator__Transform__Type__String__Boolean);
@@ -2842,6 +2879,8 @@ public class Lua_UnityEngine_Animator : LuaObject {
 		addMember(l,CloseAnimationStream);
 		addMember(l,ResolveAllStreamHandles);
 		addMember(l,ResolveAllSceneHandles);
+		addMember(l,UnbindAllStreamHandles);
+		addMember(l,UnbindAllSceneHandles);
 		addMember(l,StringToHash_s);
 		addMember(l,"isOptimizable",get_isOptimizable,null,true);
 		addMember(l,"isHuman",get_isHuman,null,true);

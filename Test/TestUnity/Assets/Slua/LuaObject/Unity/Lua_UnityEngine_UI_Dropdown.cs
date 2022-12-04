@@ -5,55 +5,25 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetValueWithoutNotify(IntPtr l) {
+		try {
+			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.SetValueWithoutNotify(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RefreshShownValue(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
 			self.RefreshShownValue();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddOptions__List_1_OptionData(IntPtr l) {
-		try {
-			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.UI.Dropdown.OptionData> a1;
-			checkType(l,2,out a1);
-			self.AddOptions(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddOptions__List_1_String(IntPtr l) {
-		try {
-			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
-			System.Collections.Generic.List<System.String> a1;
-			checkType(l,2,out a1);
-			self.AddOptions(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddOptions__List_1_Sprite(IntPtr l) {
-		try {
-			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.Sprite> a1;
-			checkType(l,2,out a1);
-			self.AddOptions(a1);
 			pushValue(l,true);
 			return 1;
 		}
@@ -287,34 +257,6 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_options(IntPtr l) {
-		try {
-			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.options);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_options(IntPtr l) {
-		try {
-			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
-			List<UnityEngine.UI.Dropdown.OptionData> v;
-			checkType(l,2,out v);
-			self.options=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_onValueChanged(IntPtr l) {
 		try {
 			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
@@ -334,6 +276,34 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 			UnityEngine.UI.Dropdown.DropdownEvent v;
 			checkType(l,2,out v);
 			self.onValueChanged=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_alphaFadeSpeed(IntPtr l) {
+		try {
+			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.alphaFadeSpeed);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_alphaFadeSpeed(IntPtr l) {
+		try {
+			UnityEngine.UI.Dropdown self=(UnityEngine.UI.Dropdown)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.alphaFadeSpeed=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -372,10 +342,8 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Dropdown");
+		addMember(l,SetValueWithoutNotify);
 		addMember(l,RefreshShownValue);
-		addMember(l,AddOptions__List_1_OptionData);
-		addMember(l,AddOptions__List_1_String);
-		addMember(l,AddOptions__List_1_Sprite);
 		addMember(l,ClearOptions);
 		addMember(l,OnPointerClick);
 		addMember(l,OnSubmit);
@@ -387,8 +355,8 @@ public class Lua_UnityEngine_UI_Dropdown : LuaObject {
 		addMember(l,"captionImage",get_captionImage,set_captionImage,true);
 		addMember(l,"itemText",get_itemText,set_itemText,true);
 		addMember(l,"itemImage",get_itemImage,set_itemImage,true);
-		addMember(l,"options",get_options,set_options,true);
 		addMember(l,"onValueChanged",get_onValueChanged,set_onValueChanged,true);
+		addMember(l,"alphaFadeSpeed",get_alphaFadeSpeed,set_alphaFadeSpeed,true);
 		addMember(l,"value",get_value,set_value,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.UI.Dropdown),typeof(UnityEngine.UI.Selectable));
 	}

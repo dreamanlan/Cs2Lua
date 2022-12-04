@@ -57,12 +57,30 @@ public class Lua_UnityEngine_HashUtilities : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ComputeHash128_s(IntPtr l) {
+		try {
+			System.Byte[] a1;
+			checkArray(l,1,out a1);
+			UnityEngine.Hash128 a2;
+			checkValueType(l,2,out a2);
+			UnityEngine.HashUtilities.ComputeHash128(a1,ref a2);
+			pushValue(l,true);
+			pushValue(l,a2);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.HashUtilities");
 		addMember(l,AppendHash_s);
 		addMember(l,QuantisedMatrixHash_s);
 		addMember(l,QuantisedVectorHash_s);
+		addMember(l,ComputeHash128_s);
 		createTypeMetatable(l,null, typeof(UnityEngine.HashUtilities));
 	}
 }

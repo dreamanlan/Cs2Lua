@@ -51,6 +51,24 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int TryGetComponent(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			UnityEngine.Component a2;
+			var ret=self.TryGetComponent(a1,out a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a2);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetComponentInChildren__Type(IntPtr l) {
 		try {
 			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
@@ -119,12 +137,30 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponentInParent(IntPtr l) {
+	static public int GetComponentInParent__Type(IntPtr l) {
 		try {
 			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 			System.Type a1;
 			checkType(l,2,out a1);
 			var ret=self.GetComponentInParent(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetComponentInParent__Type__Boolean(IntPtr l) {
+		try {
+			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			var ret=self.GetComponentInParent(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -169,7 +205,7 @@ public class Lua_UnityEngine_Component : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponents__Type(IntPtr l) {
+	static public int GetComponents(IntPtr l) {
 		try {
 			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
 			System.Type a1;
@@ -178,23 +214,6 @@ public class Lua_UnityEngine_Component : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetComponents__Type__List_1_Component(IntPtr l) {
-		try {
-			UnityEngine.Component self=(UnityEngine.Component)checkSelf(l);
-			System.Type a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Component> a2;
-			checkType(l,3,out a2);
-			self.GetComponents(a1,a2);
-			pushValue(l,true);
-			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -480,15 +499,16 @@ public class Lua_UnityEngine_Component : LuaObject {
 		addMember(l,ctor_s);
 		addMember(l,GetComponent__Type);
 		addMember(l,GetComponent__String);
+		addMember(l,TryGetComponent);
 		addMember(l,GetComponentInChildren__Type);
 		addMember(l,GetComponentInChildren__Type__Boolean);
 		addMember(l,GetComponentsInChildren__Type);
 		addMember(l,GetComponentsInChildren__Type__Boolean);
-		addMember(l,GetComponentInParent);
+		addMember(l,GetComponentInParent__Type);
+		addMember(l,GetComponentInParent__Type__Boolean);
 		addMember(l,GetComponentsInParent__Type);
 		addMember(l,GetComponentsInParent__Type__Boolean);
-		addMember(l,GetComponents__Type);
-		addMember(l,GetComponents__Type__List_1_Component);
+		addMember(l,GetComponents);
 		addMember(l,CompareTag);
 		addMember(l,SendMessageUpwards__String);
 		addMember(l,SendMessageUpwards__String__Object);

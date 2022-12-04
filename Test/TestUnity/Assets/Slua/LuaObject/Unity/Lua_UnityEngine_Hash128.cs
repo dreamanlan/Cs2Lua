@@ -108,6 +108,57 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Append__String(IntPtr l) {
+		try {
+			UnityEngine.Hash128 self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.Append(a1);
+			pushValue(l,true);
+			setBack(l,(object)self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__Int32(IntPtr l) {
+		try {
+			UnityEngine.Hash128 self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.Append(a1);
+			pushValue(l,true);
+			setBack(l,(object)self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__Single(IntPtr l) {
+		try {
+			UnityEngine.Hash128 self;
+			checkValueType(l,1,out self);
+			System.Single a1;
+			checkType(l,2,out a1);
+			self.Append(a1);
+			pushValue(l,true);
+			setBack(l,(object)self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Equals__Object(IntPtr l) {
 		try {
 			UnityEngine.Hash128 self;
@@ -157,9 +208,39 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Compute_s(IntPtr l) {
+	static public int Compute__String_s(IntPtr l) {
 		try {
 			System.String a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Hash128.Compute(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Compute__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.Hash128.Compute(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Compute__Single_s(IntPtr l) {
+		try {
+			System.Single a1;
 			checkType(l,1,out a1);
 			var ret=UnityEngine.Hash128.Compute(a1);
 			pushValue(l,true);
@@ -261,10 +342,15 @@ public class Lua_UnityEngine_Hash128 : LuaObject {
 		addMember(l,CompareTo__Hash128);
 		addMember(l,CompareTo__Object);
 		addMember(l,ToString);
+		addMember(l,Append__String);
+		addMember(l,Append__Int32);
+		addMember(l,Append__Single);
 		addMember(l,Equals__Object);
 		addMember(l,Equals__Hash128);
 		addMember(l,Parse_s);
-		addMember(l,Compute_s);
+		addMember(l,Compute__String_s);
+		addMember(l,Compute__Int32_s);
+		addMember(l,Compute__Single_s);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,op_LessThan_s);

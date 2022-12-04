@@ -21,6 +21,22 @@ public class Lua_UnityEngine_UI_GraphicRegistry : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int RegisterRaycastGraphicForCanvas_s(IntPtr l) {
+		try {
+			UnityEngine.Canvas a1;
+			checkType(l,1,out a1);
+			UnityEngine.UI.Graphic a2;
+			checkType(l,2,out a2);
+			UnityEngine.UI.GraphicRegistry.RegisterRaycastGraphicForCanvas(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int UnregisterGraphicForCanvas_s(IntPtr l) {
 		try {
 			UnityEngine.Canvas a1;
@@ -37,14 +53,47 @@ public class Lua_UnityEngine_UI_GraphicRegistry : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetGraphicsForCanvas_s(IntPtr l) {
+	static public int UnregisterRaycastGraphicForCanvas_s(IntPtr l) {
 		try {
 			UnityEngine.Canvas a1;
 			checkType(l,1,out a1);
-			var ret=UnityEngine.UI.GraphicRegistry.GetGraphicsForCanvas(a1);
+			UnityEngine.UI.Graphic a2;
+			checkType(l,2,out a2);
+			UnityEngine.UI.GraphicRegistry.UnregisterRaycastGraphicForCanvas(a1,a2);
 			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DisableGraphicForCanvas_s(IntPtr l) {
+		try {
+			UnityEngine.Canvas a1;
+			checkType(l,1,out a1);
+			UnityEngine.UI.Graphic a2;
+			checkType(l,2,out a2);
+			UnityEngine.UI.GraphicRegistry.DisableGraphicForCanvas(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DisableRaycastGraphicForCanvas_s(IntPtr l) {
+		try {
+			UnityEngine.Canvas a1;
+			checkType(l,1,out a1);
+			UnityEngine.UI.Graphic a2;
+			checkType(l,2,out a2);
+			UnityEngine.UI.GraphicRegistry.DisableRaycastGraphicForCanvas(a1,a2);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -66,8 +115,11 @@ public class Lua_UnityEngine_UI_GraphicRegistry : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.GraphicRegistry");
 		addMember(l,RegisterGraphicForCanvas_s);
+		addMember(l,RegisterRaycastGraphicForCanvas_s);
 		addMember(l,UnregisterGraphicForCanvas_s);
-		addMember(l,GetGraphicsForCanvas_s);
+		addMember(l,UnregisterRaycastGraphicForCanvas_s);
+		addMember(l,DisableGraphicForCanvas_s);
+		addMember(l,DisableRaycastGraphicForCanvas_s);
 		addMember(l,"instance",get_instance,null,false);
 		createTypeMetatable(l,null, typeof(UnityEngine.UI.GraphicRegistry));
 	}

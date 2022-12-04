@@ -100,11 +100,37 @@ public class Lua_UnityEngine_Profiling_Recorder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_gpuElapsedNanoseconds(IntPtr l) {
+		try {
+			UnityEngine.Profiling.Recorder self=(UnityEngine.Profiling.Recorder)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.gpuElapsedNanoseconds);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sampleBlockCount(IntPtr l) {
 		try {
 			UnityEngine.Profiling.Recorder self=(UnityEngine.Profiling.Recorder)checkSelf(l);
 			pushValue(l,true);
 			pushValue(l,self.sampleBlockCount);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_gpuSampleBlockCount(IntPtr l) {
+		try {
+			UnityEngine.Profiling.Recorder self=(UnityEngine.Profiling.Recorder)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.gpuSampleBlockCount);
 			return 2;
 		}
 		catch(Exception e) {
@@ -120,7 +146,9 @@ public class Lua_UnityEngine_Profiling_Recorder : LuaObject {
 		addMember(l,"isValid",get_isValid,null,true);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"elapsedNanoseconds",get_elapsedNanoseconds,null,true);
+		addMember(l,"gpuElapsedNanoseconds",get_gpuElapsedNanoseconds,null,true);
 		addMember(l,"sampleBlockCount",get_sampleBlockCount,null,true);
+		addMember(l,"gpuSampleBlockCount",get_gpuSampleBlockCount,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Profiling.Recorder));
 	}
 }

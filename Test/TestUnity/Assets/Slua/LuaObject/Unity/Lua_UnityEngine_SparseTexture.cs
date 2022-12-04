@@ -5,6 +5,28 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_SparseTexture : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__DefaultFormat__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.SparseTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Experimental.Rendering.DefaultFormat a3;
+			checkEnum(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			o=new UnityEngine.SparseTexture(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ctor__Int32__Int32__GraphicsFormat__Int32_s(IntPtr l) {
 		try {
 			UnityEngine.SparseTexture o;
@@ -174,6 +196,7 @@ public class Lua_UnityEngine_SparseTexture : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SparseTexture");
+		addMember(l,ctor__Int32__Int32__DefaultFormat__Int32_s);
 		addMember(l,ctor__Int32__Int32__GraphicsFormat__Int32_s);
 		addMember(l,ctor__Int32__Int32__TextureFormat__Int32_s);
 		addMember(l,ctor__Int32__Int32__TextureFormat__Int32__Boolean_s);

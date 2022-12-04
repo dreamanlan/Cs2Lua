@@ -5,6 +5,30 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Texture3D : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__DefaultFormat__TextureCreationFlags_s(IntPtr l) {
+		try {
+			UnityEngine.Texture3D o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.DefaultFormat a4;
+			checkEnum(l,4,out a4);
+			UnityEngine.Experimental.Rendering.TextureCreationFlags a5;
+			checkEnum(l,5,out a5);
+			o=new UnityEngine.Texture3D(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ctor__Int32__Int32__Int32__GraphicsFormat__TextureCreationFlags_s(IntPtr l) {
 		try {
 			UnityEngine.Texture3D o;
@@ -18,6 +42,30 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 			checkEnum(l,4,out a4);
 			UnityEngine.Experimental.Rendering.TextureCreationFlags a5;
 			checkEnum(l,5,out a5);
+			o=new UnityEngine.Texture3D(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__TextureFormat__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.Texture3D o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.TextureFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
 			o=new UnityEngine.Texture3D(a1,a2,a3,a4,a5);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -46,6 +94,99 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 			pushValue(l,true);
 			pushValue(l,o);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__GraphicsFormat__TextureCreationFlags__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.Texture3D o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			UnityEngine.Experimental.Rendering.TextureCreationFlags a5;
+			checkEnum(l,5,out a5);
+			System.Int32 a6;
+			checkType(l,6,out a6);
+			o=new UnityEngine.Texture3D(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__TextureFormat__Int32__IntPtr_s(IntPtr l) {
+		try {
+			UnityEngine.Texture3D o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.TextureFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			System.IntPtr a6;
+			checkType(l,6,out a6);
+			o=new UnityEngine.Texture3D(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__TextureFormat__Boolean__IntPtr_s(IntPtr l) {
+		try {
+			UnityEngine.Texture3D o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.TextureFormat a4;
+			checkEnum(l,4,out a4);
+			System.Boolean a5;
+			checkType(l,5,out a5);
+			System.IntPtr a6;
+			checkType(l,6,out a6);
+			o=new UnityEngine.Texture3D(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int UpdateExternalTexture(IntPtr l) {
+		try {
+			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
+			System.IntPtr a1;
+			checkType(l,2,out a1);
+			self.UpdateExternalTexture(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -222,6 +363,159 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetPixel__Int32__Int32__Int32__Color(IntPtr l) {
+		try {
+			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			UnityEngine.Color a4;
+			checkType(l,5,out a4);
+			self.SetPixel(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetPixel__Int32__Int32__Int32__Color__Int32(IntPtr l) {
+		try {
+			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			UnityEngine.Color a4;
+			checkType(l,5,out a4);
+			System.Int32 a5;
+			checkType(l,6,out a5);
+			self.SetPixel(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPixel__Int32__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetPixel(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPixel__Int32__Int32__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Int32 a4;
+			checkType(l,5,out a4);
+			var ret=self.GetPixel(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPixelBilinear__Single__Single__Single(IntPtr l) {
+		try {
+			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Single a3;
+			checkType(l,4,out a3);
+			var ret=self.GetPixelBilinear(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPixelBilinear__Single__Single__Single__Int32(IntPtr l) {
+		try {
+			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			System.Single a2;
+			checkType(l,3,out a2);
+			System.Single a3;
+			checkType(l,4,out a3);
+			System.Int32 a4;
+			checkType(l,5,out a4);
+			var ret=self.GetPixelBilinear(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int CreateExternalTexture_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.TextureFormat a4;
+			checkEnum(l,4,out a4);
+			System.Boolean a5;
+			checkType(l,5,out a5);
+			System.IntPtr a6;
+			checkType(l,6,out a6);
+			var ret=UnityEngine.Texture3D.CreateExternalTexture(a1,a2,a3,a4,a5,a6);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_depth(IntPtr l) {
 		try {
 			UnityEngine.Texture3D self=(UnityEngine.Texture3D)checkSelf(l);
@@ -262,8 +556,14 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Texture3D");
+		addMember(l,ctor__Int32__Int32__Int32__DefaultFormat__TextureCreationFlags_s);
 		addMember(l,ctor__Int32__Int32__Int32__GraphicsFormat__TextureCreationFlags_s);
+		addMember(l,ctor__Int32__Int32__Int32__TextureFormat__Int32_s);
 		addMember(l,ctor__Int32__Int32__Int32__TextureFormat__Boolean_s);
+		addMember(l,ctor__Int32__Int32__Int32__GraphicsFormat__TextureCreationFlags__Int32_s);
+		addMember(l,ctor__Int32__Int32__Int32__TextureFormat__Int32__IntPtr_s);
+		addMember(l,ctor__Int32__Int32__Int32__TextureFormat__Boolean__IntPtr_s);
+		addMember(l,UpdateExternalTexture);
 		addMember(l,GetPixels);
 		addMember(l,GetPixels__Int32);
 		addMember(l,GetPixels32);
@@ -275,6 +575,13 @@ public class Lua_UnityEngine_Texture3D : LuaObject {
 		addMember(l,Apply);
 		addMember(l,Apply__Boolean);
 		addMember(l,Apply__Boolean__Boolean);
+		addMember(l,SetPixel__Int32__Int32__Int32__Color);
+		addMember(l,SetPixel__Int32__Int32__Int32__Color__Int32);
+		addMember(l,GetPixel__Int32__Int32__Int32);
+		addMember(l,GetPixel__Int32__Int32__Int32__Int32);
+		addMember(l,GetPixelBilinear__Single__Single__Single);
+		addMember(l,GetPixelBilinear__Single__Single__Single__Int32);
+		addMember(l,CreateExternalTexture_s);
 		addMember(l,"depth",get_depth,null,true);
 		addMember(l,"format",get_format,null,true);
 		addMember(l,"isReadable",get_isReadable,null,true);

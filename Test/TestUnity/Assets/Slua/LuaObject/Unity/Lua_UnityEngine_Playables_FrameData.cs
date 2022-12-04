@@ -75,20 +75,6 @@ public class Lua_UnityEngine_Playables_FrameData : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_effectiveParentDelay(IntPtr l) {
-		try {
-			UnityEngine.Playables.FrameData self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.effectiveParentDelay);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_effectiveParentSpeed(IntPtr l) {
 		try {
 			UnityEngine.Playables.FrameData self;
@@ -207,7 +193,6 @@ public class Lua_UnityEngine_Playables_FrameData : LuaObject {
 		addMember(l,"deltaTime",get_deltaTime,null,true);
 		addMember(l,"weight",get_weight,null,true);
 		addMember(l,"effectiveWeight",get_effectiveWeight,null,true);
-		addMember(l,"effectiveParentDelay",get_effectiveParentDelay,null,true);
 		addMember(l,"effectiveParentSpeed",get_effectiveParentSpeed,null,true);
 		addMember(l,"effectiveSpeed",get_effectiveSpeed,null,true);
 		addMember(l,"evaluationType",get_evaluationType,null,true);

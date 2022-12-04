@@ -95,6 +95,24 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int MoveMainWindowTo_s(IntPtr l) {
+		try {
+			UnityEngine.DisplayInfo a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Vector2Int a2;
+			checkValueType(l,2,out a2);
+			var ret=UnityEngine.Screen.MoveMainWindowTo(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a1);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_width(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -131,10 +149,10 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_orientation(IntPtr l) {
+	static public int get_currentResolution(IntPtr l) {
 		try {
 			pushValue(l,true);
-			pushEnum(l,(int)UnityEngine.Screen.orientation);
+			pushValue(l,UnityEngine.Screen.currentResolution);
 			return 2;
 		}
 		catch(Exception e) {
@@ -143,24 +161,10 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int set_orientation(IntPtr l) {
-		try {
-			UnityEngine.ScreenOrientation v;
-			checkEnum(l,2,out v);
-			UnityEngine.Screen.orientation=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_sleepTimeout(IntPtr l) {
+	static public int get_resolutions(IntPtr l) {
 		try {
 			pushValue(l,true);
-			pushValue(l,UnityEngine.Screen.sleepTimeout);
+			pushValue(l,UnityEngine.Screen.resolutions);
 			return 2;
 		}
 		catch(Exception e) {
@@ -169,13 +173,75 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int set_sleepTimeout(IntPtr l) {
+	static public int get_fullScreen(IntPtr l) {
 		try {
-			int v;
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Screen.fullScreen);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_fullScreen(IntPtr l) {
+		try {
+			bool v;
 			checkType(l,2,out v);
-			UnityEngine.Screen.sleepTimeout=v;
+			UnityEngine.Screen.fullScreen=v;
 			pushValue(l,true);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_fullScreenMode(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushEnum(l,(int)UnityEngine.Screen.fullScreenMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_fullScreenMode(IntPtr l) {
+		try {
+			UnityEngine.FullScreenMode v;
+			checkEnum(l,2,out v);
+			UnityEngine.Screen.fullScreenMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_safeArea(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Screen.safeArea);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_cutouts(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Screen.cutouts);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -287,10 +353,10 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_currentResolution(IntPtr l) {
+	static public int get_orientation(IntPtr l) {
 		try {
 			pushValue(l,true);
-			pushValue(l,UnityEngine.Screen.currentResolution);
+			pushEnum(l,(int)UnityEngine.Screen.orientation);
 			return 2;
 		}
 		catch(Exception e) {
@@ -299,49 +365,11 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_fullScreen(IntPtr l) {
+	static public int set_orientation(IntPtr l) {
 		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Screen.fullScreen);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_fullScreen(IntPtr l) {
-		try {
-			bool v;
-			checkType(l,2,out v);
-			UnityEngine.Screen.fullScreen=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_fullScreenMode(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushEnum(l,(int)UnityEngine.Screen.fullScreenMode);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_fullScreenMode(IntPtr l) {
-		try {
-			UnityEngine.FullScreenMode v;
+			UnityEngine.ScreenOrientation v;
 			checkEnum(l,2,out v);
-			UnityEngine.Screen.fullScreenMode=v;
+			UnityEngine.Screen.orientation=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -351,10 +379,10 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_safeArea(IntPtr l) {
+	static public int get_sleepTimeout(IntPtr l) {
 		try {
 			pushValue(l,true);
-			pushValue(l,UnityEngine.Screen.safeArea);
+			pushValue(l,UnityEngine.Screen.sleepTimeout);
 			return 2;
 		}
 		catch(Exception e) {
@@ -363,10 +391,62 @@ public class Lua_UnityEngine_Screen : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_resolutions(IntPtr l) {
+	static public int set_sleepTimeout(IntPtr l) {
+		try {
+			int v;
+			checkType(l,2,out v);
+			UnityEngine.Screen.sleepTimeout=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_brightness(IntPtr l) {
 		try {
 			pushValue(l,true);
-			pushValue(l,UnityEngine.Screen.resolutions);
+			pushValue(l,UnityEngine.Screen.brightness);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_brightness(IntPtr l) {
+		try {
+			float v;
+			checkType(l,2,out v);
+			UnityEngine.Screen.brightness=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_mainWindowPosition(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Screen.mainWindowPosition);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_mainWindowDisplayInfo(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Screen.mainWindowDisplayInfo);
 			return 2;
 		}
 		catch(Exception e) {
@@ -381,20 +461,25 @@ public class Lua_UnityEngine_Screen : LuaObject {
 		addMember(l,SetResolution__Int32__Int32__Boolean_s);
 		addMember(l,SetResolution__Int32__Int32__FullScreenMode__Int32_s);
 		addMember(l,SetResolution__Int32__Int32__Boolean__Int32_s);
+		addMember(l,MoveMainWindowTo_s);
 		addMember(l,"width",get_width,null,false);
 		addMember(l,"height",get_height,null,false);
 		addMember(l,"dpi",get_dpi,null,false);
-		addMember(l,"orientation",get_orientation,set_orientation,false);
-		addMember(l,"sleepTimeout",get_sleepTimeout,set_sleepTimeout,false);
+		addMember(l,"currentResolution",get_currentResolution,null,false);
+		addMember(l,"resolutions",get_resolutions,null,false);
+		addMember(l,"fullScreen",get_fullScreen,set_fullScreen,false);
+		addMember(l,"fullScreenMode",get_fullScreenMode,set_fullScreenMode,false);
+		addMember(l,"safeArea",get_safeArea,null,false);
+		addMember(l,"cutouts",get_cutouts,null,false);
 		addMember(l,"autorotateToPortrait",get_autorotateToPortrait,set_autorotateToPortrait,false);
 		addMember(l,"autorotateToPortraitUpsideDown",get_autorotateToPortraitUpsideDown,set_autorotateToPortraitUpsideDown,false);
 		addMember(l,"autorotateToLandscapeLeft",get_autorotateToLandscapeLeft,set_autorotateToLandscapeLeft,false);
 		addMember(l,"autorotateToLandscapeRight",get_autorotateToLandscapeRight,set_autorotateToLandscapeRight,false);
-		addMember(l,"currentResolution",get_currentResolution,null,false);
-		addMember(l,"fullScreen",get_fullScreen,set_fullScreen,false);
-		addMember(l,"fullScreenMode",get_fullScreenMode,set_fullScreenMode,false);
-		addMember(l,"safeArea",get_safeArea,null,false);
-		addMember(l,"resolutions",get_resolutions,null,false);
+		addMember(l,"orientation",get_orientation,set_orientation,false);
+		addMember(l,"sleepTimeout",get_sleepTimeout,set_sleepTimeout,false);
+		addMember(l,"brightness",get_brightness,set_brightness,false);
+		addMember(l,"mainWindowPosition",get_mainWindowPosition,null,false);
+		addMember(l,"mainWindowDisplayInfo",get_mainWindowDisplayInfo,null,false);
 		createTypeMetatable(l,null, typeof(UnityEngine.Screen));
 	}
 }

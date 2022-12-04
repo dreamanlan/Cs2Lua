@@ -7,6 +7,7 @@ public class Lua_UnityEngine_Scripting_GarbageCollector_Mode : LuaObject {
 		getEnumTable(l,"UnityEngine.Scripting.GarbageCollector.Mode");
 		addMember(l,0,"Disabled");
 		addMember(l,1,"Enabled");
+		addMember(l,2,"Manual");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

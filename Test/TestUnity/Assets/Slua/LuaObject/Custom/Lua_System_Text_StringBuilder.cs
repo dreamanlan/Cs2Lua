@@ -187,6 +187,150 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Append__Decimal(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Decimal a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Append(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__Int64(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Int64 a1;
+			checkType(l,2,out a1);
+			var ret=self.Append(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__Int16(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Int16 a1;
+			checkType(l,2,out a1);
+			var ret=self.Append(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__Byte(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Byte a1;
+			checkType(l,2,out a1);
+			var ret=self.Append(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__UInt16(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.UInt16 a1;
+			checkType(l,2,out a1);
+			var ret=self.Append(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__SByte(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.SByte a1;
+			checkType(l,2,out a1);
+			var ret=self.Append(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__Boolean(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			var ret=self.Append(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__UInt64(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.UInt64 a1;
+			checkType(l,2,out a1);
+			var ret=self.Append(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Append__StringBuilder(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Text.StringBuilder a1;
+			checkType(l,2,out a1);
+			var ret=self.Append(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Append__Object(IntPtr l) {
 		try {
 			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
@@ -219,102 +363,6 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Append__UInt64(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.UInt64 a1;
-			checkType(l,2,out a1);
-			var ret=self.Append(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Append__Boolean(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Boolean a1;
-			checkType(l,2,out a1);
-			var ret=self.Append(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Append__SByte(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.SByte a1;
-			checkType(l,2,out a1);
-			var ret=self.Append(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Append__Byte(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Byte a1;
-			checkType(l,2,out a1);
-			var ret=self.Append(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Append__Char(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Char a1;
-			checkType(l,2,out a1);
-			var ret=self.Append(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Append__Int16(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Int16 a1;
-			checkType(l,2,out a1);
-			var ret=self.Append(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int Append__A_Char(IntPtr l) {
 		try {
 			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
@@ -331,42 +379,10 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Append__Int64(IntPtr l) {
+	static public int Append__Char(IntPtr l) {
 		try {
 			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Int64 a1;
-			checkType(l,2,out a1);
-			var ret=self.Append(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Append__Decimal(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Decimal a1;
-			checkValueType(l,2,out a1);
-			var ret=self.Append(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Append__UInt16(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.UInt16 a1;
+			System.Char a1;
 			checkType(l,2,out a1);
 			var ret=self.Append(a1);
 			pushValue(l,true);
@@ -485,6 +501,26 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Append__StringBuilder__Int32__Int32(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Text.StringBuilder a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.Append(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AppendLine(IntPtr l) {
 		try {
 			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
@@ -536,139 +572,13 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__Object(IntPtr l) {
+	static public int Insert__Int32__Int32(IntPtr l) {
 		try {
 			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
 			System.Int32 a1;
 			checkType(l,2,out a1);
-			System.Object a2;
+			System.Int32 a2;
 			checkType(l,3,out a2);
-			var ret=self.Insert(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__String(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.String a2;
-			checkType(l,3,out a2);
-			var ret=self.Insert(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__Boolean(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Boolean a2;
-			checkType(l,3,out a2);
-			var ret=self.Insert(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__SByte(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.SByte a2;
-			checkType(l,3,out a2);
-			var ret=self.Insert(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__Byte(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Byte a2;
-			checkType(l,3,out a2);
-			var ret=self.Insert(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__Int16(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Int16 a2;
-			checkType(l,3,out a2);
-			var ret=self.Insert(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__Char(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Char a2;
-			checkType(l,3,out a2);
-			var ret=self.Insert(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__A_Char(IntPtr l) {
-		try {
-			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Char[] a2;
-			checkArray(l,3,out a2);
 			var ret=self.Insert(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
@@ -698,12 +608,12 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__Int32(IntPtr l) {
+	static public int Insert__Int32__UInt32(IntPtr l) {
 		try {
 			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
 			System.Int32 a1;
 			checkType(l,2,out a1);
-			System.Int32 a2;
+			System.UInt32 a2;
 			checkType(l,3,out a2);
 			var ret=self.Insert(a1,a2);
 			pushValue(l,true);
@@ -716,12 +626,12 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__Int64(IntPtr l) {
+	static public int Insert__Int32__UInt16(IntPtr l) {
 		try {
 			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
 			System.Int32 a1;
 			checkType(l,2,out a1);
-			System.Int64 a2;
+			System.UInt16 a2;
 			checkType(l,3,out a2);
 			var ret=self.Insert(a1,a2);
 			pushValue(l,true);
@@ -752,12 +662,12 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__UInt16(IntPtr l) {
+	static public int Insert__Int32__Int64(IntPtr l) {
 		try {
 			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
 			System.Int32 a1;
 			checkType(l,2,out a1);
-			System.UInt16 a2;
+			System.Int64 a2;
 			checkType(l,3,out a2);
 			var ret=self.Insert(a1,a2);
 			pushValue(l,true);
@@ -770,13 +680,139 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Insert__Int32__UInt32(IntPtr l) {
+	static public int Insert__Int32__Object(IntPtr l) {
 		try {
 			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
 			System.Int32 a1;
 			checkType(l,2,out a1);
-			System.UInt32 a2;
+			System.Object a2;
 			checkType(l,3,out a2);
+			var ret=self.Insert(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Insert__Int32__Char(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Char a2;
+			checkType(l,3,out a2);
+			var ret=self.Insert(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Insert__Int32__Int16(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int16 a2;
+			checkType(l,3,out a2);
+			var ret=self.Insert(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Insert__Int32__Byte(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Byte a2;
+			checkType(l,3,out a2);
+			var ret=self.Insert(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Insert__Int32__SByte(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.SByte a2;
+			checkType(l,3,out a2);
+			var ret=self.Insert(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Insert__Int32__Boolean(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			var ret=self.Insert(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Insert__Int32__String(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.String a2;
+			checkType(l,3,out a2);
+			var ret=self.Insert(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Insert__Int32__A_Char(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Char[] a2;
+			checkArray(l,3,out a2);
 			var ret=self.Insert(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
@@ -874,6 +910,78 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 			System.Int32 a2;
 			checkType(l,3,out a2);
 			var ret=self.Remove(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AppendJoin__String__A_Object(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Object[] a2;
+			checkParams(l,3,out a2);
+			var ret=self.AppendJoin(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AppendJoin__String__A_String(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.String[] a2;
+			checkParams(l,3,out a2);
+			var ret=self.AppendJoin(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AppendJoin__Char__A_Object(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Char a1;
+			checkType(l,2,out a1);
+			System.Object[] a2;
+			checkParams(l,3,out a2);
+			var ret=self.AppendJoin(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AppendJoin__Char__A_String(IntPtr l) {
+		try {
+			System.Text.StringBuilder self=(System.Text.StringBuilder)checkSelf(l);
+			System.Char a1;
+			checkType(l,2,out a1);
+			System.String[] a2;
+			checkParams(l,3,out a2);
+			var ret=self.AppendJoin(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -1274,46 +1382,52 @@ public class Lua_System_Text_StringBuilder : LuaObject {
 		addMember(l,ToString__Int32__Int32);
 		addMember(l,Clear);
 		addMember(l,Append__Int32);
+		addMember(l,Append__Decimal);
+		addMember(l,Append__Int64);
+		addMember(l,Append__Int16);
+		addMember(l,Append__Byte);
+		addMember(l,Append__UInt16);
+		addMember(l,Append__SByte);
+		addMember(l,Append__Boolean);
+		addMember(l,Append__UInt64);
+		addMember(l,Append__StringBuilder);
 		addMember(l,Append__Object);
 		addMember(l,Append__String);
-		addMember(l,Append__UInt64);
-		addMember(l,Append__Boolean);
-		addMember(l,Append__SByte);
-		addMember(l,Append__Byte);
-		addMember(l,Append__Char);
-		addMember(l,Append__Int16);
 		addMember(l,Append__A_Char);
-		addMember(l,Append__Int64);
-		addMember(l,Append__Decimal);
-		addMember(l,Append__UInt16);
+		addMember(l,Append__Char);
 		addMember(l,Append__UInt32);
 		addMember(l,Append__Single);
 		addMember(l,Append__Double);
 		addMember(l,Append__Char__Int32);
 		addMember(l,Append__String__Int32__Int32);
 		addMember(l,Append__A_Char__Int32__Int32);
+		addMember(l,Append__StringBuilder__Int32__Int32);
 		addMember(l,AppendLine);
 		addMember(l,AppendLine__String);
 		addMember(l,CopyTo);
-		addMember(l,Insert__Int32__Object);
-		addMember(l,Insert__Int32__String);
-		addMember(l,Insert__Int32__Boolean);
-		addMember(l,Insert__Int32__SByte);
-		addMember(l,Insert__Int32__Byte);
-		addMember(l,Insert__Int32__Int16);
-		addMember(l,Insert__Int32__Char);
-		addMember(l,Insert__Int32__A_Char);
-		addMember(l,Insert__Int32__UInt64);
 		addMember(l,Insert__Int32__Int32);
-		addMember(l,Insert__Int32__Int64);
-		addMember(l,Insert__Int32__Decimal);
-		addMember(l,Insert__Int32__UInt16);
+		addMember(l,Insert__Int32__UInt64);
 		addMember(l,Insert__Int32__UInt32);
+		addMember(l,Insert__Int32__UInt16);
+		addMember(l,Insert__Int32__Decimal);
+		addMember(l,Insert__Int32__Int64);
+		addMember(l,Insert__Int32__Object);
+		addMember(l,Insert__Int32__Char);
+		addMember(l,Insert__Int32__Int16);
+		addMember(l,Insert__Int32__Byte);
+		addMember(l,Insert__Int32__SByte);
+		addMember(l,Insert__Int32__Boolean);
+		addMember(l,Insert__Int32__String);
+		addMember(l,Insert__Int32__A_Char);
 		addMember(l,Insert__Int32__Single);
 		addMember(l,Insert__Int32__Double);
 		addMember(l,Insert__Int32__String__Int32);
 		addMember(l,Insert__Int32__A_Char__Int32__Int32);
 		addMember(l,Remove);
+		addMember(l,AppendJoin__String__A_Object);
+		addMember(l,AppendJoin__String__A_String);
+		addMember(l,AppendJoin__Char__A_Object);
+		addMember(l,AppendJoin__Char__A_String);
 		addMember(l,AppendFormat__String__Object);
 		addMember(l,AppendFormat__String__A_Object);
 		addMember(l,AppendFormat__String__Object__Object);

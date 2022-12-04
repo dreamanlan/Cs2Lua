@@ -59,80 +59,6 @@ public class Lua_System_Text_RegularExpressions_Regex : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static new public int ToString(IntPtr l) {
-		try {
-			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
-			var ret=self.ToString();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetGroupNames(IntPtr l) {
-		try {
-			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
-			var ret=self.GetGroupNames();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetGroupNumbers(IntPtr l) {
-		try {
-			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
-			var ret=self.GetGroupNumbers();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GroupNameFromNumber(IntPtr l) {
-		try {
-			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			var ret=self.GroupNameFromNumber(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GroupNumberFromName(IntPtr l) {
-		try {
-			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			var ret=self.GroupNumberFromName(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int IsMatch__String(IntPtr l) {
 		try {
 			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
@@ -429,11 +355,10 @@ public class Lua_System_Text_RegularExpressions_Regex : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Escape_s(IntPtr l) {
+	static new public int ToString(IntPtr l) {
 		try {
-			System.String a1;
-			checkType(l,1,out a1);
-			var ret=System.Text.RegularExpressions.Regex.Escape(a1);
+			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
+			var ret=self.ToString();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -444,11 +369,56 @@ public class Lua_System_Text_RegularExpressions_Regex : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Unescape_s(IntPtr l) {
+	static public int GetGroupNames(IntPtr l) {
 		try {
+			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
+			var ret=self.GetGroupNames();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetGroupNumbers(IntPtr l) {
+		try {
+			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
+			var ret=self.GetGroupNumbers();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GroupNameFromNumber(IntPtr l) {
+		try {
+			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GroupNameFromNumber(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GroupNumberFromName(IntPtr l) {
+		try {
+			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
 			System.String a1;
-			checkType(l,1,out a1);
-			var ret=System.Text.RegularExpressions.Regex.Unescape(a1);
+			checkType(l,2,out a1);
+			var ret=self.GroupNumberFromName(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -867,6 +837,36 @@ public class Lua_System_Text_RegularExpressions_Regex : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Escape_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.Text.RegularExpressions.Regex.Escape(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Unescape_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.Text.RegularExpressions.Regex.Unescape(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_InfiniteMatchTimeout(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -905,11 +905,11 @@ public class Lua_System_Text_RegularExpressions_Regex : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_Options(IntPtr l) {
+	static public int get_MatchTimeout(IntPtr l) {
 		try {
 			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
 			pushValue(l,true);
-			pushEnum(l,(int)self.Options);
+			pushValue(l,self.MatchTimeout);
 			return 2;
 		}
 		catch(Exception e) {
@@ -918,11 +918,11 @@ public class Lua_System_Text_RegularExpressions_Regex : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_MatchTimeout(IntPtr l) {
+	static public int get_Options(IntPtr l) {
 		try {
 			System.Text.RegularExpressions.Regex self=(System.Text.RegularExpressions.Regex)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.MatchTimeout);
+			pushEnum(l,(int)self.Options);
 			return 2;
 		}
 		catch(Exception e) {
@@ -948,11 +948,6 @@ public class Lua_System_Text_RegularExpressions_Regex : LuaObject {
 		addMember(l,ctor__String_s);
 		addMember(l,ctor__String__RegexOptions_s);
 		addMember(l,ctor__String__RegexOptions__TimeSpan_s);
-		addMember(l,ToString);
-		addMember(l,GetGroupNames);
-		addMember(l,GetGroupNumbers);
-		addMember(l,GroupNameFromNumber);
-		addMember(l,GroupNumberFromName);
 		addMember(l,IsMatch__String);
 		addMember(l,IsMatch__String__Int32);
 		addMember(l,Match__String);
@@ -969,8 +964,11 @@ public class Lua_System_Text_RegularExpressions_Regex : LuaObject {
 		addMember(l,Split__String);
 		addMember(l,Split__String__Int32);
 		addMember(l,Split__String__Int32__Int32);
-		addMember(l,Escape_s);
-		addMember(l,Unescape_s);
+		addMember(l,ToString);
+		addMember(l,GetGroupNames);
+		addMember(l,GetGroupNumbers);
+		addMember(l,GroupNameFromNumber);
+		addMember(l,GroupNumberFromName);
 		addMember(l,IsMatch__String__String_s);
 		addMember(l,IsMatch__String__String__RegexOptions_s);
 		addMember(l,IsMatch__String__String__RegexOptions__TimeSpan_s);
@@ -992,10 +990,12 @@ public class Lua_System_Text_RegularExpressions_Regex : LuaObject {
 		addMember(l,CompileToAssembly__A_RegexCompilationInfo__AssemblyName_s);
 		addMember(l,CompileToAssembly__A_RegexCompilationInfo__AssemblyName__A_CustomAttributeBuilder_s);
 		addMember(l,CompileToAssembly__A_RegexCompilationInfo__AssemblyName__A_CustomAttributeBuilder__String_s);
+		addMember(l,Escape_s);
+		addMember(l,Unescape_s);
 		addMember(l,"InfiniteMatchTimeout",get_InfiniteMatchTimeout,null,false);
 		addMember(l,"CacheSize",get_CacheSize,set_CacheSize,false);
-		addMember(l,"Options",get_Options,null,true);
 		addMember(l,"MatchTimeout",get_MatchTimeout,null,true);
+		addMember(l,"Options",get_Options,null,true);
 		addMember(l,"RightToLeft",get_RightToLeft,null,true);
 		createTypeMetatable(l,null, typeof(System.Text.RegularExpressions.Regex));
 	}

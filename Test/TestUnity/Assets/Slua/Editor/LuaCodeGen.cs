@@ -223,11 +223,8 @@ namespace SLua
 
                 Type[] types = assembly.GetExportedTypes();
 
-                HashSet<string> useList;
-                List<string> noUseList;
-
-                CustomExport.OnGetUseList(out useList);
-                CustomExport.OnGetNoUseList(out noUseList);
+                HashSet<string> useList = CustomExport.OnGetUseList();
+                List<string> noUseList = CustomExport.OnGetNoUseList();
 
                 string path = GenPath + genAtPath;
                 foreach (Type t in types) {
@@ -369,10 +366,8 @@ namespace SLua
             List<string> assemblyList = new List<string>();
             CustomExport.OnAddCustomAssembly(ref assemblyList);
 
-            HashSet<string> useList;
-            List<string> noUseList;
-            CustomExport.OnGetCustomAssemblyUseList(out useList);
-            CustomExport.OnGetCustomAssemblyNoUseList(out noUseList);
+            HashSet<string> useList = CustomExport.OnGetCustomAssemblyUseList();
+            List<string> noUseList = CustomExport.OnGetCustomAssemblyNoUseList();
 
             foreach (string assemblyItem in assemblyList) {
                 Assembly assembly = Assembly.Load(assemblyItem);
@@ -573,6 +568,9 @@ namespace SLua
                 file.NewLine = NewLine;
                 Write(file, "using System;");
                 Write(file, "using System.Collections.Generic;");
+                if (name == "BindUnity") {
+                    Write(file, "[assembly: UnityEngine.Scripting.Preserve]");
+                }
                 Write(file, "namespace SLua {");
                 Write(file, "[LuaBinder({0})]", order);
                 Write(file, "public class {0} {{", name);
@@ -739,7 +737,7 @@ namespace SLua
                     Write(file, "LuaDLL.lua_pushnil(l);");
                 }
                 else if (pt.Name == "BoxedValue") {
-                    Write(file, "pushValue(l, (object)a{0});", n + 1);
+                    Write(file, "pushValue(l, a{0}.GetObject());", n + 1);
                 }
                 else {
                     Write(file, "pushValue(l, a{0});", n + 1);
@@ -788,14 +786,20 @@ namespace SLua
                 string t = SimpleType(pars[n].ParameterType);
 
                 ParameterInfo p = pars[n];
-                if (p.ParameterType.IsByRef && p.IsOut) {
-                    str += string.Format("out {0} a{1}", t, n + 1);
+                if (p.ParameterType.IsByRef) {
+                    if (p.IsOut) {
+                        str += string.Format("out {0} a{1}", t, n + 1);
+                    }
+                    else if (p.IsIn) {
+                        str += string.Format("in {0} a{1}", t, n + 1);
+                    }
+                    else {
+                        str += string.Format("ref {0} a{1}", t, n + 1);
+                    }
                 }
-                else if (p.ParameterType.IsByRef) {
-                    str += string.Format("ref {0} a{1}", t, n + 1);
-                }
-                else
+                else {
                     str += string.Format("{0} a{1}", t, n + 1);
+                }
 
                 if (n < pars.Length - 1)
                     str += ",";
@@ -982,7 +986,7 @@ namespace SLua
                     if (pt.IsByRef)
                         pt = pt.GetElementType();
                     if (pt.Name == "BoxedValue")
-                        ret += ("pushValue(l,(object)v" + n + ");");
+                        ret += ("pushValue(l,v" + n + ".GetObject());");
                     else
                         ret += ("pushValue(l,v" + n + ");");
                 }
@@ -1082,6 +1086,34 @@ namespace SLua
             }
         }
 
+        private bool IsUnsupportedField(FieldInfo fi)
+        {
+            if (fi.FieldType.IsGenericType || fi.FieldType.IsPointer)
+                return true;
+            return false;
+        }
+        private bool IsUnsupportedProperty(PropertyInfo pi)
+        {
+            if (pi.PropertyType.IsGenericType || pi.PropertyType.IsPointer)
+                return true;
+            return false;
+        }
+        private bool IsUnsupportedMethod(MethodInfo mi)
+        {
+            if (mi.ReturnType.IsGenericType || mi.ReturnType.IsPointer)
+                return true;
+            return IsUnsupportedMethod((MethodBase)mi);
+        }
+        private bool IsUnsupportedMethod(MethodBase mb)
+        {
+            var ps = mb.GetParameters();
+            foreach(var p in ps) {
+                if (p.ParameterType.IsGenericType || p.ParameterType.IsPointer) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         private const string c_DisposeName = "Dispose";
         private const string c_DisposeIntfName = "System.IDisposable.Dispose";
@@ -1101,6 +1133,8 @@ namespace SLua
             MethodInfo[] members = t.GetMethods(bf);
             List<MethodInfo> methods = new List<MethodInfo>();
             foreach (MethodInfo mi in members) {
+                if (IsUnsupportedMethod(mi))
+                    continue;
                 var assemblyFullName = mi.DeclaringType.Assembly.FullName;
                 if (assemblyFullName.StartsWith("mscorlib")) {
                     if (mi.Name == "TryAdd" ||
@@ -1319,7 +1353,7 @@ namespace SLua
 
             FieldInfo[] fields = GetFields(t);
             foreach (FieldInfo fi in fields) {
-                if (DontExport(fi) || IsObsolete(fi))
+                if (IsUnsupportedField(fi) || DontExport(fi) || IsObsolete(fi))
                     continue;
 
                 PropPair pp = new PropPair();
@@ -1392,7 +1426,7 @@ namespace SLua
             PropertyInfo[] props = GetProperties(t);
             foreach (PropertyInfo fi in props) {
                 //if (fi.Name == "Item" || IsObsolete(fi) || MemberInFilter(t,fi) || DontExport(fi))
-                if (IsObsolete(fi) || MemberInFilter(t, fi) || DontExport(fi))
+                if (IsUnsupportedProperty(fi) || IsObsolete(fi) || MemberInFilter(t, fi) || DontExport(fi))
                     continue;
                 if (fi.Name == "Item"
                     || (t.Name == "StringBuilder" && fi.Name == "Chars")
@@ -1678,7 +1712,8 @@ namespace SLua
 
             ConstructorInfo[] cons = t.GetConstructors(BindingFlags.Instance | BindingFlags.Public);
             foreach (ConstructorInfo ci in cons) {
-                if (!IsObsolete(ci) && !DontExport(ci) && !ContainUnsafe(ci))
+                
+                if (!IsUnsupportedMethod(ci) && !IsObsolete(ci) && !DontExport(ci) && !ContainUnsafe(ci))
                     ret.Add(ci);
             }
             return ret.ToArray();
@@ -1695,7 +1730,7 @@ namespace SLua
 
         bool DontExport(MemberInfo mi)
         {
-            var methodString = string.Format("{0}.{1}", mi.DeclaringType, mi.Name);
+            var methodString = string.Format("{0}.{1}", GenericBaseName(mi.DeclaringType), mi.Name);
             if (CustomExport.FunctionFilterList.Contains(methodString))
                 return true;
             // directly ignore any components .ctor
@@ -1748,7 +1783,7 @@ namespace SLua
                 Write(file, "{0} o;", TypeDecl(t));
                 Write(file, "o=new {0}();", TypeDecl(t));
                 if (t.Name == "BoxedValue")
-                    WriteReturn(file, "(object)o");
+                    WriteReturn(file, "o.GetObject()");
                 else
                     WriteReturn(file, "o");
                 WriteCatchExecption(file);
@@ -1810,7 +1845,7 @@ namespace SLua
             if (t.Name == "String") // if export system.string, push string as ud not lua string
                 Write(file, "pushObject(l,o);");
             else if (t.Name == "BoxedValue")
-                Write(file, "pushValue(l,(object)o);");
+                Write(file, "pushValue(l,o.GetObject());");
             else
                 Write(file, "pushValue(l,o);");
             Write(file, "return 2;");
@@ -1996,15 +2031,6 @@ namespace SLua
             return false;
         }
 
-        bool hasUnsafeParameter(ParameterInfo[] pis)
-        {
-            foreach (var pi in pis) {
-                if (pi.ParameterType.IsPointer)
-                    return true;
-            }
-            return false;
-        }
-
         void WriteFunctionDec(StreamWriter file, string name)
         {
             WriteFunctionAttr(file);
@@ -2056,16 +2082,14 @@ namespace SLua
             int ct = 0;
             for (int n = 0; n < methods.Length; n++) {
                 var mi = methods[n];
-                ParameterInfo[] pars = mi.GetParameters();
-                if (!hasUnsafeParameter(pars)) {
+                if (!IsUnsupportedMethod(mi)) {
                     ++ct;
                 }
             }
             if (ct == 1) {
                 for (int n = 0; n < methods.Length; n++) {
                     var mi = methods[n];
-                    ParameterInfo[] pars = mi.GetParameters();
-                    if (!hasUnsafeParameter(pars)) {
+                    if (!IsUnsupportedMethod(mi)) {
                         string fn = writeStatic ? staticName(mi.Name) : mi.Name;
                         if (fn == c_DisposeIntfName)
                             fn = c_DisposeName;
@@ -2097,8 +2121,7 @@ namespace SLua
                 });
                 for (int n = 0; n < methods.Length; n++) {
                     var mi = methods[n];
-                    ParameterInfo[] pars = mi.GetParameters();
-                    if (!hasUnsafeParameter(pars)) {
+                    if (!IsUnsupportedMethod(mi)) {
                         string sig = CalcOverloadedMethodSignature(t, mi);
                         string fn = writeStatic ? staticName(sig) : sig;
                         if (!funcname.Contains(fn)) {
@@ -2384,7 +2407,7 @@ namespace SLua
             if (t.IsEnum)
                 Write(file, "pushEnum(l,(int)ret);");
             else if (t.Name == "BoxedValue")
-                Write(file, "pushValue(l,(object)ret);");
+                Write(file, "pushValue(l,ret.GetObject());");
             else
                 Write(file, "pushValue(l,ret);");
         }
@@ -2396,7 +2419,7 @@ namespace SLua
             if (t.IsEnum)
                 Write(file, "pushEnum(l,(int){0});", ret);
             else if (t.Name == "BoxedValue")
-                Write(file, "pushValue(l,(object){0});", ret);
+                Write(file, "pushValue(l,{0}.GetObject());", ret);
             else
                 Write(file, "pushValue(l,{0});", ret);
         }
@@ -2535,12 +2558,17 @@ namespace SLua
             ParameterInfo[] pars = m.GetParameters();
             for (int n = parOffset; n < pars.Length; n++) {
                 ParameterInfo p = pars[n];
-                if (p.ParameterType.IsByRef && p.IsOut)
-                    str += string.Format("out a{0}", n + 1);
-                else if (p.ParameterType.IsByRef)
-                    str += string.Format("ref a{0}", n + 1);
-                else
+                if (p.ParameterType.IsByRef) {
+                    if (p.IsOut)
+                        str += string.Format("out a{0}", n + 1);
+                    else if (p.IsIn)
+                        str += string.Format("a{0}", n + 1);
+                    else
+                        str += string.Format("ref a{0}", n + 1);
+                }
+                else {
                     str += string.Format("a{0}", n + 1);
+                }
                 if (n < pars.Length - 1)
                     str += ",";
             }

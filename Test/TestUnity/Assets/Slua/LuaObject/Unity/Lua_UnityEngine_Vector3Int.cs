@@ -19,6 +19,24 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.Vector3Int o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			o=new UnityEngine.Vector3Int(a1,a2);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ctor__Int32__Int32__Int32_s(IntPtr l) {
 		try {
 			UnityEngine.Vector3Int o;
@@ -152,6 +170,25 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 			System.String a1;
 			checkType(l,2,out a1);
 			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.Vector3Int self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -363,6 +400,55 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 			System.Int32 a2;
 			checkType(l,2,out a2);
 			var ret=a1*a2;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Multiply__Int32__Vector3Int_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector3Int a2;
+			checkValueType(l,2,out a2);
+			var ret=a1*a2;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_UnaryNegation_s(IntPtr l) {
+		try {
+			UnityEngine.Vector3Int a1;
+			checkValueType(l,1,out a1);
+			var ret=-a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Division_s(IntPtr l) {
+		try {
+			UnityEngine.Vector3Int a1;
+			checkValueType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=a1/a2;
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -600,6 +686,30 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_forward(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Vector3Int.forward);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_back(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Vector3Int.back);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int getItem(IntPtr l) {
 		try {
 			UnityEngine.Vector3Int self;
@@ -637,6 +747,7 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Vector3Int");
 		addMember(l,ctor_s);
+		addMember(l,ctor__Int32__Int32_s);
 		addMember(l,ctor__Int32__Int32__Int32_s);
 		addMember(l,Set);
 		addMember(l,Scale);
@@ -645,6 +756,7 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 		addMember(l,Equals__Vector3Int);
 		addMember(l,ToString);
 		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,Distance_s);
 		addMember(l,Min_s);
 		addMember(l,Max_s);
@@ -658,6 +770,9 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 		addMember(l,op_Subtraction_s);
 		addMember(l,op_Multiply__Vector3Int__Vector3Int_s);
 		addMember(l,op_Multiply__Vector3Int__Int32_s);
+		addMember(l,op_Multiply__Int32__Vector3Int_s);
+		addMember(l,op_UnaryNegation_s);
+		addMember(l,op_Division_s);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,getItem);
@@ -673,6 +788,8 @@ public class Lua_UnityEngine_Vector3Int : LuaObject {
 		addMember(l,"down",get_down,null,false);
 		addMember(l,"left",get_left,null,false);
 		addMember(l,"right",get_right,null,false);
+		addMember(l,"forward",get_forward,null,false);
+		addMember(l,"back",get_back,null,false);
 		createTypeMetatable(l,null, typeof(UnityEngine.Vector3Int),typeof(System.ValueType));
 	}
 }

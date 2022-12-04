@@ -79,6 +79,122 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__GraphicsFormat__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a3;
+			checkEnum(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			o=new UnityEngine.RenderTextureDescriptor(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__GraphicsFormat__GraphicsFormat_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a3;
+			checkEnum(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			o=new UnityEngine.RenderTextureDescriptor(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__RenderTextureFormat__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.RenderTextureFormat a3;
+			checkEnum(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			o=new UnityEngine.RenderTextureDescriptor(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__GraphicsFormat__Int32__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a3;
+			checkEnum(l,3,out a3);
+			System.Int32 a4;
+			checkType(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			o=new UnityEngine.RenderTextureDescriptor(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__GraphicsFormat__GraphicsFormat__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a3;
+			checkEnum(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			o=new UnityEngine.RenderTextureDescriptor(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_width(IntPtr l) {
 		try {
 			UnityEngine.RenderTextureDescriptor self;
@@ -203,6 +319,130 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_mipCount(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.mipCount);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_mipCount(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			int v;
+			checkType(l,2,out v);
+			self.mipCount=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_graphicsFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushEnum(l,(int)self.graphicsFormat);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_graphicsFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			UnityEngine.Experimental.Rendering.GraphicsFormat v;
+			checkEnum(l,2,out v);
+			self.graphicsFormat=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_stencilFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushEnum(l,(int)self.stencilFormat);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_stencilFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			UnityEngine.Experimental.Rendering.GraphicsFormat v;
+			checkEnum(l,2,out v);
+			self.stencilFormat=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_depthStencilFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushEnum(l,(int)self.depthStencilFormat);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_depthStencilFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			UnityEngine.Experimental.Rendering.GraphicsFormat v;
+			checkEnum(l,2,out v);
+			self.depthStencilFormat=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_colorFormat(IntPtr l) {
 		try {
 			UnityEngine.RenderTextureDescriptor self;
@@ -224,6 +464,37 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			UnityEngine.RenderTextureFormat v;
 			checkEnum(l,2,out v);
 			self.colorFormat=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_sRGB(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.sRGB);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_sRGB(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			bool v;
+			checkType(l,2,out v);
+			self.sRGB=v;
 			setBack(l,(object)self);
 			pushValue(l,true);
 			return 1;
@@ -403,37 +674,6 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_sRGB(IntPtr l) {
-		try {
-			UnityEngine.RenderTextureDescriptor self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushValue(l,self.sRGB);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_sRGB(IntPtr l) {
-		try {
-			UnityEngine.RenderTextureDescriptor self;
-			checkValueType(l,1,out self);
-			bool v;
-			checkType(l,2,out v);
-			self.sRGB=v;
-			setBack(l,(object)self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_useMipMap(IntPtr l) {
 		try {
 			UnityEngine.RenderTextureDescriptor self;
@@ -556,6 +796,37 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_useDynamicScale(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.useDynamicScale);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_useDynamicScale(IntPtr l) {
+		try {
+			UnityEngine.RenderTextureDescriptor self;
+			checkValueType(l,1,out self);
+			bool v;
+			checkType(l,2,out v);
+			self.useDynamicScale=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.RenderTextureDescriptor");
@@ -563,22 +834,32 @@ public class Lua_UnityEngine_RenderTextureDescriptor : LuaObject {
 		addMember(l,ctor__Int32__Int32_s);
 		addMember(l,ctor__Int32__Int32__RenderTextureFormat_s);
 		addMember(l,ctor__Int32__Int32__RenderTextureFormat__Int32_s);
+		addMember(l,ctor__Int32__Int32__GraphicsFormat__Int32_s);
+		addMember(l,ctor__Int32__Int32__GraphicsFormat__GraphicsFormat_s);
+		addMember(l,ctor__Int32__Int32__RenderTextureFormat__Int32__Int32_s);
+		addMember(l,ctor__Int32__Int32__GraphicsFormat__Int32__Int32_s);
+		addMember(l,ctor__Int32__Int32__GraphicsFormat__GraphicsFormat__Int32_s);
 		addMember(l,"width",get_width,set_width,true);
 		addMember(l,"height",get_height,set_height,true);
 		addMember(l,"msaaSamples",get_msaaSamples,set_msaaSamples,true);
 		addMember(l,"volumeDepth",get_volumeDepth,set_volumeDepth,true);
+		addMember(l,"mipCount",get_mipCount,set_mipCount,true);
+		addMember(l,"graphicsFormat",get_graphicsFormat,set_graphicsFormat,true);
+		addMember(l,"stencilFormat",get_stencilFormat,set_stencilFormat,true);
+		addMember(l,"depthStencilFormat",get_depthStencilFormat,set_depthStencilFormat,true);
 		addMember(l,"colorFormat",get_colorFormat,set_colorFormat,true);
+		addMember(l,"sRGB",get_sRGB,set_sRGB,true);
 		addMember(l,"depthBufferBits",get_depthBufferBits,set_depthBufferBits,true);
 		addMember(l,"dimension",get_dimension,set_dimension,true);
 		addMember(l,"shadowSamplingMode",get_shadowSamplingMode,set_shadowSamplingMode,true);
 		addMember(l,"vrUsage",get_vrUsage,set_vrUsage,true);
 		addMember(l,"flags",get_flags,null,true);
 		addMember(l,"memoryless",get_memoryless,set_memoryless,true);
-		addMember(l,"sRGB",get_sRGB,set_sRGB,true);
 		addMember(l,"useMipMap",get_useMipMap,set_useMipMap,true);
 		addMember(l,"autoGenerateMips",get_autoGenerateMips,set_autoGenerateMips,true);
 		addMember(l,"enableRandomWrite",get_enableRandomWrite,set_enableRandomWrite,true);
 		addMember(l,"bindMS",get_bindMS,set_bindMS,true);
+		addMember(l,"useDynamicScale",get_useDynamicScale,set_useDynamicScale,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.RenderTextureDescriptor),typeof(System.ValueType));
 	}
 }

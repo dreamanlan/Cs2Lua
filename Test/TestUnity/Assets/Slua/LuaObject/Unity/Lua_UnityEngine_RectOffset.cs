@@ -41,6 +41,54 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static new public int ToString(IntPtr l) {
+		try {
+			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
+			var ret=self.ToString();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String(IntPtr l) {
+		try {
+			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Add(IntPtr l) {
 		try {
 			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
@@ -63,20 +111,6 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 			UnityEngine.Rect a1;
 			checkValueType(l,2,out a1);
 			var ret=self.Remove(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static new public int ToString(IntPtr l) {
-		try {
-			UnityEngine.RectOffset self=(UnityEngine.RectOffset)checkSelf(l);
-			var ret=self.ToString();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -228,9 +262,11 @@ public class Lua_UnityEngine_RectOffset : LuaObject {
 		getTypeTable(l,"UnityEngine.RectOffset");
 		addMember(l,ctor_s);
 		addMember(l,ctor__Int32__Int32__Int32__Int32_s);
+		addMember(l,ToString);
+		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,Add);
 		addMember(l,Remove);
-		addMember(l,ToString);
 		addMember(l,"left",get_left,set_left,true);
 		addMember(l,"right",get_right,set_right,true);
 		addMember(l,"top",get_top,set_top,true);

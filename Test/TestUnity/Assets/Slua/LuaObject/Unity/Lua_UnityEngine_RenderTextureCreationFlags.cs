@@ -15,6 +15,7 @@ public class Lua_UnityEngine_RenderTextureCreationFlags : LuaObject {
 		addMember(l,256,"NoResolvedColorSurface");
 		addMember(l,1024,"DynamicallyScalable");
 		addMember(l,2048,"BindMS");
+		addMember(l,16384,"APISharable");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

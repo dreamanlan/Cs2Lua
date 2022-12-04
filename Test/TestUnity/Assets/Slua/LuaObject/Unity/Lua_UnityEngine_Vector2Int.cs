@@ -141,6 +141,42 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.ToString(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Distance_s(IntPtr l) {
 		try {
 			UnityEngine.Vector2Int a1;
@@ -284,6 +320,21 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int op_UnaryNegation_s(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int a1;
+			checkValueType(l,1,out a1);
+			var ret=-a1;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Addition_s(IntPtr l) {
 		try {
 			UnityEngine.Vector2Int a1;
@@ -335,6 +386,23 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int op_Multiply__Int32__Vector2Int_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			UnityEngine.Vector2Int a2;
+			checkValueType(l,2,out a2);
+			var ret=a1*a2;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Multiply__Vector2Int__Int32_s(IntPtr l) {
 		try {
 			UnityEngine.Vector2Int a1;
@@ -342,6 +410,23 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 			System.Int32 a2;
 			checkType(l,2,out a2);
 			var ret=a1*a2;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Division_s(IntPtr l) {
+		try {
+			UnityEngine.Vector2Int a1;
+			checkValueType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			var ret=a1/a2;
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -592,6 +677,8 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 		addMember(l,Equals__Object);
 		addMember(l,Equals__Vector2Int);
 		addMember(l,ToString);
+		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,Distance_s);
 		addMember(l,Min_s);
 		addMember(l,Max_s);
@@ -601,10 +688,13 @@ public class Lua_UnityEngine_Vector2Int : LuaObject {
 		addMember(l,FloorToInt_s);
 		addMember(l,CeilToInt_s);
 		addMember(l,RoundToInt_s);
+		addMember(l,op_UnaryNegation_s);
 		addMember(l,op_Addition_s);
 		addMember(l,op_Subtraction_s);
 		addMember(l,op_Multiply__Vector2Int__Vector2Int_s);
+		addMember(l,op_Multiply__Int32__Vector2Int_s);
 		addMember(l,op_Multiply__Vector2Int__Int32_s);
+		addMember(l,op_Division_s);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,getItem);

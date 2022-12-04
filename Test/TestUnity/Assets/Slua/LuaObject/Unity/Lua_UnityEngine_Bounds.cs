@@ -243,6 +243,25 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.Bounds self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Contains(IntPtr l) {
 		try {
 			UnityEngine.Bounds self;
@@ -498,6 +517,7 @@ public class Lua_UnityEngine_Bounds : LuaObject {
 		addMember(l,IntersectRay__Ray__O_Single);
 		addMember(l,ToString);
 		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,Contains);
 		addMember(l,SqrDistance);
 		addMember(l,ClosestPoint);

@@ -84,6 +84,37 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_wrapAround(IntPtr l) {
+		try {
+			UnityEngine.UI.Navigation self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.wrapAround);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_wrapAround(IntPtr l) {
+		try {
+			UnityEngine.UI.Navigation self;
+			checkValueType(l,1,out self);
+			bool v;
+			checkType(l,2,out v);
+			self.wrapAround=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_selectOnUp(IntPtr l) {
 		try {
 			UnityEngine.UI.Navigation self;
@@ -225,6 +256,7 @@ public class Lua_UnityEngine_UI_Navigation : LuaObject {
 		addMember(l,Equals__Navigation);
 		addMember(l,Equals__Object);
 		addMember(l,"mode",get_mode,set_mode,true);
+		addMember(l,"wrapAround",get_wrapAround,set_wrapAround,true);
 		addMember(l,"selectOnUp",get_selectOnUp,set_selectOnUp,true);
 		addMember(l,"selectOnDown",get_selectOnDown,set_selectOnDown,true);
 		addMember(l,"selectOnLeft",get_selectOnLeft,set_selectOnLeft,true);

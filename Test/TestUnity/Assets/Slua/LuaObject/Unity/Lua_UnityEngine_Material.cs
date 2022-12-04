@@ -69,7 +69,295 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int EnableKeyword(IntPtr l) {
+	static public int HasFloat__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasFloat(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasFloat__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasFloat(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasInt__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasInt(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasInt__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasInt(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasInteger__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasInteger(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasInteger__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasInteger(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasTexture__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasTexture(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasTexture__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasTexture(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasMatrix__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasMatrix(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasMatrix__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasMatrix(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasVector__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasVector(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasVector__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasVector(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasColor__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasColor(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasColor__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasColor(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasBuffer__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasBuffer(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasBuffer__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasBuffer(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasConstantBuffer__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.HasConstantBuffer(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int HasConstantBuffer__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.HasConstantBuffer(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int EnableKeyword__String(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
 			System.String a1;
@@ -84,7 +372,23 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int DisableKeyword(IntPtr l) {
+	static public int EnableKeyword__R_LocalKeyword(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			UnityEngine.Rendering.LocalKeyword a1;
+			checkValueType(l,2,out a1);
+			self.EnableKeyword(a1);
+			pushValue(l,true);
+			pushValue(l,a1);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int DisableKeyword__String(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
 			System.String a1;
@@ -99,7 +403,23 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int IsKeywordEnabled(IntPtr l) {
+	static public int DisableKeyword__R_LocalKeyword(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			UnityEngine.Rendering.LocalKeyword a1;
+			checkValueType(l,2,out a1);
+			self.DisableKeyword(a1);
+			pushValue(l,true);
+			pushValue(l,a1);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsKeywordEnabled__String(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
 			System.String a1;
@@ -107,6 +427,41 @@ public class Lua_UnityEngine_Material : LuaObject {
 			var ret=self.IsKeywordEnabled(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsKeywordEnabled__R_LocalKeyword(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			UnityEngine.Rendering.LocalKeyword a1;
+			checkValueType(l,2,out a1);
+			var ret=self.IsKeywordEnabled(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a1);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetKeyword(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			UnityEngine.Rendering.LocalKeyword a1;
+			checkValueType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			self.SetKeyword(a1,a2);
+			pushValue(l,true);
+			pushValue(l,a1);
 			return 2;
 		}
 		catch(Exception e) {
@@ -285,10 +640,10 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTexturePropertyNames(IntPtr l) {
+	static public int ComputeCRC(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			var ret=self.GetTexturePropertyNames();
+			var ret=self.ComputeCRC();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -299,14 +654,13 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTexturePropertyNames__List_1_String(IntPtr l) {
+	static public int GetTexturePropertyNames(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.Collections.Generic.List<System.String> a1;
-			checkType(l,2,out a1);
-			self.GetTexturePropertyNames(a1);
+			var ret=self.GetTexturePropertyNames();
 			pushValue(l,true);
-			return 1;
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -328,12 +682,31 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTexturePropertyNameIDs__List_1_Int32(IntPtr l) {
+	static public int SetInt__String__Int32(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.Collections.Generic.List<System.Int32> a1;
+			System.String a1;
 			checkType(l,2,out a1);
-			self.GetTexturePropertyNameIDs(a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetInt(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetInt__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetInt(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -377,14 +750,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetInt__String__Int32(IntPtr l) {
+	static public int SetInteger__String__Int32(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
 			System.String a1;
 			checkType(l,2,out a1);
 			System.Int32 a2;
 			checkType(l,3,out a2);
-			self.SetInt(a1,a2);
+			self.SetInteger(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -394,14 +767,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetInt__Int32__Int32(IntPtr l) {
+	static public int SetInteger__Int32__Int32(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
 			System.Int32 a1;
 			checkType(l,2,out a1);
 			System.Int32 a2;
 			checkType(l,3,out a2);
-			self.SetInt(a1,a2);
+			self.SetInteger(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -547,6 +920,44 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetTexture__String__RenderTexture__RenderTextureSubElement(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.RenderTexture a2;
+			checkType(l,3,out a2);
+			UnityEngine.Rendering.RenderTextureSubElement a3;
+			checkEnum(l,4,out a3);
+			self.SetTexture(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTexture__Int32__RenderTexture__RenderTextureSubElement(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.RenderTexture a2;
+			checkType(l,3,out a2);
+			UnityEngine.Rendering.RenderTextureSubElement a3;
+			checkEnum(l,4,out a3);
+			self.SetTexture(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetBuffer__String__ComputeBuffer(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
@@ -581,14 +992,14 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetFloatArray__String__List_1_Single(IntPtr l) {
+	static public int SetBuffer__String__GraphicsBuffer(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
 			System.String a1;
 			checkType(l,2,out a1);
-			System.Collections.Generic.List<System.Single> a2;
+			UnityEngine.GraphicsBuffer a2;
 			checkType(l,3,out a2);
-			self.SetFloatArray(a1,a2);
+			self.SetBuffer(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -598,14 +1009,98 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetFloatArray__Int32__List_1_Single(IntPtr l) {
+	static public int SetBuffer__Int32__GraphicsBuffer(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
 			System.Int32 a1;
 			checkType(l,2,out a1);
-			System.Collections.Generic.List<System.Single> a2;
+			UnityEngine.GraphicsBuffer a2;
 			checkType(l,3,out a2);
-			self.SetFloatArray(a1,a2);
+			self.SetBuffer(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetConstantBuffer__String__ComputeBuffer__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.ComputeBuffer a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Int32 a4;
+			checkType(l,5,out a4);
+			self.SetConstantBuffer(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetConstantBuffer__Int32__ComputeBuffer__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.ComputeBuffer a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Int32 a4;
+			checkType(l,5,out a4);
+			self.SetConstantBuffer(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetConstantBuffer__String__GraphicsBuffer__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			UnityEngine.GraphicsBuffer a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Int32 a4;
+			checkType(l,5,out a4);
+			self.SetConstantBuffer(a1,a2,a3,a4);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetConstantBuffer__Int32__GraphicsBuffer__Int32__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.GraphicsBuffer a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			System.Int32 a4;
+			checkType(l,5,out a4);
+			self.SetConstantBuffer(a1,a2,a3,a4);
 			pushValue(l,true);
 			return 1;
 		}
@@ -649,40 +1144,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetColorArray__String__List_1_Color(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Color> a2;
-			checkType(l,3,out a2);
-			self.SetColorArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetColorArray__Int32__List_1_Color(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Color> a2;
-			checkType(l,3,out a2);
-			self.SetColorArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int SetColorArray__String__A_Color(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
@@ -708,40 +1169,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 			UnityEngine.Color[] a2;
 			checkArray(l,3,out a2);
 			self.SetColorArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetVectorArray__String__List_1_Vector4(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Vector4> a2;
-			checkType(l,3,out a2);
-			self.SetVectorArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetVectorArray__Int32__List_1_Vector4(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Vector4> a2;
-			checkType(l,3,out a2);
-			self.SetVectorArray(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -785,40 +1212,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetMatrixArray__String__List_1_Matrix4x4(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
-			checkType(l,3,out a2);
-			self.SetMatrixArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetMatrixArray__Int32__List_1_Matrix4x4(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
-			checkType(l,3,out a2);
-			self.SetMatrixArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int SetMatrixArray__String__A_Matrix4x4(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
@@ -846,6 +1239,38 @@ public class Lua_UnityEngine_Material : LuaObject {
 			self.SetMatrixArray(a1,a2);
 			pushValue(l,true);
 			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetInt__String(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			var ret=self.GetInt(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetInt__Int32(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetInt(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -885,12 +1310,12 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetInt__String(IntPtr l) {
+	static public int GetInteger__String(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
 			System.String a1;
 			checkType(l,2,out a1);
-			var ret=self.GetInt(a1);
+			var ret=self.GetInteger(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -901,12 +1326,12 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetInt__Int32(IntPtr l) {
+	static public int GetInteger__Int32(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
 			System.Int32 a1;
 			checkType(l,2,out a1);
-			var ret=self.GetInt(a1);
+			var ret=self.GetInteger(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -1077,40 +1502,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetFloatArray__String__List_1_Single(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<System.Single> a2;
-			checkType(l,3,out a2);
-			self.GetFloatArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetFloatArray__Int32__List_1_Single(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<System.Single> a2;
-			checkType(l,3,out a2);
-			self.GetFloatArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int GetColorArray__String(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
@@ -1136,40 +1527,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetColorArray__String__List_1_Color(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Color> a2;
-			checkType(l,3,out a2);
-			self.GetColorArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetColorArray__Int32__List_1_Color(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Color> a2;
-			checkType(l,3,out a2);
-			self.GetColorArray(a1,a2);
-			pushValue(l,true);
-			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -1209,40 +1566,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetVectorArray__String__List_1_Vector4(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Vector4> a2;
-			checkType(l,3,out a2);
-			self.GetVectorArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetVectorArray__Int32__List_1_Vector4(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Vector4> a2;
-			checkType(l,3,out a2);
-			self.GetVectorArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int GetMatrixArray__String(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
@@ -1268,40 +1591,6 @@ public class Lua_UnityEngine_Material : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetMatrixArray__String__List_1_Matrix4x4(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
-			checkType(l,3,out a2);
-			self.GetMatrixArray(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetMatrixArray__Int32__List_1_Matrix4x4(IntPtr l) {
-		try {
-			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Matrix4x4> a2;
-			checkType(l,3,out a2);
-			self.GetMatrixArray(a1,a2);
-			pushValue(l,true);
-			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -1609,6 +1898,34 @@ public class Lua_UnityEngine_Material : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_enabledKeywords(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.enabledKeywords);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_enabledKeywords(IntPtr l) {
+		try {
+			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
+			UnityEngine.Rendering.LocalKeyword[] v;
+			checkArray(l,2,out v);
+			self.enabledKeywords=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_globalIlluminationFlags(IntPtr l) {
 		try {
 			UnityEngine.Material self=(UnityEngine.Material)checkSelf(l);
@@ -1739,9 +2056,31 @@ public class Lua_UnityEngine_Material : LuaObject {
 		addMember(l,ctor__Material_s);
 		addMember(l,HasProperty__Int32);
 		addMember(l,HasProperty__String);
-		addMember(l,EnableKeyword);
-		addMember(l,DisableKeyword);
-		addMember(l,IsKeywordEnabled);
+		addMember(l,HasFloat__String);
+		addMember(l,HasFloat__Int32);
+		addMember(l,HasInt__String);
+		addMember(l,HasInt__Int32);
+		addMember(l,HasInteger__String);
+		addMember(l,HasInteger__Int32);
+		addMember(l,HasTexture__String);
+		addMember(l,HasTexture__Int32);
+		addMember(l,HasMatrix__String);
+		addMember(l,HasMatrix__Int32);
+		addMember(l,HasVector__String);
+		addMember(l,HasVector__Int32);
+		addMember(l,HasColor__String);
+		addMember(l,HasColor__Int32);
+		addMember(l,HasBuffer__String);
+		addMember(l,HasBuffer__Int32);
+		addMember(l,HasConstantBuffer__String);
+		addMember(l,HasConstantBuffer__Int32);
+		addMember(l,EnableKeyword__String);
+		addMember(l,EnableKeyword__R_LocalKeyword);
+		addMember(l,DisableKeyword__String);
+		addMember(l,DisableKeyword__R_LocalKeyword);
+		addMember(l,IsKeywordEnabled__String);
+		addMember(l,IsKeywordEnabled__R_LocalKeyword);
+		addMember(l,SetKeyword);
 		addMember(l,SetShaderPassEnabled);
 		addMember(l,GetShaderPassEnabled);
 		addMember(l,GetPassName);
@@ -1752,14 +2091,15 @@ public class Lua_UnityEngine_Material : LuaObject {
 		addMember(l,Lerp);
 		addMember(l,SetPass);
 		addMember(l,CopyPropertiesFromMaterial);
+		addMember(l,ComputeCRC);
 		addMember(l,GetTexturePropertyNames);
-		addMember(l,GetTexturePropertyNames__List_1_String);
 		addMember(l,GetTexturePropertyNameIDs);
-		addMember(l,GetTexturePropertyNameIDs__List_1_Int32);
-		addMember(l,SetFloat__String__Single);
-		addMember(l,SetFloat__Int32__Single);
 		addMember(l,SetInt__String__Int32);
 		addMember(l,SetInt__Int32__Int32);
+		addMember(l,SetFloat__String__Single);
+		addMember(l,SetFloat__Int32__Single);
+		addMember(l,SetInteger__String__Int32);
+		addMember(l,SetInteger__Int32__Int32);
 		addMember(l,SetColor__String__Color);
 		addMember(l,SetColor__Int32__Color);
 		addMember(l,SetVector__String__Vector4);
@@ -1768,28 +2108,30 @@ public class Lua_UnityEngine_Material : LuaObject {
 		addMember(l,SetMatrix__Int32__Matrix4x4);
 		addMember(l,SetTexture__String__Texture);
 		addMember(l,SetTexture__Int32__Texture);
+		addMember(l,SetTexture__String__RenderTexture__RenderTextureSubElement);
+		addMember(l,SetTexture__Int32__RenderTexture__RenderTextureSubElement);
 		addMember(l,SetBuffer__String__ComputeBuffer);
 		addMember(l,SetBuffer__Int32__ComputeBuffer);
-		addMember(l,SetFloatArray__String__List_1_Single);
-		addMember(l,SetFloatArray__Int32__List_1_Single);
+		addMember(l,SetBuffer__String__GraphicsBuffer);
+		addMember(l,SetBuffer__Int32__GraphicsBuffer);
+		addMember(l,SetConstantBuffer__String__ComputeBuffer__Int32__Int32);
+		addMember(l,SetConstantBuffer__Int32__ComputeBuffer__Int32__Int32);
+		addMember(l,SetConstantBuffer__String__GraphicsBuffer__Int32__Int32);
+		addMember(l,SetConstantBuffer__Int32__GraphicsBuffer__Int32__Int32);
 		addMember(l,SetFloatArray__String__A_Single);
 		addMember(l,SetFloatArray__Int32__A_Single);
-		addMember(l,SetColorArray__String__List_1_Color);
-		addMember(l,SetColorArray__Int32__List_1_Color);
 		addMember(l,SetColorArray__String__A_Color);
 		addMember(l,SetColorArray__Int32__A_Color);
-		addMember(l,SetVectorArray__String__List_1_Vector4);
-		addMember(l,SetVectorArray__Int32__List_1_Vector4);
 		addMember(l,SetVectorArray__String__A_Vector4);
 		addMember(l,SetVectorArray__Int32__A_Vector4);
-		addMember(l,SetMatrixArray__String__List_1_Matrix4x4);
-		addMember(l,SetMatrixArray__Int32__List_1_Matrix4x4);
 		addMember(l,SetMatrixArray__String__A_Matrix4x4);
 		addMember(l,SetMatrixArray__Int32__A_Matrix4x4);
-		addMember(l,GetFloat__String);
-		addMember(l,GetFloat__Int32);
 		addMember(l,GetInt__String);
 		addMember(l,GetInt__Int32);
+		addMember(l,GetFloat__String);
+		addMember(l,GetFloat__Int32);
+		addMember(l,GetInteger__String);
+		addMember(l,GetInteger__Int32);
 		addMember(l,GetColor__String);
 		addMember(l,GetColor__Int32);
 		addMember(l,GetVector__String);
@@ -1800,20 +2142,12 @@ public class Lua_UnityEngine_Material : LuaObject {
 		addMember(l,GetTexture__Int32);
 		addMember(l,GetFloatArray__String);
 		addMember(l,GetFloatArray__Int32);
-		addMember(l,GetFloatArray__String__List_1_Single);
-		addMember(l,GetFloatArray__Int32__List_1_Single);
 		addMember(l,GetColorArray__String);
 		addMember(l,GetColorArray__Int32);
-		addMember(l,GetColorArray__String__List_1_Color);
-		addMember(l,GetColorArray__Int32__List_1_Color);
 		addMember(l,GetVectorArray__String);
 		addMember(l,GetVectorArray__Int32);
-		addMember(l,GetVectorArray__String__List_1_Vector4);
-		addMember(l,GetVectorArray__Int32__List_1_Vector4);
 		addMember(l,GetMatrixArray__String);
 		addMember(l,GetMatrixArray__Int32);
-		addMember(l,GetMatrixArray__String__List_1_Matrix4x4);
-		addMember(l,GetMatrixArray__Int32__List_1_Matrix4x4);
 		addMember(l,SetTextureOffset__String__Vector2);
 		addMember(l,SetTextureOffset__Int32__Vector2);
 		addMember(l,SetTextureScale__String__Vector2);
@@ -1828,6 +2162,7 @@ public class Lua_UnityEngine_Material : LuaObject {
 		addMember(l,"mainTextureOffset",get_mainTextureOffset,set_mainTextureOffset,true);
 		addMember(l,"mainTextureScale",get_mainTextureScale,set_mainTextureScale,true);
 		addMember(l,"renderQueue",get_renderQueue,set_renderQueue,true);
+		addMember(l,"enabledKeywords",get_enabledKeywords,set_enabledKeywords,true);
 		addMember(l,"globalIlluminationFlags",get_globalIlluminationFlags,set_globalIlluminationFlags,true);
 		addMember(l,"doubleSidedGI",get_doubleSidedGI,set_doubleSidedGI,true);
 		addMember(l,"enableInstancing",get_enableInstancing,set_enableInstancing,true);

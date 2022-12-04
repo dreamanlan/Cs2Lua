@@ -6,91 +6,6 @@ using UnityEngine;
 public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetCustomParticleData(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.Vector4> a1;
-			checkType(l,2,out a1);
-			UnityEngine.ParticleSystemCustomData a2;
-			checkEnum(l,3,out a2);
-			self.SetCustomParticleData(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetCustomParticleData(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.Vector4> a1;
-			checkType(l,2,out a1);
-			UnityEngine.ParticleSystemCustomData a2;
-			checkEnum(l,3,out a2);
-			var ret=self.GetCustomParticleData(a1,a2);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int TriggerSubEmitter__Int32(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			self.TriggerSubEmitter(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int TriggerSubEmitter__Int32__R_Particle(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			UnityEngine.ParticleSystem.Particle a2;
-			checkValueType(l,3,out a2);
-			self.TriggerSubEmitter(a1,ref a2);
-			pushValue(l,true);
-			pushValue(l,a2);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int TriggerSubEmitter__Int32__List_1_Particle(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			System.Int32 a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a2;
-			checkType(l,3,out a2);
-			self.TriggerSubEmitter(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int Emit__Int32(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
@@ -221,6 +136,81 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPlaybackState(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			var ret=self.GetPlaybackState();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetPlaybackState(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.PlaybackState a1;
+			checkValueType(l,2,out a1);
+			self.SetPlaybackState(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTrails(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			var ret=self.GetTrails();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTrails__R_Trails(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.Trails a1;
+			checkValueType(l,2,out a1);
+			var ret=self.GetTrails(ref a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a1);
+			return 3;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetTrails(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystem.Trails a1;
+			checkValueType(l,2,out a1);
+			self.SetTrails(a1);
+			pushValue(l,true);
+			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -459,12 +449,31 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetSafeCollisionEventSize(IntPtr l) {
+	static public int TriggerSubEmitter__Int32(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			var ret=self.GetSafeCollisionEventSize();
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.TriggerSubEmitter(a1);
 			pushValue(l,true);
-			pushValue(l,ret);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TriggerSubEmitter__Int32__R_Particle(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			UnityEngine.ParticleSystem.Particle a2;
+			checkValueType(l,3,out a2);
+			self.TriggerSubEmitter(a1,ref a2);
+			pushValue(l,true);
+			pushValue(l,a2);
 			return 2;
 		}
 		catch(Exception e) {
@@ -473,14 +482,51 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetCollisionEvents(IntPtr l) {
+	static public int AllocateAxisOfRotationAttribute(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			UnityEngine.GameObject a2;
-			checkType(l,2,out a2);
-			System.Collections.Generic.List<UnityEngine.ParticleCollisionEvent> a3;
-			checkType(l,3,out a3);
-			var ret=self.GetCollisionEvents(a2,a3);
+			self.AllocateAxisOfRotationAttribute();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AllocateMeshIndexAttribute(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			self.AllocateMeshIndexAttribute();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int AllocateCustomDataAttribute(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			UnityEngine.ParticleSystemCustomData a1;
+			checkEnum(l,2,out a1);
+			self.AllocateCustomDataAttribute(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetSafeCollisionEventSize(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			var ret=self.GetSafeCollisionEventSize();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -507,65 +553,25 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetTriggerParticles(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			UnityEngine.ParticleSystemTriggerEventType a2;
-			checkEnum(l,2,out a2);
-			System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
-			checkType(l,3,out a3);
-			var ret=self.GetTriggerParticles(a2,a3);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetTriggerParticles__ParticleSystem__ParticleSystemTriggerEventType__List_1_Particle(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			UnityEngine.ParticleSystemTriggerEventType a2;
-			checkEnum(l,2,out a2);
-			System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
-			checkType(l,3,out a3);
-			self.SetTriggerParticles(a2,a3);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetTriggerParticles__ParticleSystem__ParticleSystemTriggerEventType__List_1_Particle__Int32__Int32(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
-			UnityEngine.ParticleSystemTriggerEventType a2;
-			checkEnum(l,2,out a2);
-			System.Collections.Generic.List<UnityEngine.ParticleSystem.Particle> a3;
-			checkType(l,3,out a3);
-			System.Int32 a4;
-			checkType(l,4,out a4);
-			System.Int32 a5;
-			checkType(l,5,out a5);
-			self.SetTriggerParticles(a2,a3,a4,a5);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int ResetPreMappedBufferMemory_s(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.ResetPreMappedBufferMemory();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetMaximumPreMappedBufferCounts_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.ParticleSystem.SetMaximumPreMappedBufferCounts(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -815,6 +821,19 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_lifetimeByEmitterSpeed(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.lifetimeByEmitterSpeed);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_forceOverLifetime(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem self=(UnityEngine.ParticleSystem)checkSelf(l);
@@ -1024,11 +1043,6 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem");
-		addMember(l,SetCustomParticleData);
-		addMember(l,GetCustomParticleData);
-		addMember(l,TriggerSubEmitter__Int32);
-		addMember(l,TriggerSubEmitter__Int32__R_Particle);
-		addMember(l,TriggerSubEmitter__Int32__List_1_Particle);
 		addMember(l,Emit__Int32);
 		addMember(l,Emit__EmitParams__Int32);
 		addMember(l,SetParticles__O_Particle);
@@ -1037,6 +1051,11 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 		addMember(l,GetParticles__O_Particle);
 		addMember(l,GetParticles__O_Particle__Int32);
 		addMember(l,GetParticles__O_Particle__Int32__Int32);
+		addMember(l,GetPlaybackState);
+		addMember(l,SetPlaybackState);
+		addMember(l,GetTrails);
+		addMember(l,GetTrails__R_Trails);
+		addMember(l,SetTrails);
 		addMember(l,Simulate__Single);
 		addMember(l,Simulate__Single__Boolean);
 		addMember(l,Simulate__Single__Boolean__Boolean);
@@ -1052,13 +1071,15 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 		addMember(l,Clear__Boolean);
 		addMember(l,IsAlive);
 		addMember(l,IsAlive__Boolean);
+		addMember(l,TriggerSubEmitter__Int32);
+		addMember(l,TriggerSubEmitter__Int32__R_Particle);
+		addMember(l,AllocateAxisOfRotationAttribute);
+		addMember(l,AllocateMeshIndexAttribute);
+		addMember(l,AllocateCustomDataAttribute);
 		addMember(l,GetSafeCollisionEventSize);
-		addMember(l,GetCollisionEvents);
 		addMember(l,GetSafeTriggerParticlesSize);
-		addMember(l,GetTriggerParticles);
-		addMember(l,SetTriggerParticles__ParticleSystem__ParticleSystemTriggerEventType__List_1_Particle);
-		addMember(l,SetTriggerParticles__ParticleSystem__ParticleSystemTriggerEventType__List_1_Particle__Int32__Int32);
 		addMember(l,ResetPreMappedBufferMemory_s);
+		addMember(l,SetMaximumPreMappedBufferCounts_s);
 		addMember(l,"isPlaying",get_isPlaying,null,true);
 		addMember(l,"isEmitting",get_isEmitting,null,true);
 		addMember(l,"isStopped",get_isStopped,null,true);
@@ -1074,6 +1095,7 @@ public class Lua_UnityEngine_ParticleSystem : LuaObject {
 		addMember(l,"velocityOverLifetime",get_velocityOverLifetime,null,true);
 		addMember(l,"limitVelocityOverLifetime",get_limitVelocityOverLifetime,null,true);
 		addMember(l,"inheritVelocity",get_inheritVelocity,null,true);
+		addMember(l,"lifetimeByEmitterSpeed",get_lifetimeByEmitterSpeed,null,true);
 		addMember(l,"forceOverLifetime",get_forceOverLifetime,null,true);
 		addMember(l,"colorOverLifetime",get_colorOverLifetime,null,true);
 		addMember(l,"colorBySpeed",get_colorBySpeed,null,true);

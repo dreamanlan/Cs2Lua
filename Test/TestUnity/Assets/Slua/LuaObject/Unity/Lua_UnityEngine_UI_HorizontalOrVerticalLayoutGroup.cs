@@ -143,6 +143,90 @@ public class Lua_UnityEngine_UI_HorizontalOrVerticalLayoutGroup : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_childScaleWidth(IntPtr l) {
+		try {
+			UnityEngine.UI.HorizontalOrVerticalLayoutGroup self=(UnityEngine.UI.HorizontalOrVerticalLayoutGroup)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.childScaleWidth);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_childScaleWidth(IntPtr l) {
+		try {
+			UnityEngine.UI.HorizontalOrVerticalLayoutGroup self=(UnityEngine.UI.HorizontalOrVerticalLayoutGroup)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.childScaleWidth=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_childScaleHeight(IntPtr l) {
+		try {
+			UnityEngine.UI.HorizontalOrVerticalLayoutGroup self=(UnityEngine.UI.HorizontalOrVerticalLayoutGroup)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.childScaleHeight);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_childScaleHeight(IntPtr l) {
+		try {
+			UnityEngine.UI.HorizontalOrVerticalLayoutGroup self=(UnityEngine.UI.HorizontalOrVerticalLayoutGroup)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.childScaleHeight=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_reverseArrangement(IntPtr l) {
+		try {
+			UnityEngine.UI.HorizontalOrVerticalLayoutGroup self=(UnityEngine.UI.HorizontalOrVerticalLayoutGroup)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.reverseArrangement);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_reverseArrangement(IntPtr l) {
+		try {
+			UnityEngine.UI.HorizontalOrVerticalLayoutGroup self=(UnityEngine.UI.HorizontalOrVerticalLayoutGroup)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.reverseArrangement=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.HorizontalOrVerticalLayoutGroup");
@@ -151,6 +235,9 @@ public class Lua_UnityEngine_UI_HorizontalOrVerticalLayoutGroup : LuaObject {
 		addMember(l,"childForceExpandHeight",get_childForceExpandHeight,set_childForceExpandHeight,true);
 		addMember(l,"childControlWidth",get_childControlWidth,set_childControlWidth,true);
 		addMember(l,"childControlHeight",get_childControlHeight,set_childControlHeight,true);
+		addMember(l,"childScaleWidth",get_childScaleWidth,set_childScaleWidth,true);
+		addMember(l,"childScaleHeight",get_childScaleHeight,set_childScaleHeight,true);
+		addMember(l,"reverseArrangement",get_reverseArrangement,set_reverseArrangement,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.UI.HorizontalOrVerticalLayoutGroup),typeof(UnityEngine.UI.LayoutGroup));
 	}
 }

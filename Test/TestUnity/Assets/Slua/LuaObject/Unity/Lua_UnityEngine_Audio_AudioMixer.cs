@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Audio_AudioMixer : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int FindMatchingGroups(IntPtr l) {
+	static public int FindSnapshot(IntPtr l) {
 		try {
 			UnityEngine.Audio.AudioMixer self=(UnityEngine.Audio.AudioMixer)checkSelf(l);
 			System.String a1;
 			checkType(l,2,out a1);
-			var ret=self.FindMatchingGroups(a1);
+			var ret=self.FindSnapshot(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -21,12 +21,12 @@ public class Lua_UnityEngine_Audio_AudioMixer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int FindSnapshot(IntPtr l) {
+	static public int FindMatchingGroups(IntPtr l) {
 		try {
 			UnityEngine.Audio.AudioMixer self=(UnityEngine.Audio.AudioMixer)checkSelf(l);
 			System.String a1;
 			checkType(l,2,out a1);
-			var ret=self.FindSnapshot(a1);
+			var ret=self.FindMatchingGroups(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -165,8 +165,8 @@ public class Lua_UnityEngine_Audio_AudioMixer : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Audio.AudioMixer");
-		addMember(l,FindMatchingGroups);
 		addMember(l,FindSnapshot);
+		addMember(l,FindMatchingGroups);
 		addMember(l,TransitionToSnapshots);
 		addMember(l,SetFloat);
 		addMember(l,ClearFloat);

@@ -1,44 +1,15 @@
 ﻿using System;
 using SLua;
 using System.Collections.Generic;
-using UnityEngine.Experimental.U2D;
+using UnityEngine.U2D;
 [UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_SpriteRenderer : LuaObject {
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetDeformableVertices(IntPtr l) {
-		try {
-			UnityEngine.SpriteRenderer self=(UnityEngine.SpriteRenderer)checkSelf(l);
-			var ret=self.GetDeformableVertices();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
 	static public int DeactivateDeformableBuffer(IntPtr l) {
 		try {
 			UnityEngine.SpriteRenderer self=(UnityEngine.SpriteRenderer)checkSelf(l);
 			self.DeactivateDeformableBuffer();
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int UpdateDeformableBuffer(IntPtr l) {
-		try {
-			UnityEngine.SpriteRenderer self=(UnityEngine.SpriteRenderer)checkSelf(l);
-			Unity.Jobs.JobHandle a2;
-			checkValueType(l,2,out a2);
-			self.UpdateDeformableBuffer(a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -329,9 +300,7 @@ public class Lua_UnityEngine_SpriteRenderer : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SpriteRenderer");
-		addMember(l,GetDeformableVertices);
 		addMember(l,DeactivateDeformableBuffer);
-		addMember(l,UpdateDeformableBuffer);
 		addMember(l,"sprite",get_sprite,set_sprite,true);
 		addMember(l,"drawMode",get_drawMode,set_drawMode,true);
 		addMember(l,"size",get_size,set_size,true);

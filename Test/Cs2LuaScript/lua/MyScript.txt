@@ -44,7 +44,7 @@ MyScript = {
 		slider.onValueChanged:AddListener(function(v)
 			MyScript.Reset(this);
 			counttxt.text = LuaString.Format__String__Object("cube:{0}", v);
-			this.max = typecast(v, System.Int32, TypeKind.Struct);
+			this.max = typecast(v, System.Int32, TypeKind.Structure);
 		end);
 		MyScript.Reset(this);
 	end,
@@ -65,7 +65,7 @@ MyScript = {
 			local angle;
 			if ((i % 2) == 1) then angle = UnityEngine.Time.time else angle = -5 end;
 			local b;
-			b = new_vector3(__cs2lua_func_info, nil, typecast(((UnityEngine.Mathf.Cos(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Struct), 0);
+			b = new_vector3(__cs2lua_func_info, nil, typecast(((UnityEngine.Mathf.Cos(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Structure), typecast(((UnityEngine.Mathf.Sin(((((i * 3.14159300) * 2) / this.max) + angle)) * nr)), System.Single, TypeKind.Structure), 0);
 			this.cubes[(i + 1)].transform.position = b;
 			i = (i + 1);
 		end;
@@ -131,7 +131,7 @@ MyScript = {
 		while (i < this.max) do
 			local cube;
 			cube = UnityEngine.GameObject.CreatePrimitive(3);
-			cube.transform.position = new_vector3(__cs2lua_func_info, nil, (typecast(UnityEngine.Mathf.Cos((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Struct) * this.r), 0);
+			cube.transform.position = new_vector3(__cs2lua_func_info, nil, (typecast(UnityEngine.Mathf.Cos((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Structure) * this.r), (typecast(UnityEngine.Mathf.Sin((((i * 3.14159300) * 2) / this.max)), System.Single, TypeKind.Structure) * this.r), 0);
 			cube.transform:SetParent__Transform(this.root.transform);
 			local mat;
 			mat = cube:GetComponent__Type(UnityEngine.Renderer).material;
@@ -168,7 +168,7 @@ MyScript = {
 		recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, nil, this.bgCurrent);
 		this.bgColor = new_color(__cs2lua_func_info, nil);
 		recycle_and_keep_color(__cs2lua_func_info, UnityEngine.Color, nil, this.bgColor);
-		this.colors = wrap_color_array(__cs2lua_func_info, UnityEngine.Color, TypeKind.Struct, get_unity_color_red(__cs2lua_func_info), get_unity_color_blue(__cs2lua_func_info), get_unity_color_green(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info), get_unity_color_yellow(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info));
+		this.colors = wraparray({get_unity_color_red(__cs2lua_func_info), get_unity_color_blue(__cs2lua_func_info), get_unity_color_green(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), get_unity_color_white(__cs2lua_func_info), get_unity_color_yellow(__cs2lua_func_info), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), get_unity_color_black(__cs2lua_func_info)}, nil, UnityEngine.Color, TypeKind.Structure);
 	end,
 	-------------------------------
 	------ instance fields -------

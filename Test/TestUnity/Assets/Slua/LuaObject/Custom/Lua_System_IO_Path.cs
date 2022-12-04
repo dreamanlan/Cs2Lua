@@ -154,11 +154,28 @@ public class Lua_System_IO_Path : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetFullPath_s(IntPtr l) {
+	static public int GetFullPath__String_s(IntPtr l) {
 		try {
 			System.String a1;
 			checkType(l,1,out a1);
 			var ret=System.IO.Path.GetFullPath(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetFullPath__String__String_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Path.GetFullPath(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -279,6 +296,38 @@ public class Lua_System_IO_Path : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetRelativePath_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			var ret=System.IO.Path.GetRelativePath(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsPathFullyQualified_s(IntPtr l) {
+		try {
+			System.String a1;
+			checkType(l,1,out a1);
+			var ret=System.IO.Path.IsPathFullyQualified(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_AltDirectorySeparatorChar(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -337,7 +386,8 @@ public class Lua_System_IO_Path : LuaObject {
 		addMember(l,GetExtension_s);
 		addMember(l,GetFileName_s);
 		addMember(l,GetFileNameWithoutExtension_s);
-		addMember(l,GetFullPath_s);
+		addMember(l,GetFullPath__String_s);
+		addMember(l,GetFullPath__String__String_s);
 		addMember(l,GetPathRoot_s);
 		addMember(l,GetTempFileName_s);
 		addMember(l,GetTempPath_s);
@@ -346,6 +396,8 @@ public class Lua_System_IO_Path : LuaObject {
 		addMember(l,GetInvalidFileNameChars_s);
 		addMember(l,GetInvalidPathChars_s);
 		addMember(l,GetRandomFileName_s);
+		addMember(l,GetRelativePath_s);
+		addMember(l,IsPathFullyQualified_s);
 		addMember(l,"AltDirectorySeparatorChar",get_AltDirectorySeparatorChar,null,false);
 		addMember(l,"DirectorySeparatorChar",get_DirectorySeparatorChar,null,false);
 		addMember(l,"PathSeparator",get_PathSeparator,null,false);

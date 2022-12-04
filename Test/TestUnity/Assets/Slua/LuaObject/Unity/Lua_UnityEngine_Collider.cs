@@ -98,6 +98,19 @@ public class Lua_UnityEngine_Collider : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_attachedArticulationBody(IntPtr l) {
+		try {
+			UnityEngine.Collider self=(UnityEngine.Collider)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.attachedArticulationBody);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isTrigger(IntPtr l) {
 		try {
 			UnityEngine.Collider self=(UnityEngine.Collider)checkSelf(l);
@@ -167,6 +180,34 @@ public class Lua_UnityEngine_Collider : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_hasModifiableContacts(IntPtr l) {
+		try {
+			UnityEngine.Collider self=(UnityEngine.Collider)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.hasModifiableContacts);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_hasModifiableContacts(IntPtr l) {
+		try {
+			UnityEngine.Collider self=(UnityEngine.Collider)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.hasModifiableContacts=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_sharedMaterial(IntPtr l) {
 		try {
 			UnityEngine.Collider self=(UnityEngine.Collider)checkSelf(l);
@@ -229,9 +270,11 @@ public class Lua_UnityEngine_Collider : LuaObject {
 		addMember(l,ClosestPointOnBounds);
 		addMember(l,"enabled",get_enabled,set_enabled,true);
 		addMember(l,"attachedRigidbody",get_attachedRigidbody,null,true);
+		addMember(l,"attachedArticulationBody",get_attachedArticulationBody,null,true);
 		addMember(l,"isTrigger",get_isTrigger,set_isTrigger,true);
 		addMember(l,"contactOffset",get_contactOffset,set_contactOffset,true);
 		addMember(l,"bounds",get_bounds,null,true);
+		addMember(l,"hasModifiableContacts",get_hasModifiableContacts,set_hasModifiableContacts,true);
 		addMember(l,"sharedMaterial",get_sharedMaterial,set_sharedMaterial,true);
 		addMember(l,"material",get_material,set_material,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Collider),typeof(UnityEngine.Component));

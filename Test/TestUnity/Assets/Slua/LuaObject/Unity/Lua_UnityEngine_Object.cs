@@ -49,54 +49,6 @@ public class Lua_UnityEngine_Object : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CompareName__Object(IntPtr l) {
-		try {
-			UnityEngine.Object self=(UnityEngine.Object)checkSelf(l);
-			UnityEngine.Object a1;
-			checkType(l,2,out a1);
-			var ret=self.CompareName(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int CompareName__String(IntPtr l) {
-		try {
-			UnityEngine.Object self=(UnityEngine.Object)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			var ret=self.CompareName(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int NameContains(IntPtr l) {
-		try {
-			UnityEngine.Object self=(UnityEngine.Object)checkSelf(l);
-			System.String a1;
-			checkType(l,2,out a1);
-			var ret=self.NameContains(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static new public int ToString(IntPtr l) {
 		try {
 			UnityEngine.Object self=(UnityEngine.Object)checkSelf(l);
@@ -277,11 +229,28 @@ public class Lua_UnityEngine_Object : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int FindObjectsOfType_s(IntPtr l) {
+	static public int FindObjectsOfType__Type_s(IntPtr l) {
 		try {
 			System.Type a1;
 			checkType(l,1,out a1);
 			var ret=UnityEngine.Object.FindObjectsOfType(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int FindObjectsOfType__Type__Boolean_s(IntPtr l) {
+		try {
+			System.Type a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.Object.FindObjectsOfType(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -306,11 +275,28 @@ public class Lua_UnityEngine_Object : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int FindObjectOfType_s(IntPtr l) {
+	static public int FindObjectOfType__Type_s(IntPtr l) {
 		try {
 			System.Type a1;
 			checkType(l,1,out a1);
 			var ret=UnityEngine.Object.FindObjectOfType(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int FindObjectOfType__Type__Boolean_s(IntPtr l) {
+		try {
+			System.Type a1;
+			checkType(l,1,out a1);
+			System.Boolean a2;
+			checkType(l,2,out a2);
+			var ret=UnityEngine.Object.FindObjectOfType(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -415,9 +401,6 @@ public class Lua_UnityEngine_Object : LuaObject {
 		addMember(l,ctor_s);
 		addMember(l,GetInstanceID);
 		addMember(l,Equals);
-		addMember(l,CompareName__Object);
-		addMember(l,CompareName__String);
-		addMember(l,NameContains);
 		addMember(l,ToString);
 		addMember(l,op_Implicit_s);
 		addMember(l,Instantiate__Object_s);
@@ -429,9 +412,11 @@ public class Lua_UnityEngine_Object : LuaObject {
 		addMember(l,Destroy__Object__Single_s);
 		addMember(l,DestroyImmediate__Object_s);
 		addMember(l,DestroyImmediate__Object__Boolean_s);
-		addMember(l,FindObjectsOfType_s);
+		addMember(l,FindObjectsOfType__Type_s);
+		addMember(l,FindObjectsOfType__Type__Boolean_s);
 		addMember(l,DontDestroyOnLoad_s);
-		addMember(l,FindObjectOfType_s);
+		addMember(l,FindObjectOfType__Type_s);
+		addMember(l,FindObjectOfType__Type__Boolean_s);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,"name",get_name,set_name,true);

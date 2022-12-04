@@ -50,6 +50,7 @@ public class Lua_UnityEngine_ParticleSystemVertexStream : LuaObject {
 		addMember(l,42,"NoiseImpulseX");
 		addMember(l,43,"NoiseImpulseXY");
 		addMember(l,44,"NoiseImpulseXYZ");
+		addMember(l,45,"MeshIndex");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

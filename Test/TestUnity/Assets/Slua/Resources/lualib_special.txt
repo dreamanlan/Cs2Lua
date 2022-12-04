@@ -20,16 +20,6 @@ function get_unity_color_white(funcInfo)
 	return obj
 end
 
-function wrap_color_array(funcInfo, classObj, typeKind, ...)
-	local newarr = wraparray({...}, nil, classObj, typeKind)
-	for i,v in ipairs(newarr) do
-	    if v~=nil then
-	        luatableremove(funcInfo.c_list, v)
-	    end
-	end
-	return newarr;
-end
-
 function recycle_and_keep_color(funcInfo, fieldType, oldVal, newVal)
 	recycleandkeepcheck(funcInfo, fieldType, oldVal, newVal)
 	if not rawequal(oldVal,newVal) and oldVal~=nil then

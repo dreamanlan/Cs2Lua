@@ -40,26 +40,26 @@ class(Mandelbrot) {
 			local(maxiter); maxiter = 50;
 			local(limit); limit = 4.0000000000000000;
 			local(y); y = 0;
-			while( execbinary("<", y, height, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
-				local(Ci); Ci = execbinary("-", execbinary("/", execbinary("*", 2.0000000000000000, y, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), height, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), 1.0000000000000000, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct);
+			while( execbinary("<", y, height, System.Int32, System.Int32, TypeKind.Structure, TypeKind.Structure) ){
+				local(Ci); Ci = execbinary("-", execbinary("/", execbinary("*", 2.0000000000000000, y, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), height, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), 1.0000000000000000, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure);
 				local(x); x = 0;
-				while( execbinary("<", x, width, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct) ){
+				while( execbinary("<", x, width, System.Int32, System.Int32, TypeKind.Structure, TypeKind.Structure) ){
 					local(Zr); Zr = 0.0000000000000000;
 					local(Zi); Zi = 0.0000000000000000;
-					local(Cr); Cr = execbinary("-", execbinary("/", execbinary("*", 2.0000000000000000, x, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), width, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), 1.5000000000000000, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct);
+					local(Cr); Cr = execbinary("-", execbinary("/", execbinary("*", 2.0000000000000000, x, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), width, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), 1.5000000000000000, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure);
 					local(i); i = maxiter;
 					local(isInside); isInside = true;
 					do{
-						local(Tr); Tr = execbinary("+", execbinary("-", execbinary("*", Zr, Zr, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), execbinary("*", Zi, Zi, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), Cr, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct);
-						Zi = execbinary("+", execbinary("*", execbinary("*", 2.0000000000000000, Zr, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), Zi, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), Ci, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct);
+						local(Tr); Tr = execbinary("+", execbinary("-", execbinary("*", Zr, Zr, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), execbinary("*", Zi, Zi, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), Cr, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure);
+						Zi = execbinary("+", execbinary("*", execbinary("*", 2.0000000000000000, Zr, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), Zi, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), Ci, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure);
 						Zr = Tr;
-						if( execbinary(">", execbinary("+", execbinary("*", Zr, Zr, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), execbinary("*", Zi, Zi, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), limit, System.Double, System.Double, TypeKind.Struct, TypeKind.Struct), 33_20_36_21 ){
+						if( execbinary(">", execbinary("+", execbinary("*", Zr, Zr, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), execbinary("*", Zi, Zi, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), limit, System.Double, System.Double, TypeKind.Structure, TypeKind.Structure), 33_20_36_21 ){
 							isInside = false;
 							block{
 							break;
 							};
 						};
-					}while(execbinary(">", prefixoperator(true, i, execbinary("-", i, 1, null, null, null, null)), 0, System.Int32, System.Int32, TypeKind.Struct, TypeKind.Struct));
+					}while(execbinary(">", prefixoperator(true, i, execbinary("-", i, 1, null, null, null, null)), 0, System.Int32, System.Int32, TypeKind.Structure, TypeKind.Structure));
 					if( isInside, 39_16_41_17 ){
 						callinstance(this, Mandelbrot, "DrawCube", x, y, width, height);
 					};
@@ -70,12 +70,12 @@ class(Mandelbrot) {
 		}options[needfuncinfo(false), rettype(return, System.Void, TypeKind.Unknown, 0, false)];
 		DrawCube = deffunc(0)args(this, x, y, w, h){
 			local(cube); cube = callexternstatic(UnityEngine.GameObject, "CreatePrimitive", 3);
-			setexterninstance(SymbolKind.Property, getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "position", newexternstruct(UnityEngine.Vector3, "g_UnityEngine_Vector3", typeargs(), typekinds(), "ctor__Single__Single__Single", 0, null, execbinary("/", execbinary("*", execbinary("*", x, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), w, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), h, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 12, System.Single, System.Single, TypeKind.Struct, TypeKind.Struct), 0));
+			setexterninstance(SymbolKind.Property, getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "position", newexternstruct(UnityEngine.Vector3, "g_UnityEngine_Vector3", typeargs(), typekinds(), "ctor__Single__Single__Single", 0, null, execbinary("/", execbinary("*", execbinary("*", x, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Structure, TypeKind.Structure), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Structure, TypeKind.Structure), w, System.Single, System.Single, TypeKind.Structure, TypeKind.Structure), execbinary("-", execbinary("/", execbinary("*", execbinary("*", y, getinstance(SymbolKind.Field, this, Mandelbrot, "r"), System.Single, System.Single, TypeKind.Structure, TypeKind.Structure), getinstance(SymbolKind.Field, this, Mandelbrot, "scale"), System.Single, System.Single, TypeKind.Structure, TypeKind.Structure), h, System.Single, System.Single, TypeKind.Structure, TypeKind.Structure), 12, System.Single, System.Single, TypeKind.Structure, TypeKind.Structure), 0));
 			callexterninstance(getexterninstance(SymbolKind.Property, cube, UnityEngine.GameObject, "transform"), UnityEngine.Transform, "SetParent__Transform", getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Mandelbrot, "root"), UnityEngine.GameObject, "transform"));
 			local(mat); mat = getexterninstance(SymbolKind.Property, callexterninstance(cube, UnityEngine.GameObject, "GetComponent__Type", UnityEngine.Renderer), UnityEngine.Renderer, "material");
 			local(ix); ix = callexternstatic(UnityEngine.Random, "Range__Int32__Int32", 0, getexterninstance(SymbolKind.Property, getinstance(SymbolKind.Field, this, Mandelbrot, "colors"), System.Array, "Length"));
 			setexterninstance(SymbolKind.Property, mat, UnityEngine.Material, "color", arraygetstruct(false, SymbolKind.Field, UnityEngine.Color, getinstance(SymbolKind.Field, this, Mandelbrot, "colors"), 1, ix + 1));
-		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(x, System.Int32, TypeKind.Struct, 0, true), paramtype(y, System.Int32, TypeKind.Struct, 0, true), paramtype(w, System.Int32, TypeKind.Struct, 0, true), paramtype(h, System.Int32, TypeKind.Struct, 0, true)];
+		}options[needfuncinfo(true), rettype(return, System.Void, TypeKind.Unknown, 0, false), paramtype(x, System.Int32, TypeKind.Structure, 0, true), paramtype(y, System.Int32, TypeKind.Structure, 0, true), paramtype(w, System.Int32, TypeKind.Structure, 0, true), paramtype(h, System.Int32, TypeKind.Structure, 0, true)];
 		ctor = deffunc(0)args(this){
 			callinstance(this, Mandelbrot, "__ctor");
 		};
@@ -85,7 +85,7 @@ class(Mandelbrot) {
 			}else{
 				setinstance(SymbolKind.Field, this, Mandelbrot, "__ctor_called", true);
 			};
-			setinstance(SymbolKind.Field, this, Mandelbrot, "colors", literalarray(UnityEngine.Color, TypeKind.Struct, getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "red"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "blue"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "white"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "black")));
+			setinstance(SymbolKind.Field, this, Mandelbrot, "colors", literalarray(UnityEngine.Color, TypeKind.Structure, getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "red"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "blue"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "green"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "cyan"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "grey"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "white"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "yellow"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "magenta"), getexternstaticstructmember(SymbolKind.Property, UnityEngine.Color, "black")));
 		}options[needfuncinfo(true)];
 	};
 	instance_fields {

@@ -85,6 +85,18 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int UpdateCachedState_s(IntPtr l) {
+		try {
+			UnityEngine.ReflectionProbe.UpdateCachedState();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_size(IntPtr l) {
 		try {
 			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
@@ -257,6 +269,34 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 			bool v;
 			checkType(l,2,out v);
 			self.hdr=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_renderDynamicObjects(IntPtr l) {
+		try {
+			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.renderDynamicObjects);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_renderDynamicObjects(IntPtr l) {
+		try {
+			UnityEngine.ReflectionProbe self=(UnityEngine.ReflectionProbe)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.renderDynamicObjects=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -738,6 +778,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		addMember(l,RenderProbe__RenderTexture);
 		addMember(l,IsFinishedRendering);
 		addMember(l,BlendCubemap_s);
+		addMember(l,UpdateCachedState_s);
 		addMember(l,"size",get_size,set_size,true);
 		addMember(l,"center",get_center,set_center,true);
 		addMember(l,"nearClipPlane",get_nearClipPlane,set_nearClipPlane,true);
@@ -745,6 +786,7 @@ public class Lua_UnityEngine_ReflectionProbe : LuaObject {
 		addMember(l,"intensity",get_intensity,set_intensity,true);
 		addMember(l,"bounds",get_bounds,null,true);
 		addMember(l,"hdr",get_hdr,set_hdr,true);
+		addMember(l,"renderDynamicObjects",get_renderDynamicObjects,set_renderDynamicObjects,true);
 		addMember(l,"shadowDistance",get_shadowDistance,set_shadowDistance,true);
 		addMember(l,"resolution",get_resolution,set_resolution,true);
 		addMember(l,"cullingMask",get_cullingMask,set_cullingMask,true);

@@ -109,6 +109,26 @@ public class Lua_System_Text_UnicodeEncoding : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetByteCount__String__Int32__Int32(IntPtr l) {
+		try {
+			System.Text.UnicodeEncoding self=(System.Text.UnicodeEncoding)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetByteCount(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetBytes__A_Char(IntPtr l) {
 		try {
 			System.Text.UnicodeEncoding self=(System.Text.UnicodeEncoding)checkSelf(l);
@@ -146,6 +166,26 @@ public class Lua_System_Text_UnicodeEncoding : LuaObject {
 			System.Text.UnicodeEncoding self=(System.Text.UnicodeEncoding)checkSelf(l);
 			System.Char[] a1;
 			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			System.Int32 a3;
+			checkType(l,4,out a3);
+			var ret=self.GetBytes(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetBytes__String__Int32__Int32(IntPtr l) {
+		try {
+			System.Text.UnicodeEncoding self=(System.Text.UnicodeEncoding)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
 			System.Int32 a2;
 			checkType(l,3,out a2);
 			System.Int32 a3;
@@ -450,9 +490,11 @@ public class Lua_System_Text_UnicodeEncoding : LuaObject {
 		addMember(l,GetByteCount__String);
 		addMember(l,GetByteCount__A_Char);
 		addMember(l,GetByteCount__A_Char__Int32__Int32);
+		addMember(l,GetByteCount__String__Int32__Int32);
 		addMember(l,GetBytes__A_Char);
 		addMember(l,GetBytes__String);
 		addMember(l,GetBytes__A_Char__Int32__Int32);
+		addMember(l,GetBytes__String__Int32__Int32);
 		addMember(l,GetBytes__String__Int32__Int32__A_Byte__Int32);
 		addMember(l,GetBytes__A_Char__Int32__Int32__A_Byte__Int32);
 		addMember(l,GetCharCount__A_Byte);

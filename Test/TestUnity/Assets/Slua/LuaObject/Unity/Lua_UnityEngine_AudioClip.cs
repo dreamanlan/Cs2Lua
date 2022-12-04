@@ -235,11 +235,11 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_loadState(IntPtr l) {
+	static public int get_loadInBackground(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
 			pushValue(l,true);
-			pushEnum(l,(int)self.loadState);
+			pushValue(l,self.loadInBackground);
 			return 2;
 		}
 		catch(Exception e) {
@@ -248,11 +248,11 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_loadInBackground(IntPtr l) {
+	static public int get_loadState(IntPtr l) {
 		try {
 			UnityEngine.AudioClip self=(UnityEngine.AudioClip)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.loadInBackground);
+			pushEnum(l,(int)self.loadState);
 			return 2;
 		}
 		catch(Exception e) {
@@ -276,8 +276,8 @@ public class Lua_UnityEngine_AudioClip : LuaObject {
 		addMember(l,"loadType",get_loadType,null,true);
 		addMember(l,"preloadAudioData",get_preloadAudioData,null,true);
 		addMember(l,"ambisonic",get_ambisonic,null,true);
-		addMember(l,"loadState",get_loadState,null,true);
 		addMember(l,"loadInBackground",get_loadInBackground,null,true);
+		addMember(l,"loadState",get_loadState,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.AudioClip),typeof(UnityEngine.Object));
 	}
 }

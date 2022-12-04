@@ -27,6 +27,7 @@ namespace SLua
 
     public class CustomExport
     {
+
         public static void OnGetAssemblyToGenerateExtensionMethod(out List<string> list)
         {
             list = new List<string> {
@@ -82,6 +83,7 @@ namespace SLua
             add(typeof(System.IO.FileStream), "System.IO.FileStream");
             add(typeof(System.IO.BinaryReader), "System.IO.BinaryReader");
             add(typeof(System.IO.BinaryWriter), "System.IO.BinaryWriter");
+            add(typeof(System.DateTime), "System.DateTime");
             add(typeof(System.TimeSpan), "System.TimeSpan");
             add(typeof(System.TimeZone), "System.TimeZone");
             add(typeof(System.Math), "System.Math");
@@ -116,7 +118,6 @@ namespace SLua
             // type is what you want to export
             // typename used for simplify generic type name or rename, like List<int> named to "ListInt", if not a generic type keep typename as null or rename as new type name
         }
-
         public static HashSet<string> OnAddCustomNamespace()
         {
             return new HashSet<string> {
@@ -133,15 +134,14 @@ namespace SLua
             //list.Add("NGUI");
             list.Add("CustomApi");
         }
-
-        public static void OnGetCustomAssemblyUseList(out HashSet<string> list)
+        public static HashSet<string> OnGetCustomAssemblyUseList()
         {
-            list = new HashSet<string> {
+            return new HashSet<string> {
             };
         }
-        public static void OnGetCustomAssemblyNoUseList(out List<string> list)
+        public static List<string> OnGetCustomAssemblyNoUseList()
         {
-            list = new List<string> {
+            return new List<string> {
             };
         }
 
@@ -163,21 +163,24 @@ namespace SLua
             "UnityEngine.Debug.LogErrorFormat",
             "UnityEngine.Debug.LogAssertionFormat",
             "UnityEngine.WWW.GetMovieTexture",
-            "UnityEngine.Font.GetPathsToOSFonts",
+            "UnityEngine.Font.GetPathsToOSFonts",            
+			"System.Type.MakeGenericSignatureType",
+            "System.Type.IsCollectible",
+            "System.Collections.Generic.HashSet`1.EnsureCapacity",
         };
         // white list
-        public static void OnGetUseList(out HashSet<string> list)
+        public static HashSet<string> OnGetUseList()
         {
-            list = new HashSet<string>
+            return new HashSet<string>
             {
-
+                "UnityEngine.Texture2D"
             };
         }
         // black list
-        public static void OnGetNoUseList(out List<string> list)
+        public static List<string> OnGetNoUseList()
         {
-            list = new List<string>
-            {      
+            return new List<string>
+            {
                 "HideInInspector",
                 "ExecuteInEditMode",
                 "AddComponentMenu",
@@ -186,7 +189,7 @@ namespace SLua
                 "DisallowMultipleComponent",
                 "SerializeField",
                 "AssemblyIsEditorAssembly",
-                "Attribute", 
+                "Attribute",
                 "Types",
                 "UnitySurrogateSelector",
                 "TrackedReference",
@@ -209,7 +212,7 @@ namespace SLua
                 "TextClipping",
                 "Gizmos",
                 "ADBannerView",
-                "ADInterstitialAd",            
+                "ADInterstitialAd",
                 "Android",
                 "Tizen",
                 "jvalue",
@@ -225,14 +228,15 @@ namespace SLua
                 "Handheld",
                 "LocalNotification",
                 "NotificationServices",
-                "RemoteNotificationType",      
+                "RemoteNotificationType",
                 "RemoteNotification",
                 "SamsungTV",
                 "TextureCompressionQuality",
                 "TouchScreenKeyboardType",
                 "TouchScreenKeyboard",
+                "MovieTexture",
                 "UnityEngineInternal",
-                "Terrain",                            
+                "Terrain",
                 "Tree",
                 "SplatPrototype",
                 "DetailPrototype",
@@ -240,8 +244,8 @@ namespace SLua
                 "MeshSubsetCombineUtility",
                 "AOT",
                 "Social",
-                "Enumerator",       
-                "SendMouseEvents",               
+                "Enumerator",
+                "SendMouseEvents",
                 "Cursor",
                 "Flash",
                 "ActionScript",
@@ -253,43 +257,18 @@ namespace SLua
                 "GraphicRebuildTracker",
                 "Advertisements",
                 "UnityEditor",
-			    "WSA",
-			    "EventProvider",
-			    "Apple",
-			    "ClusterInput",
+                "WSA",
+                "EventProvider",
+                "Apple",
+                "ClusterInput",
                 "CullingParameters",
-                "CullResults",
                 "ShadowSplitData",
-                "DisposeSentinel",
-                "ReflectionMethodsCache",
-                "MovieTexture",
-                "2D",
-                "Cache",
-                "CachedAssetBundle",
-                "Caching",
-                "Compute",
-                "CharacterController",
-                "ConstantForce",
-                "ContactPoint",
-                "ControllerColliderHit",
-                "CrashReport",
-                "Cubemap",
-                "CullingGroup",
-                "CustomRenderTexture",
-                "Experimental",
-                "Joint",
-                "ForceMode",
-                "Lightmap",
-                "LightProbe",
-                "Rendering",
-                "Rigidbody",
-                "CharacterInfo",
-                "LOD",
+                "RaycastAllCallback",
+                "GetRayIntersectionAllCallback",
+                "Raycast2DCallback",
+                "Raycast3DCallback",
+                "DeallocateDelegate",
                 "Unsafe",
-                "UnityM1Extension",
-                "UnityM1Version",
-				"ParticleSystemForceField",
-                "UnityStats2"
             };
         }
     }

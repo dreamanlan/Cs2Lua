@@ -185,11 +185,26 @@ public class Lua_System_Double : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int IsPositiveInfinity_s(IntPtr l) {
+	static public int IsNaN_s(IntPtr l) {
 		try {
 			System.Double a1;
 			checkType(l,1,out a1);
-			var ret=System.Double.IsPositiveInfinity(a1);
+			var ret=System.Double.IsNaN(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsNegative_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Double.IsNegative(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -215,11 +230,41 @@ public class Lua_System_Double : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int IsNaN_s(IntPtr l) {
+	static public int IsNormal_s(IntPtr l) {
 		try {
 			System.Double a1;
 			checkType(l,1,out a1);
-			var ret=System.Double.IsNaN(a1);
+			var ret=System.Double.IsNormal(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsPositiveInfinity_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Double.IsPositiveInfinity(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int IsSubnormal_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			var ret=System.Double.IsSubnormal(a1);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -522,9 +567,12 @@ public class Lua_System_Double : LuaObject {
 		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,GetTypeCode);
 		addMember(l,IsInfinity_s);
-		addMember(l,IsPositiveInfinity_s);
-		addMember(l,IsNegativeInfinity_s);
 		addMember(l,IsNaN_s);
+		addMember(l,IsNegative_s);
+		addMember(l,IsNegativeInfinity_s);
+		addMember(l,IsNormal_s);
+		addMember(l,IsPositiveInfinity_s);
+		addMember(l,IsSubnormal_s);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,op_LessThan_s);

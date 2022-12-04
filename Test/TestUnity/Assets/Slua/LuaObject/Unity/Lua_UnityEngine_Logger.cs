@@ -236,6 +236,38 @@ public class Lua_UnityEngine_Logger : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int LogException__Exception(IntPtr l) {
+		try {
+			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
+			System.Exception a1;
+			checkType(l,2,out a1);
+			self.LogException(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LogException__Exception__Object(IntPtr l) {
+		try {
+			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
+			System.Exception a1;
+			checkType(l,2,out a1);
+			UnityEngine.Object a2;
+			checkType(l,3,out a2);
+			self.LogException(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int LogFormat__LogType__String__A_Object(IntPtr l) {
 		try {
 			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
@@ -267,38 +299,6 @@ public class Lua_UnityEngine_Logger : LuaObject {
 			System.Object[] a4;
 			checkParams(l,5,out a4);
 			self.LogFormat(a1,a2,a3,a4);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int LogException__Exception(IntPtr l) {
-		try {
-			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
-			System.Exception a1;
-			checkType(l,2,out a1);
-			self.LogException(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int LogException__Exception__Object(IntPtr l) {
-		try {
-			UnityEngine.Logger self=(UnityEngine.Logger)checkSelf(l);
-			System.Exception a1;
-			checkType(l,2,out a1);
-			UnityEngine.Object a2;
-			checkType(l,3,out a2);
-			self.LogException(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -406,10 +406,10 @@ public class Lua_UnityEngine_Logger : LuaObject {
 		addMember(l,LogWarning__String__Object__Object);
 		addMember(l,LogError__String__Object);
 		addMember(l,LogError__String__Object__Object);
-		addMember(l,LogFormat__LogType__String__A_Object);
-		addMember(l,LogFormat__LogType__Object__String__A_Object);
 		addMember(l,LogException__Exception);
 		addMember(l,LogException__Exception__Object);
+		addMember(l,LogFormat__LogType__String__A_Object);
+		addMember(l,LogFormat__LogType__Object__String__A_Object);
 		addMember(l,"logHandler",get_logHandler,set_logHandler,true);
 		addMember(l,"logEnabled",get_logEnabled,set_logEnabled,true);
 		addMember(l,"filterLogType",get_filterLogType,set_filterLogType,true);

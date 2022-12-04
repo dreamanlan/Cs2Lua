@@ -123,13 +123,32 @@ public class Lua_UnityEngine_Animations_AnimationLayerMixerPlayable : LuaObject 
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Create_s(IntPtr l) {
+	static public int Create__PlayableGraph__Int32_s(IntPtr l) {
 		try {
 			UnityEngine.Playables.PlayableGraph a1;
 			checkValueType(l,1,out a1);
 			System.Int32 a2;
 			checkType(l,2,out a2);
 			var ret=UnityEngine.Animations.AnimationLayerMixerPlayable.Create(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Create__PlayableGraph__Int32__Boolean_s(IntPtr l) {
+		try {
+			UnityEngine.Playables.PlayableGraph a1;
+			checkValueType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Boolean a3;
+			checkType(l,3,out a3);
+			var ret=UnityEngine.Animations.AnimationLayerMixerPlayable.Create(a1,a2,a3);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -190,7 +209,8 @@ public class Lua_UnityEngine_Animations_AnimationLayerMixerPlayable : LuaObject 
 		addMember(l,IsLayerAdditive);
 		addMember(l,SetLayerAdditive);
 		addMember(l,SetLayerMaskFromAvatarMask);
-		addMember(l,Create_s);
+		addMember(l,Create__PlayableGraph__Int32_s);
+		addMember(l,Create__PlayableGraph__Int32__Boolean_s);
 		addMember(l,op_Implicit_s);
 		addMember(l,op_Explicit_s);
 		addMember(l,"Null",get_Null,null,false);

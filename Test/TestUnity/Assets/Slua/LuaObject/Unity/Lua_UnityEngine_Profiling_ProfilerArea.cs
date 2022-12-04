@@ -18,6 +18,7 @@ public class Lua_UnityEngine_Profiling_ProfilerArea : LuaObject {
 		addMember(l,10,"UI");
 		addMember(l,11,"UIDetails");
 		addMember(l,12,"GlobalIllumination");
+		addMember(l,13,"VirtualTexturing");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

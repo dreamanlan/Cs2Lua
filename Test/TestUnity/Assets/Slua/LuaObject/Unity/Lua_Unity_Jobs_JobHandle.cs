@@ -34,20 +34,6 @@ public class Lua_Unity_Jobs_JobHandle : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int CompleteAll__NativeArray_1_JobHandle_s(IntPtr l) {
-		try {
-			Unity.Collections.NativeArray<Unity.Jobs.JobHandle> a1;
-			checkValueType(l,1,out a1);
-			Unity.Jobs.JobHandle.CompleteAll(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int CompleteAll__R_JobHandle__R_JobHandle_s(IntPtr l) {
 		try {
 			Unity.Jobs.JobHandle a1;
@@ -92,21 +78,6 @@ public class Lua_Unity_Jobs_JobHandle : LuaObject {
 			Unity.Jobs.JobHandle.ScheduleBatchedJobs();
 			pushValue(l,true);
 			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int CombineDependencies__NativeArray_1_JobHandle_s(IntPtr l) {
-		try {
-			Unity.Collections.NativeArray<Unity.Jobs.JobHandle> a1;
-			checkValueType(l,1,out a1);
-			var ret=Unity.Jobs.JobHandle.CombineDependencies(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -184,11 +155,9 @@ public class Lua_Unity_Jobs_JobHandle : LuaObject {
 		getTypeTable(l,"Unity.Jobs.JobHandle");
 		addMember(l,ctor_s);
 		addMember(l,Complete);
-		addMember(l,CompleteAll__NativeArray_1_JobHandle_s);
 		addMember(l,CompleteAll__R_JobHandle__R_JobHandle_s);
 		addMember(l,CompleteAll__R_JobHandle__R_JobHandle__R_JobHandle_s);
 		addMember(l,ScheduleBatchedJobs_s);
-		addMember(l,CombineDependencies__NativeArray_1_JobHandle_s);
 		addMember(l,CombineDependencies__JobHandle__JobHandle_s);
 		addMember(l,CombineDependencies__JobHandle__JobHandle__JobHandle_s);
 		addMember(l,CheckFenceIsDependencyOrDidSyncFence_s);

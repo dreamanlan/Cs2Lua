@@ -50,23 +50,6 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetRootGameObjects__List_1_GameObject(IntPtr l) {
-		try {
-			UnityEngine.SceneManagement.Scene self;
-			checkValueType(l,1,out self);
-			System.Collections.Generic.List<UnityEngine.GameObject> a1;
-			checkType(l,2,out a1);
-			self.GetRootGameObjects(a1);
-			pushValue(l,true);
-			setBack(l,(object)self);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static new public int Equals(IntPtr l) {
 		try {
 			UnityEngine.SceneManagement.Scene self;
@@ -246,13 +229,43 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_isSubScene(IntPtr l) {
+		try {
+			UnityEngine.SceneManagement.Scene self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.isSubScene);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_isSubScene(IntPtr l) {
+		try {
+			UnityEngine.SceneManagement.Scene self;
+			checkValueType(l,1,out self);
+			bool v;
+			checkType(l,2,out v);
+			self.isSubScene=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.SceneManagement.Scene");
 		addMember(l,ctor_s);
 		addMember(l,IsValid);
 		addMember(l,GetRootGameObjects);
-		addMember(l,GetRootGameObjects__List_1_GameObject);
 		addMember(l,Equals);
 		addMember(l,GetPhysicsScene);
 		addMember(l,op_Equality_s);
@@ -264,6 +277,7 @@ public class Lua_UnityEngine_SceneManagement_Scene : LuaObject {
 		addMember(l,"buildIndex",get_buildIndex,null,true);
 		addMember(l,"isDirty",get_isDirty,null,true);
 		addMember(l,"rootCount",get_rootCount,null,true);
+		addMember(l,"isSubScene",get_isSubScene,set_isSubScene,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.SceneManagement.Scene),typeof(System.ValueType));
 	}
 }

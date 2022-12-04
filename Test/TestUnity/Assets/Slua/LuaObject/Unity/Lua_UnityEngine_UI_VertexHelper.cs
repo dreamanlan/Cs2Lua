@@ -1,7 +1,6 @@
 ﻿using System;
 using SLua;
 using System.Collections.Generic;
-using UnityEngine.Experimental.UI;
 [UnityEngine.Scripting.Preserve]
 public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -127,14 +126,14 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddVert__Vector3__Color32__Vector2(IntPtr l) {
+	static public int AddVert__Vector3__Color32__Vector4(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
 			UnityEngine.Vector3 a1;
 			checkType(l,2,out a1);
 			UnityEngine.Color32 a2;
 			checkValueType(l,3,out a2);
-			UnityEngine.Vector2 a3;
+			UnityEngine.Vector4 a3;
 			checkType(l,4,out a3);
 			self.AddVert(a1,a2,a3);
 			pushValue(l,true);
@@ -146,16 +145,16 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddVert__Vector3__Color32__Vector2__Vector2__Vector3__Vector4(IntPtr l) {
+	static public int AddVert__Vector3__Color32__Vector4__Vector4__Vector3__Vector4(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
 			UnityEngine.Vector3 a1;
 			checkType(l,2,out a1);
 			UnityEngine.Color32 a2;
 			checkValueType(l,3,out a2);
-			UnityEngine.Vector2 a3;
+			UnityEngine.Vector4 a3;
 			checkType(l,4,out a3);
-			UnityEngine.Vector2 a4;
+			UnityEngine.Vector4 a4;
 			checkType(l,5,out a4);
 			UnityEngine.Vector3 a5;
 			checkType(l,6,out a5);
@@ -171,26 +170,26 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddVert__VertexHelper__Vector3__Color32__Vector2__Vector2__Vector2__Vector2__Vector3__Vector4(IntPtr l) {
+	static public int AddVert__Vector3__Color32__Vector4__Vector4__Vector4__Vector4__Vector3__Vector4(IntPtr l) {
 		try {
 			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
-			UnityEngine.Vector3 a2;
-			checkType(l,2,out a2);
-			UnityEngine.Color32 a3;
-			checkValueType(l,3,out a3);
-			UnityEngine.Vector2 a4;
-			checkType(l,4,out a4);
-			UnityEngine.Vector2 a5;
-			checkType(l,5,out a5);
-			UnityEngine.Vector2 a6;
-			checkType(l,6,out a6);
-			UnityEngine.Vector2 a7;
-			checkType(l,7,out a7);
-			UnityEngine.Vector3 a8;
-			checkType(l,8,out a8);
-			UnityEngine.Vector4 a9;
-			checkType(l,9,out a9);
-			self.AddVert(a2,a3,a4,a5,a6,a7,a8,a9);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Color32 a2;
+			checkValueType(l,3,out a2);
+			UnityEngine.Vector4 a3;
+			checkType(l,4,out a3);
+			UnityEngine.Vector4 a4;
+			checkType(l,5,out a4);
+			UnityEngine.Vector4 a5;
+			checkType(l,6,out a5);
+			UnityEngine.Vector4 a6;
+			checkType(l,7,out a6);
+			UnityEngine.Vector3 a7;
+			checkType(l,8,out a7);
+			UnityEngine.Vector4 a8;
+			checkType(l,9,out a8);
+			self.AddVert(a1,a2,a3,a4,a5,a6,a7,a8);
 			pushValue(l,true);
 			return 1;
 		}
@@ -225,53 +224,6 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 			UnityEngine.UIVertex[] a1;
 			checkArray(l,2,out a1);
 			self.AddUIVertexQuad(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddUIVertexStream(IntPtr l) {
-		try {
-			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-			checkType(l,2,out a1);
-			System.Collections.Generic.List<System.Int32> a2;
-			checkType(l,3,out a2);
-			self.AddUIVertexStream(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int AddUIVertexTriangleStream(IntPtr l) {
-		try {
-			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-			checkType(l,2,out a1);
-			self.AddUIVertexTriangleStream(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetUIVertexStream(IntPtr l) {
-		try {
-			UnityEngine.UI.VertexHelper self=(UnityEngine.UI.VertexHelper)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.UIVertex> a1;
-			checkType(l,2,out a1);
-			self.GetUIVertexStream(a1);
 			pushValue(l,true);
 			return 1;
 		}
@@ -316,14 +268,11 @@ public class Lua_UnityEngine_UI_VertexHelper : LuaObject {
 		addMember(l,SetUIVertex);
 		addMember(l,FillMesh);
 		addMember(l,AddVert__UIVertex);
-		addMember(l,AddVert__Vector3__Color32__Vector2);
-		addMember(l,AddVert__Vector3__Color32__Vector2__Vector2__Vector3__Vector4);
-		addMember(l,AddVert__VertexHelper__Vector3__Color32__Vector2__Vector2__Vector2__Vector2__Vector3__Vector4);
+		addMember(l,AddVert__Vector3__Color32__Vector4);
+		addMember(l,AddVert__Vector3__Color32__Vector4__Vector4__Vector3__Vector4);
+		addMember(l,AddVert__Vector3__Color32__Vector4__Vector4__Vector4__Vector4__Vector3__Vector4);
 		addMember(l,AddTriangle);
 		addMember(l,AddUIVertexQuad);
-		addMember(l,AddUIVertexStream);
-		addMember(l,AddUIVertexTriangleStream);
-		addMember(l,GetUIVertexStream);
 		addMember(l,"currentVertCount",get_currentVertCount,null,true);
 		addMember(l,"currentIndexCount",get_currentIndexCount,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.UI.VertexHelper));

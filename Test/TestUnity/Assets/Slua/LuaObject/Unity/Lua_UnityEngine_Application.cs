@@ -256,46 +256,10 @@ public class Lua_UnityEngine_Application : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_platform(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushEnum(l,(int)UnityEngine.Application.platform);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_buildGUID(IntPtr l) {
 		try {
 			pushValue(l,true);
 			pushValue(l,UnityEngine.Application.buildGUID);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_isMobilePlatform(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Application.isMobilePlatform);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_isConsolePlatform(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Application.isConsolePlatform);
 			return 2;
 		}
 		catch(Exception e) {
@@ -406,18 +370,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 		try {
 			pushValue(l,true);
 			pushValue(l,UnityEngine.Application.unityVersion);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_engineVersion(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Application.engineVersion);
 			return 2;
 		}
 		catch(Exception e) {
@@ -548,18 +500,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_systemLanguage(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushEnum(l,(int)UnityEngine.Application.systemLanguage);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_consoleLogPath(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -598,18 +538,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_internetReachability(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushEnum(l,(int)UnityEngine.Application.internetReachability);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_genuine(IntPtr l) {
 		try {
 			pushValue(l,true);
@@ -626,6 +554,66 @@ public class Lua_UnityEngine_Application : LuaObject {
 		try {
 			pushValue(l,true);
 			pushValue(l,UnityEngine.Application.genuineCheckAvailable);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_platform(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushEnum(l,(int)UnityEngine.Application.platform);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_isMobilePlatform(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Application.isMobilePlatform);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_isConsolePlatform(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Application.isConsolePlatform);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_systemLanguage(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushEnum(l,(int)UnityEngine.Application.systemLanguage);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_internetReachability(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushEnum(l,(int)UnityEngine.Application.internetReachability);
 			return 2;
 		}
 		catch(Exception e) {
@@ -665,10 +653,7 @@ public class Lua_UnityEngine_Application : LuaObject {
 		addMember(l,HasUserAuthorization_s);
 		addMember(l,"isPlaying",get_isPlaying,null,false);
 		addMember(l,"isFocused",get_isFocused,null,false);
-		addMember(l,"platform",get_platform,null,false);
 		addMember(l,"buildGUID",get_buildGUID,null,false);
-		addMember(l,"isMobilePlatform",get_isMobilePlatform,null,false);
-		addMember(l,"isConsolePlatform",get_isConsolePlatform,null,false);
 		addMember(l,"runInBackground",get_runInBackground,set_runInBackground,false);
 		addMember(l,"isBatchMode",get_isBatchMode,null,false);
 		addMember(l,"dataPath",get_dataPath,null,false);
@@ -677,7 +662,6 @@ public class Lua_UnityEngine_Application : LuaObject {
 		addMember(l,"temporaryCachePath",get_temporaryCachePath,null,false);
 		addMember(l,"absoluteURL",get_absoluteURL,null,false);
 		addMember(l,"unityVersion",get_unityVersion,null,false);
-		addMember(l,"engineVersion",get_engineVersion,null,false);
 		addMember(l,"version",get_version,null,false);
 		addMember(l,"installerName",get_installerName,null,false);
 		addMember(l,"identifier",get_identifier,null,false);
@@ -687,12 +671,15 @@ public class Lua_UnityEngine_Application : LuaObject {
 		addMember(l,"companyName",get_companyName,null,false);
 		addMember(l,"cloudProjectId",get_cloudProjectId,null,false);
 		addMember(l,"targetFrameRate",get_targetFrameRate,set_targetFrameRate,false);
-		addMember(l,"systemLanguage",get_systemLanguage,null,false);
 		addMember(l,"consoleLogPath",get_consoleLogPath,null,false);
 		addMember(l,"backgroundLoadingPriority",get_backgroundLoadingPriority,set_backgroundLoadingPriority,false);
-		addMember(l,"internetReachability",get_internetReachability,null,false);
 		addMember(l,"genuine",get_genuine,null,false);
 		addMember(l,"genuineCheckAvailable",get_genuineCheckAvailable,null,false);
+		addMember(l,"platform",get_platform,null,false);
+		addMember(l,"isMobilePlatform",get_isMobilePlatform,null,false);
+		addMember(l,"isConsolePlatform",get_isConsolePlatform,null,false);
+		addMember(l,"systemLanguage",get_systemLanguage,null,false);
+		addMember(l,"internetReachability",get_internetReachability,null,false);
 		addMember(l,"isEditor",get_isEditor,null,false);
 		createTypeMetatable(l,null, typeof(UnityEngine.Application));
 	}

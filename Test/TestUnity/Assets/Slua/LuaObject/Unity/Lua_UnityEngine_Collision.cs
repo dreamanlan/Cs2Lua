@@ -51,20 +51,6 @@ public class Lua_UnityEngine_Collision : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetEnumerator(IntPtr l) {
-		try {
-			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
-			var ret=self.GetEnumerator();
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_relativeVelocity(IntPtr l) {
 		try {
 			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
@@ -83,6 +69,32 @@ public class Lua_UnityEngine_Collision : LuaObject {
 			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
 			pushValue(l,true);
 			pushValue(l,self.rigidbody);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_articulationBody(IntPtr l) {
+		try {
+			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.articulationBody);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_body(IntPtr l) {
+		try {
+			UnityEngine.Collision self=(UnityEngine.Collision)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.body);
 			return 2;
 		}
 		catch(Exception e) {
@@ -173,9 +185,10 @@ public class Lua_UnityEngine_Collision : LuaObject {
 		addMember(l,ctor_s);
 		addMember(l,GetContact);
 		addMember(l,GetContacts);
-		addMember(l,GetEnumerator);
 		addMember(l,"relativeVelocity",get_relativeVelocity,null,true);
 		addMember(l,"rigidbody",get_rigidbody,null,true);
+		addMember(l,"articulationBody",get_articulationBody,null,true);
+		addMember(l,"body",get_body,null,true);
 		addMember(l,"collider",get_collider,null,true);
 		addMember(l,"transform",get_transform,null,true);
 		addMember(l,"gameObject",get_gameObject,null,true);

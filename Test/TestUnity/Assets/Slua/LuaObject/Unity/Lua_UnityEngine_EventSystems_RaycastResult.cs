@@ -328,6 +328,37 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_displayIndex(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.RaycastResult self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.displayIndex);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_displayIndex(IntPtr l) {
+		try {
+			UnityEngine.EventSystems.RaycastResult self;
+			checkValueType(l,1,out self);
+			System.Int32 v;
+			checkType(l,2,out v);
+			self.displayIndex=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_gameObject(IntPtr l) {
 		try {
 			UnityEngine.EventSystems.RaycastResult self;
@@ -386,6 +417,7 @@ public class Lua_UnityEngine_EventSystems_RaycastResult : LuaObject {
 		addMember(l,"worldPosition",get_worldPosition,set_worldPosition,true);
 		addMember(l,"worldNormal",get_worldNormal,set_worldNormal,true);
 		addMember(l,"screenPosition",get_screenPosition,set_screenPosition,true);
+		addMember(l,"displayIndex",get_displayIndex,set_displayIndex,true);
 		addMember(l,"gameObject",get_gameObject,set_gameObject,true);
 		addMember(l,"isValid",get_isValid,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.RaycastResult),typeof(System.ValueType));

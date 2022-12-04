@@ -38,7 +38,7 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int BakeMesh(IntPtr l) {
+	static public int BakeMesh__Mesh(IntPtr l) {
 		try {
 			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
 			UnityEngine.Mesh a1;
@@ -53,11 +53,14 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetGlobalGPUSkinning_s(IntPtr l) {
+	static public int BakeMesh__Mesh__Boolean(IntPtr l) {
 		try {
-			System.Boolean a1;
-			checkType(l,1,out a1);
-			UnityEngine.SkinnedMeshRenderer.SetGlobalGPUSkinning(a1);
+			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
+			UnityEngine.Mesh a1;
+			checkType(l,2,out a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			self.BakeMesh(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -67,9 +70,24 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetGlobalGPUSkinning_s(IntPtr l) {
+	static public int GetVertexBuffer(IntPtr l) {
 		try {
-			var ret=UnityEngine.SkinnedMeshRenderer.GetGlobalGPUSkinning();
+			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
+			var ret=self.GetVertexBuffer();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetPreviousVertexBuffer(IntPtr l) {
+		try {
+			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
+			var ret=self.GetPreviousVertexBuffer();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -276,11 +294,11 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_customGPUSkinning(IntPtr l) {
+	static public int get_vertexBufferTarget(IntPtr l) {
 		try {
 			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.customGPUSkinning);
+			pushEnum(l,(int)self.vertexBufferTarget);
 			return 2;
 		}
 		catch(Exception e) {
@@ -289,40 +307,12 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int set_customGPUSkinning(IntPtr l) {
+	static public int set_vertexBufferTarget(IntPtr l) {
 		try {
 			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
-			bool v;
-			checkType(l,2,out v);
-			self.customGPUSkinning=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_localBounds(IntPtr l) {
-		try {
-			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.localBounds);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_localBounds(IntPtr l) {
-		try {
-			UnityEngine.SkinnedMeshRenderer self=(UnityEngine.SkinnedMeshRenderer)checkSelf(l);
-			UnityEngine.Bounds v;
-			checkValueType(l,2,out v);
-			self.localBounds=v;
+			UnityEngine.GraphicsBuffer.Target v;
+			checkEnum(l,2,out v);
+			self.vertexBufferTarget=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -335,9 +325,10 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 		getTypeTable(l,"UnityEngine.SkinnedMeshRenderer");
 		addMember(l,GetBlendShapeWeight);
 		addMember(l,SetBlendShapeWeight);
-		addMember(l,BakeMesh);
-		addMember(l,SetGlobalGPUSkinning_s);
-		addMember(l,GetGlobalGPUSkinning_s);
+		addMember(l,BakeMesh__Mesh);
+		addMember(l,BakeMesh__Mesh__Boolean);
+		addMember(l,GetVertexBuffer);
+		addMember(l,GetPreviousVertexBuffer);
 		addMember(l,"quality",get_quality,set_quality,true);
 		addMember(l,"updateWhenOffscreen",get_updateWhenOffscreen,set_updateWhenOffscreen,true);
 		addMember(l,"forceMatrixRecalculationPerRender",get_forceMatrixRecalculationPerRender,set_forceMatrixRecalculationPerRender,true);
@@ -345,8 +336,7 @@ public class Lua_UnityEngine_SkinnedMeshRenderer : LuaObject {
 		addMember(l,"bones",get_bones,set_bones,true);
 		addMember(l,"sharedMesh",get_sharedMesh,set_sharedMesh,true);
 		addMember(l,"skinnedMotionVectors",get_skinnedMotionVectors,set_skinnedMotionVectors,true);
-		addMember(l,"customGPUSkinning",get_customGPUSkinning,set_customGPUSkinning,true);
-		addMember(l,"localBounds",get_localBounds,set_localBounds,true);
+		addMember(l,"vertexBufferTarget",get_vertexBufferTarget,set_vertexBufferTarget,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.SkinnedMeshRenderer),typeof(UnityEngine.Renderer));
 	}
 }

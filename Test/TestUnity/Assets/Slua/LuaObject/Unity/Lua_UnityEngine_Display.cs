@@ -207,10 +207,48 @@ public class Lua_UnityEngine_Display : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_requiresBlitToBackbuffer(IntPtr l) {
+		try {
+			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.requiresBlitToBackbuffer);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_requiresSrgbBlitToBackbuffer(IntPtr l) {
+		try {
+			UnityEngine.Display self=(UnityEngine.Display)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.requiresSrgbBlitToBackbuffer);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_main(IntPtr l) {
 		try {
 			pushValue(l,true);
 			pushValue(l,UnityEngine.Display.main);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_activeEditorGameViewTarget(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.Display.activeEditorGameViewTarget);
 			return 2;
 		}
 		catch(Exception e) {
@@ -233,7 +271,10 @@ public class Lua_UnityEngine_Display : LuaObject {
 		addMember(l,"colorBuffer",get_colorBuffer,null,true);
 		addMember(l,"depthBuffer",get_depthBuffer,null,true);
 		addMember(l,"active",get_active,null,true);
+		addMember(l,"requiresBlitToBackbuffer",get_requiresBlitToBackbuffer,null,true);
+		addMember(l,"requiresSrgbBlitToBackbuffer",get_requiresSrgbBlitToBackbuffer,null,true);
 		addMember(l,"main",get_main,null,false);
+		addMember(l,"activeEditorGameViewTarget",get_activeEditorGameViewTarget,null,false);
 		createTypeMetatable(l,null, typeof(UnityEngine.Display));
 	}
 }

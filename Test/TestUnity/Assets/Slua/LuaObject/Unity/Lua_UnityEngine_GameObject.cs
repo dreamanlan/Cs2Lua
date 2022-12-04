@@ -119,7 +119,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponentInParent(IntPtr l) {
+	static public int GetComponentInParent__Type(IntPtr l) {
 		try {
 			UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 			System.Type a1;
@@ -135,12 +135,14 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponents__Type(IntPtr l) {
+	static public int GetComponentInParent__Type__Boolean(IntPtr l) {
 		try {
 			UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 			System.Type a1;
 			checkType(l,2,out a1);
-			var ret=self.GetComponents(a1);
+			System.Boolean a2;
+			checkType(l,3,out a2);
+			var ret=self.GetComponentInParent(a1,a2);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -151,16 +153,15 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetComponents__Type__List_1_Component(IntPtr l) {
+	static public int GetComponents(IntPtr l) {
 		try {
 			UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
 			System.Type a1;
 			checkType(l,2,out a1);
-			System.Collections.Generic.List<UnityEngine.Component> a2;
-			checkType(l,3,out a2);
-			self.GetComponents(a1,a2);
+			var ret=self.GetComponents(a1);
 			pushValue(l,true);
-			return 1;
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -229,6 +230,24 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int TryGetComponent(IntPtr l) {
+		try {
+			UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
+			System.Type a1;
+			checkType(l,2,out a1);
+			UnityEngine.Component a2;
+			var ret=self.TryGetComponent(a1,out a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a2);
+			return 3;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -698,6 +717,19 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_sceneCullingMask(IntPtr l) {
+		try {
+			UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.sceneCullingMask);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_gameObject(IntPtr l) {
 		try {
 			UnityEngine.GameObject self=(UnityEngine.GameObject)checkSelf(l);
@@ -719,13 +751,14 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 		addMember(l,GetComponent__String);
 		addMember(l,GetComponentInChildren__Type);
 		addMember(l,GetComponentInChildren__Type__Boolean);
-		addMember(l,GetComponentInParent);
-		addMember(l,GetComponents__Type);
-		addMember(l,GetComponents__Type__List_1_Component);
+		addMember(l,GetComponentInParent__Type);
+		addMember(l,GetComponentInParent__Type__Boolean);
+		addMember(l,GetComponents);
 		addMember(l,GetComponentsInChildren__Type);
 		addMember(l,GetComponentsInChildren__Type__Boolean);
 		addMember(l,GetComponentsInParent__Type);
 		addMember(l,GetComponentsInParent__Type__Boolean);
+		addMember(l,TryGetComponent);
 		addMember(l,SendMessageUpwards__String);
 		addMember(l,SendMessageUpwards__String__SendMessageOptions);
 		addMember(l,SendMessageUpwards__String__Object);
@@ -753,6 +786,7 @@ public class Lua_UnityEngine_GameObject : LuaObject {
 		addMember(l,"isStatic",get_isStatic,set_isStatic,true);
 		addMember(l,"tag",get_tag,set_tag,true);
 		addMember(l,"scene",get_scene,null,true);
+		addMember(l,"sceneCullingMask",get_sceneCullingMask,null,true);
 		addMember(l,"gameObject",get_gameObject,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.GameObject),typeof(UnityEngine.Object));
 	}

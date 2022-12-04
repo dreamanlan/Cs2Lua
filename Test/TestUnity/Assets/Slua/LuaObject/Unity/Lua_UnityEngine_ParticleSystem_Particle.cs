@@ -70,6 +70,40 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetMeshIndex(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.Particle self;
+			checkValueType(l,1,out self);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			self.SetMeshIndex(a1);
+			pushValue(l,true);
+			setBack(l,(object)self);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetMeshIndex(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.Particle self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystem a1;
+			checkType(l,2,out a1);
+			var ret=self.GetMeshIndex(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_position(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.Particle self;
@@ -506,6 +540,8 @@ public class Lua_UnityEngine_ParticleSystem_Particle : LuaObject {
 		addMember(l,GetCurrentSize);
 		addMember(l,GetCurrentSize3D);
 		addMember(l,GetCurrentColor);
+		addMember(l,SetMeshIndex);
+		addMember(l,GetMeshIndex);
 		addMember(l,"position",get_position,set_position,true);
 		addMember(l,"velocity",get_velocity,set_velocity,true);
 		addMember(l,"animatedVelocity",get_animatedVelocity,null,true);

@@ -116,14 +116,13 @@ public class Lua_System_IO_BinaryWriter : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Write__Boolean(IntPtr l) {
+	static public int DisposeAsync(IntPtr l) {
 		try {
 			System.IO.BinaryWriter self=(System.IO.BinaryWriter)checkSelf(l);
-			System.Boolean a1;
-			checkType(l,2,out a1);
-			self.Write(a1);
+			var ret=self.DisposeAsync();
 			pushValue(l,true);
-			return 1;
+			pushValue(l,ret);
+			return 2;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -251,21 +250,6 @@ public class Lua_System_IO_BinaryWriter : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Write__A_Char(IntPtr l) {
-		try {
-			System.IO.BinaryWriter self=(System.IO.BinaryWriter)checkSelf(l);
-			System.Char[] a1;
-			checkArray(l,2,out a1);
-			self.Write(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int Write__Char(IntPtr l) {
 		try {
 			System.IO.BinaryWriter self=(System.IO.BinaryWriter)checkSelf(l);
@@ -326,6 +310,36 @@ public class Lua_System_IO_BinaryWriter : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Write__Boolean(IntPtr l) {
+		try {
+			System.IO.BinaryWriter self=(System.IO.BinaryWriter)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			self.Write(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Write__A_Char(IntPtr l) {
+		try {
+			System.IO.BinaryWriter self=(System.IO.BinaryWriter)checkSelf(l);
+			System.Char[] a1;
+			checkArray(l,2,out a1);
+			self.Write(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Write__Single(IntPtr l) {
 		try {
 			System.IO.BinaryWriter self=(System.IO.BinaryWriter)checkSelf(l);
@@ -356,10 +370,10 @@ public class Lua_System_IO_BinaryWriter : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Write__A_Char__Int32__Int32(IntPtr l) {
+	static public int Write__A_Byte__Int32__Int32(IntPtr l) {
 		try {
 			System.IO.BinaryWriter self=(System.IO.BinaryWriter)checkSelf(l);
-			System.Char[] a1;
+			System.Byte[] a1;
 			checkArray(l,2,out a1);
 			System.Int32 a2;
 			checkType(l,3,out a2);
@@ -375,10 +389,10 @@ public class Lua_System_IO_BinaryWriter : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int Write__A_Byte__Int32__Int32(IntPtr l) {
+	static public int Write__A_Char__Int32__Int32(IntPtr l) {
 		try {
 			System.IO.BinaryWriter self=(System.IO.BinaryWriter)checkSelf(l);
-			System.Byte[] a1;
+			System.Char[] a1;
 			checkArray(l,2,out a1);
 			System.Int32 a2;
 			checkType(l,3,out a2);
@@ -427,7 +441,7 @@ public class Lua_System_IO_BinaryWriter : LuaObject {
 		addMember(l,Dispose);
 		addMember(l,Flush);
 		addMember(l,Seek);
-		addMember(l,Write__Boolean);
+		addMember(l,DisposeAsync);
 		addMember(l,Write__UInt64);
 		addMember(l,Write__Int64);
 		addMember(l,Write__UInt32);
@@ -436,15 +450,16 @@ public class Lua_System_IO_BinaryWriter : LuaObject {
 		addMember(l,Write__Int16);
 		addMember(l,Write__Decimal);
 		addMember(l,Write__String);
-		addMember(l,Write__A_Char);
 		addMember(l,Write__Char);
 		addMember(l,Write__A_Byte);
 		addMember(l,Write__SByte);
 		addMember(l,Write__Byte);
+		addMember(l,Write__Boolean);
+		addMember(l,Write__A_Char);
 		addMember(l,Write__Single);
 		addMember(l,Write__Double);
-		addMember(l,Write__A_Char__Int32__Int32);
 		addMember(l,Write__A_Byte__Int32__Int32);
+		addMember(l,Write__A_Char__Int32__Int32);
 		addMember(l,"Null",get_Null,null,false);
 		addMember(l,"BaseStream",get_BaseStream,null,true);
 		createTypeMetatable(l,null, typeof(System.IO.BinaryWriter));

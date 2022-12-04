@@ -172,6 +172,48 @@ public class Lua_UnityEngine_Jobs_TransformAccess : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_localToWorldMatrix(IntPtr l) {
+		try {
+			UnityEngine.Jobs.TransformAccess self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.localToWorldMatrix);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_worldToLocalMatrix(IntPtr l) {
+		try {
+			UnityEngine.Jobs.TransformAccess self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.worldToLocalMatrix);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_isValid(IntPtr l) {
+		try {
+			UnityEngine.Jobs.TransformAccess self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.isValid);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Jobs.TransformAccess");
@@ -181,6 +223,9 @@ public class Lua_UnityEngine_Jobs_TransformAccess : LuaObject {
 		addMember(l,"localPosition",get_localPosition,set_localPosition,true);
 		addMember(l,"localRotation",get_localRotation,set_localRotation,true);
 		addMember(l,"localScale",get_localScale,set_localScale,true);
+		addMember(l,"localToWorldMatrix",get_localToWorldMatrix,null,true);
+		addMember(l,"worldToLocalMatrix",get_worldToLocalMatrix,null,true);
+		addMember(l,"isValid",get_isValid,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Jobs.TransformAccess),typeof(System.ValueType));
 	}
 }

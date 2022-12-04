@@ -65,23 +65,6 @@ public class Lua_UnityEngine_Playables_PlayableBehaviour : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int OnBehaviourDelay(IntPtr l) {
-		try {
-			UnityEngine.Playables.PlayableBehaviour self=(UnityEngine.Playables.PlayableBehaviour)checkSelf(l);
-			UnityEngine.Playables.Playable a1;
-			checkValueType(l,2,out a1);
-			UnityEngine.Playables.FrameData a2;
-			checkValueType(l,3,out a2);
-			self.OnBehaviourDelay(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int OnBehaviourPlay(IntPtr l) {
 		try {
 			UnityEngine.Playables.PlayableBehaviour self=(UnityEngine.Playables.PlayableBehaviour)checkSelf(l);
@@ -188,7 +171,6 @@ public class Lua_UnityEngine_Playables_PlayableBehaviour : LuaObject {
 		addMember(l,OnGraphStop);
 		addMember(l,OnPlayableCreate);
 		addMember(l,OnPlayableDestroy);
-		addMember(l,OnBehaviourDelay);
 		addMember(l,OnBehaviourPlay);
 		addMember(l,OnBehaviourPause);
 		addMember(l,PrepareData);

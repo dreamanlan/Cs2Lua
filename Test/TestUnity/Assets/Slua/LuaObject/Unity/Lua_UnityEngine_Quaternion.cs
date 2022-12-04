@@ -219,6 +219,25 @@ public class Lua_UnityEngine_Quaternion : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.Quaternion self;
+			checkType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int FromToRotation_s(IntPtr l) {
 		try {
 			UnityEngine.Vector3 a1;
@@ -787,6 +806,7 @@ public class Lua_UnityEngine_Quaternion : LuaObject {
 		addMember(l,Equals__Quaternion);
 		addMember(l,ToString);
 		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,FromToRotation_s);
 		addMember(l,Inverse_s);
 		addMember(l,Slerp_s);

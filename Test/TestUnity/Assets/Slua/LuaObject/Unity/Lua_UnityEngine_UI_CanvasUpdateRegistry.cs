@@ -77,6 +77,20 @@ public class Lua_UnityEngine_UI_CanvasUpdateRegistry : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int DisableCanvasElementForRebuild_s(IntPtr l) {
+		try {
+			UnityEngine.UI.ICanvasElement a1;
+			checkType(l,1,out a1);
+			UnityEngine.UI.CanvasUpdateRegistry.DisableCanvasElementForRebuild(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int IsRebuildingLayout_s(IntPtr l) {
 		try {
 			var ret=UnityEngine.UI.CanvasUpdateRegistry.IsRebuildingLayout();
@@ -121,6 +135,7 @@ public class Lua_UnityEngine_UI_CanvasUpdateRegistry : LuaObject {
 		addMember(l,RegisterCanvasElementForGraphicRebuild_s);
 		addMember(l,TryRegisterCanvasElementForGraphicRebuild_s);
 		addMember(l,UnRegisterCanvasElementForRebuild_s);
+		addMember(l,DisableCanvasElementForRebuild_s);
 		addMember(l,IsRebuildingLayout_s);
 		addMember(l,IsRebuildingGraphics_s);
 		addMember(l,"instance",get_instance,null,false);

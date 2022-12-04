@@ -7,6 +7,7 @@ public class Lua_UnityEngine_ParticleSystemEmitterVelocityMode : LuaObject {
 		getEnumTable(l,"UnityEngine.ParticleSystemEmitterVelocityMode");
 		addMember(l,0,"Transform");
 		addMember(l,1,"Rigidbody");
+		addMember(l,2,"Custom");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

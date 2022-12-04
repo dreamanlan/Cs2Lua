@@ -68,6 +68,22 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetPersistentListenerState(IntPtr l) {
+		try {
+			UnityEngine.Events.UnityEventBase self=(UnityEngine.Events.UnityEventBase)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetPersistentListenerState(a1);
+			pushValue(l,true);
+			pushEnum(l,(int)ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveAllListeners(IntPtr l) {
 		try {
 			UnityEngine.Events.UnityEventBase self=(UnityEngine.Events.UnityEventBase)checkSelf(l);
@@ -95,9 +111,28 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetValidMethodInfo_s(IntPtr l) {
+	static public int GetValidMethodInfo__Object__String__A_Type_s(IntPtr l) {
 		try {
 			System.Object a1;
+			checkType(l,1,out a1);
+			System.String a2;
+			checkType(l,2,out a2);
+			System.Type[] a3;
+			checkArray(l,3,out a3);
+			var ret=UnityEngine.Events.UnityEventBase.GetValidMethodInfo(a1,a2,a3);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetValidMethodInfo__Type__String__A_Type_s(IntPtr l) {
+		try {
+			System.Type a1;
 			checkType(l,1,out a1);
 			System.String a2;
 			checkType(l,2,out a2);
@@ -119,9 +154,11 @@ public class Lua_UnityEngine_Events_UnityEventBase : LuaObject {
 		addMember(l,GetPersistentTarget);
 		addMember(l,GetPersistentMethodName);
 		addMember(l,SetPersistentListenerState);
+		addMember(l,GetPersistentListenerState);
 		addMember(l,RemoveAllListeners);
 		addMember(l,ToString);
-		addMember(l,GetValidMethodInfo_s);
+		addMember(l,GetValidMethodInfo__Object__String__A_Type_s);
+		addMember(l,GetValidMethodInfo__Type__String__A_Type_s);
 		createTypeMetatable(l,null, typeof(UnityEngine.Events.UnityEventBase));
 	}
 }

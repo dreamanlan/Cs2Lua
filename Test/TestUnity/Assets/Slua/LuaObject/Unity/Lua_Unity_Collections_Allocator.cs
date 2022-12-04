@@ -10,6 +10,7 @@ public class Lua_Unity_Collections_Allocator : LuaObject {
 		addMember(l,2,"Temp");
 		addMember(l,3,"TempJob");
 		addMember(l,4,"Persistent");
+		addMember(l,5,"AudioKernel");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

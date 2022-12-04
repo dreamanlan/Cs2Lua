@@ -35,36 +35,6 @@ public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetOverrides(IntPtr l) {
-		try {
-			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
-			System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<UnityEngine.AnimationClip,UnityEngine.AnimationClip>> a1;
-			checkType(l,2,out a1);
-			self.GetOverrides(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int ApplyOverrides(IntPtr l) {
-		try {
-			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
-			System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<UnityEngine.AnimationClip,UnityEngine.AnimationClip>> a1;
-			checkType(l,2,out a1);
-			self.ApplyOverrides(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_runtimeAnimatorController(IntPtr l) {
 		try {
 			UnityEngine.AnimatorOverrideController self=(UnityEngine.AnimatorOverrideController)checkSelf(l);
@@ -170,8 +140,6 @@ public class Lua_UnityEngine_AnimatorOverrideController : LuaObject {
 		getTypeTable(l,"UnityEngine.AnimatorOverrideController");
 		addMember(l,ctor_s);
 		addMember(l,ctor__RuntimeAnimatorController_s);
-		addMember(l,GetOverrides);
-		addMember(l,ApplyOverrides);
 		addMember(l,getItem);
 		addMember(l,setItem);
 		addMember(l,"runtimeAnimatorController",get_runtimeAnimatorController,set_runtimeAnimatorController,true);

@@ -21,6 +21,19 @@ public class Lua_UnityEngine_WaitForSecondsRealtime : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Reset(IntPtr l) {
+		try {
+			UnityEngine.WaitForSecondsRealtime self=(UnityEngine.WaitForSecondsRealtime)checkSelf(l);
+			self.Reset();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_waitTime(IntPtr l) {
 		try {
 			UnityEngine.WaitForSecondsRealtime self=(UnityEngine.WaitForSecondsRealtime)checkSelf(l);
@@ -64,6 +77,7 @@ public class Lua_UnityEngine_WaitForSecondsRealtime : LuaObject {
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.WaitForSecondsRealtime");
 		addMember(l,ctor_s);
+		addMember(l,Reset);
 		addMember(l,"waitTime",get_waitTime,set_waitTime,true);
 		addMember(l,"keepWaiting",get_keepWaiting,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.WaitForSecondsRealtime),typeof(UnityEngine.CustomYieldInstruction));

@@ -1,8 +1,8 @@
 ============<<<Semantic Warning:Program>>>============
-E:\OpenSource\Cs2Lua\Test\Cs2LuaScript\Program.cs(2,1): hidden CS8019: Unnecessary using directive.
-E:\OpenSource\Cs2Lua\Test\Cs2LuaScript\Program.cs(1,1): hidden CS8019: Unnecessary using directive.
-E:\OpenSource\Cs2Lua\Test\Cs2LuaScript\Program.cs(3,1): hidden CS8019: Unnecessary using directive.
+D:\GitHub\Cs2Lua\Test\Cs2LuaScript\Program.cs(2,1): hidden CS8019: Unnecessary using directive.
+D:\GitHub\Cs2Lua\Test\Cs2LuaScript\Program.cs(1,1): hidden CS8019: Unnecessary using directive.
+D:\GitHub\Cs2Lua\Test\Cs2LuaScript\Program.cs(3,1): hidden CS8019: Unnecessary using directive.
 ============<<<Semantic Warning:test1>>>============
-E:\OpenSource\Cs2Lua\Test\Cs2LuaScript\test1.cs(3,1): hidden CS8019: Unnecessary using directive.
+D:\GitHub\Cs2Lua\Test\Cs2LuaScript\test1.cs(3,1): hidden CS8019: Unnecessary using directive.
 ============<<<Semantic Warning:test2>>>============
-E:\OpenSource\Cs2Lua\Test\Cs2LuaScript\test2.cs(2,1): hidden CS8019: Unnecessary using directive.
+D:\GitHub\Cs2Lua\Test\Cs2LuaScript\test2.cs(2,1): hidden CS8019: Unnecessary using directive.

@@ -238,6 +238,18 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_devices(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushValue(l,UnityEngine.WebCamTexture.devices);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_isPlaying(IntPtr l) {
 		try {
 			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
@@ -363,18 +375,6 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_devices(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.WebCamTexture.devices);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_videoRotationAngle(IntPtr l) {
 		try {
 			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
@@ -414,34 +414,6 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_autoFocusPoint(IntPtr l) {
-		try {
-			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.autoFocusPoint);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_autoFocusPoint(IntPtr l) {
-		try {
-			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
-			System.Nullable<UnityEngine.Vector2> v;
-			checkNullable(l,2,out v);
-			self.autoFocusPoint=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_isDepth(IntPtr l) {
 		try {
 			UnityEngine.WebCamTexture self=(UnityEngine.WebCamTexture)checkSelf(l);
@@ -470,16 +442,15 @@ public class Lua_UnityEngine_WebCamTexture : LuaObject {
 		addMember(l,GetPixels__Int32__Int32__Int32__Int32);
 		addMember(l,GetPixels32);
 		addMember(l,GetPixels32__A_Color32);
+		addMember(l,"devices",get_devices,null,false);
 		addMember(l,"isPlaying",get_isPlaying,null,true);
 		addMember(l,"deviceName",get_deviceName,set_deviceName,true);
 		addMember(l,"requestedFPS",get_requestedFPS,set_requestedFPS,true);
 		addMember(l,"requestedWidth",get_requestedWidth,set_requestedWidth,true);
 		addMember(l,"requestedHeight",get_requestedHeight,set_requestedHeight,true);
-		addMember(l,"devices",get_devices,null,false);
 		addMember(l,"videoRotationAngle",get_videoRotationAngle,null,true);
 		addMember(l,"videoVerticallyMirrored",get_videoVerticallyMirrored,null,true);
 		addMember(l,"didUpdateThisFrame",get_didUpdateThisFrame,null,true);
-		addMember(l,"autoFocusPoint",get_autoFocusPoint,set_autoFocusPoint,true);
 		addMember(l,"isDepth",get_isDepth,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.WebCamTexture),typeof(UnityEngine.Texture));
 	}

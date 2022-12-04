@@ -8,6 +8,7 @@ public class Lua_UnityEngine_VRTextureUsage : LuaObject {
 		addMember(l,0,"None");
 		addMember(l,1,"OneEye");
 		addMember(l,2,"TwoEyes");
+		addMember(l,3,"DeviceSpecific");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

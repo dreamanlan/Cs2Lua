@@ -46,6 +46,21 @@ public class Lua_UnityEngine_UI_Toggle : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetIsOnWithoutNotify(IntPtr l) {
+		try {
+			UnityEngine.UI.Toggle self=(UnityEngine.UI.Toggle)checkSelf(l);
+			System.Boolean a1;
+			checkType(l,2,out a1);
+			self.SetIsOnWithoutNotify(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnPointerClick(IntPtr l) {
 		try {
 			UnityEngine.UI.Toggle self=(UnityEngine.UI.Toggle)checkSelf(l);
@@ -220,6 +235,7 @@ public class Lua_UnityEngine_UI_Toggle : LuaObject {
 		addMember(l,Rebuild);
 		addMember(l,LayoutComplete);
 		addMember(l,GraphicUpdateComplete);
+		addMember(l,SetIsOnWithoutNotify);
 		addMember(l,OnPointerClick);
 		addMember(l,OnSubmit);
 		addMember(l,"toggleTransition",get_toggleTransition,set_toggleTransition,true);

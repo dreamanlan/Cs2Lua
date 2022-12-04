@@ -435,7 +435,7 @@ public class Lua_UnityEngine_RenderSettings : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int set_customReflection(IntPtr l) {
 		try {
-			UnityEngine.Cubemap v;
+			UnityEngine.Texture v;
 			checkType(l,2,out v);
 			UnityEngine.RenderSettings.customReflection=v;
 			pushValue(l,true);

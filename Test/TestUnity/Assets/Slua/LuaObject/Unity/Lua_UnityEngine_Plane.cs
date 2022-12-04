@@ -268,6 +268,25 @@ public class Lua_UnityEngine_Plane : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.Plane self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Translate_s(IntPtr l) {
 		try {
 			UnityEngine.Plane a1;
@@ -377,6 +396,7 @@ public class Lua_UnityEngine_Plane : LuaObject {
 		addMember(l,Raycast);
 		addMember(l,ToString);
 		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,Translate_s);
 		addMember(l,"normal",get_normal,set_normal,true);
 		addMember(l,"distance",get_distance,set_distance,true);

@@ -213,6 +213,38 @@ public class Lua_System_Collections_BitArray : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int RightShift(IntPtr l) {
+		try {
+			System.Collections.BitArray self=(System.Collections.BitArray)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.RightShift(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int LeftShift(IntPtr l) {
+		try {
+			System.Collections.BitArray self=(System.Collections.BitArray)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.LeftShift(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int CopyTo(IntPtr l) {
 		try {
 			System.Collections.BitArray self=(System.Collections.BitArray)checkSelf(l);
@@ -312,11 +344,11 @@ public class Lua_System_Collections_BitArray : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_IsReadOnly(IntPtr l) {
+	static public int get_IsSynchronized(IntPtr l) {
 		try {
 			System.Collections.BitArray self=(System.Collections.BitArray)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.IsReadOnly);
+			pushValue(l,self.IsSynchronized);
 			return 2;
 		}
 		catch(Exception e) {
@@ -325,11 +357,11 @@ public class Lua_System_Collections_BitArray : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_IsSynchronized(IntPtr l) {
+	static public int get_IsReadOnly(IntPtr l) {
 		try {
 			System.Collections.BitArray self=(System.Collections.BitArray)checkSelf(l);
 			pushValue(l,true);
-			pushValue(l,self.IsSynchronized);
+			pushValue(l,self.IsReadOnly);
 			return 2;
 		}
 		catch(Exception e) {
@@ -385,6 +417,8 @@ public class Lua_System_Collections_BitArray : LuaObject {
 		addMember(l,Or);
 		addMember(l,Xor);
 		addMember(l,Not);
+		addMember(l,RightShift);
+		addMember(l,LeftShift);
 		addMember(l,CopyTo);
 		addMember(l,Clone);
 		addMember(l,GetEnumerator);
@@ -393,8 +427,8 @@ public class Lua_System_Collections_BitArray : LuaObject {
 		addMember(l,"Length",get_Length,set_Length,true);
 		addMember(l,"Count",get_Count,null,true);
 		addMember(l,"SyncRoot",get_SyncRoot,null,true);
-		addMember(l,"IsReadOnly",get_IsReadOnly,null,true);
 		addMember(l,"IsSynchronized",get_IsSynchronized,null,true);
+		addMember(l,"IsReadOnly",get_IsReadOnly,null,true);
 		createTypeMetatable(l,null, typeof(System.Collections.BitArray));
 	}
 }

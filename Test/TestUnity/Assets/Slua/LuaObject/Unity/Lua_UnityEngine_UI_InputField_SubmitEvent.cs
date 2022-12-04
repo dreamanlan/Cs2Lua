@@ -19,36 +19,6 @@ public class Lua_UnityEngine_UI_InputField_SubmitEvent : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int AddListener(IntPtr l) {
-		try {
-			UnityEngine.UI.InputField.SubmitEvent self=(UnityEngine.UI.InputField.SubmitEvent)checkSelf(l);
-			UnityEngine.Events.UnityAction<System.String> a1;
-			LuaDelegation.checkDelegate(l,2,out a1);
-			self.AddListener(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int RemoveListener(IntPtr l) {
-		try {
-			UnityEngine.UI.InputField.SubmitEvent self=(UnityEngine.UI.InputField.SubmitEvent)checkSelf(l);
-			UnityEngine.Events.UnityAction<System.String> a1;
-			LuaDelegation.checkDelegate(l,2,out a1);
-			self.RemoveListener(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int Invoke(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField.SubmitEvent self=(UnityEngine.UI.InputField.SubmitEvent)checkSelf(l);
@@ -127,6 +97,22 @@ public class Lua_UnityEngine_UI_InputField_SubmitEvent : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetPersistentListenerState(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField.SubmitEvent self=(UnityEngine.UI.InputField.SubmitEvent)checkSelf(l);
+			System.Int32 a1;
+			checkType(l,2,out a1);
+			var ret=self.GetPersistentListenerState(a1);
+			pushValue(l,true);
+			pushEnum(l,(int)ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int RemoveAllListeners(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField.SubmitEvent self=(UnityEngine.UI.InputField.SubmitEvent)checkSelf(l);
@@ -173,13 +159,12 @@ public class Lua_UnityEngine_UI_InputField_SubmitEvent : LuaObject {
 		LuaUnityEvent_string.reg(l);
 		getTypeTable(l,"UnityEngine.UI.InputField.SubmitEvent");
 		addMember(l,ctor_s);
-		addMember(l,AddListener);
-		addMember(l,RemoveListener);
 		addMember(l,Invoke);
 		addMember(l,GetPersistentEventCount);
 		addMember(l,GetPersistentTarget);
 		addMember(l,GetPersistentMethodName);
 		addMember(l,SetPersistentListenerState);
+		addMember(l,GetPersistentListenerState);
 		addMember(l,RemoveAllListeners);
 		addMember(l,ToString);
 		addMember(l,Equals);

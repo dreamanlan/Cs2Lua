@@ -258,34 +258,6 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_triggers(IntPtr l) {
-		try {
-			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.triggers);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_triggers(IntPtr l) {
-		try {
-			UnityEngine.EventSystems.EventTrigger self=(UnityEngine.EventSystems.EventTrigger)checkSelf(l);
-			List<UnityEngine.EventSystems.EventTrigger.Entry> v;
-			checkType(l,2,out v);
-			self.triggers=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.EventSystems.EventTrigger");
@@ -306,7 +278,6 @@ public class Lua_UnityEngine_EventSystems_EventTrigger : LuaObject {
 		addMember(l,OnEndDrag);
 		addMember(l,OnSubmit);
 		addMember(l,OnCancel);
-		addMember(l,"triggers",get_triggers,set_triggers,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.EventSystems.EventTrigger),typeof(UnityEngine.MonoBehaviour));
 	}
 }

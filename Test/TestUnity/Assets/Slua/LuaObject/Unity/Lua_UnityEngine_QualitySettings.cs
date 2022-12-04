@@ -87,9 +87,55 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetLODSettings_s(IntPtr l) {
+		try {
+			System.Single a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Boolean a3;
+			checkType(l,3,out a3);
+			UnityEngine.QualitySettings.SetLODSettings(a1,a2,a3);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetRenderPipelineAssetAt_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			var ret=UnityEngine.QualitySettings.GetRenderPipelineAssetAt(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetQualityLevel_s(IntPtr l) {
 		try {
 			var ret=UnityEngine.QualitySettings.GetQualityLevel();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetQualitySettings_s(IntPtr l) {
+		try {
+			var ret=UnityEngine.QualitySettings.GetQualitySettings();
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -750,10 +796,10 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_blendWeights(IntPtr l) {
+	static public int get_renderPipeline(IntPtr l) {
 		try {
 			pushValue(l,true);
-			pushEnum(l,(int)UnityEngine.QualitySettings.blendWeights);
+			pushValue(l,UnityEngine.QualitySettings.renderPipeline);
 			return 2;
 		}
 		catch(Exception e) {
@@ -762,11 +808,37 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int set_blendWeights(IntPtr l) {
+	static public int set_renderPipeline(IntPtr l) {
 		try {
-			UnityEngine.BlendWeights v;
+			UnityEngine.Rendering.RenderPipelineAsset v;
+			checkType(l,2,out v);
+			UnityEngine.QualitySettings.renderPipeline=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_skinWeights(IntPtr l) {
+		try {
+			pushValue(l,true);
+			pushEnum(l,(int)UnityEngine.QualitySettings.skinWeights);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_skinWeights(IntPtr l) {
+		try {
+			UnityEngine.SkinWeights v;
 			checkEnum(l,2,out v);
-			UnityEngine.QualitySettings.blendWeights=v;
+			UnityEngine.QualitySettings.skinWeights=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -1001,7 +1073,10 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 		addMember(l,DecreaseLevel__Boolean_s);
 		addMember(l,SetQualityLevel__Int32_s);
 		addMember(l,SetQualityLevel__Int32__Boolean_s);
+		addMember(l,SetLODSettings_s);
+		addMember(l,GetRenderPipelineAssetAt_s);
 		addMember(l,GetQualityLevel_s);
+		addMember(l,GetQualitySettings_s);
 		addMember(l,"pixelLightCount",get_pixelLightCount,set_pixelLightCount,false);
 		addMember(l,"shadows",get_shadows,set_shadows,false);
 		addMember(l,"shadowProjection",get_shadowProjection,set_shadowProjection,false);
@@ -1027,7 +1102,8 @@ public class Lua_UnityEngine_QualitySettings : LuaObject {
 		addMember(l,"realtimeReflectionProbes",get_realtimeReflectionProbes,set_realtimeReflectionProbes,false);
 		addMember(l,"billboardsFaceCameraPosition",get_billboardsFaceCameraPosition,set_billboardsFaceCameraPosition,false);
 		addMember(l,"resolutionScalingFixedDPIFactor",get_resolutionScalingFixedDPIFactor,set_resolutionScalingFixedDPIFactor,false);
-		addMember(l,"blendWeights",get_blendWeights,set_blendWeights,false);
+		addMember(l,"renderPipeline",get_renderPipeline,set_renderPipeline,false);
+		addMember(l,"skinWeights",get_skinWeights,set_skinWeights,false);
 		addMember(l,"streamingMipmapsActive",get_streamingMipmapsActive,set_streamingMipmapsActive,false);
 		addMember(l,"streamingMipmapsMemoryBudget",get_streamingMipmapsMemoryBudget,set_streamingMipmapsMemoryBudget,false);
 		addMember(l,"streamingMipmapsRenderersPerFrame",get_streamingMipmapsRenderersPerFrame,set_streamingMipmapsRenderersPerFrame,false);

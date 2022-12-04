@@ -9,6 +9,7 @@ public class Lua_UnityEngine_Diagnostics_ForcedCrashCategory : LuaObject {
 		addMember(l,1,"FatalError");
 		addMember(l,2,"Abort");
 		addMember(l,3,"PureVirtualFunction");
+		addMember(l,4,"MonoAbort");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

@@ -5,6 +5,19 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_Image : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int DisableSpriteOptimizations(IntPtr l) {
+		try {
+			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
+			self.DisableSpriteOptimizations();
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int OnBeforeSerialize(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -434,6 +447,34 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_pixelsPerUnitMultiplier(IntPtr l) {
+		try {
+			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.pixelsPerUnitMultiplier);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_pixelsPerUnitMultiplier(IntPtr l) {
+		try {
+			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.pixelsPerUnitMultiplier=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_pixelsPerUnit(IntPtr l) {
 		try {
 			UnityEngine.UI.Image self=(UnityEngine.UI.Image)checkSelf(l);
@@ -567,6 +608,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Image");
+		addMember(l,DisableSpriteOptimizations);
 		addMember(l,OnBeforeSerialize);
 		addMember(l,OnAfterDeserialize);
 		addMember(l,SetNativeSize);
@@ -587,6 +629,7 @@ public class Lua_UnityEngine_UI_Image : LuaObject {
 		addMember(l,"defaultETC1GraphicMaterial",get_defaultETC1GraphicMaterial,null,false);
 		addMember(l,"mainTexture",get_mainTexture,null,true);
 		addMember(l,"hasBorder",get_hasBorder,null,true);
+		addMember(l,"pixelsPerUnitMultiplier",get_pixelsPerUnitMultiplier,set_pixelsPerUnitMultiplier,true);
 		addMember(l,"pixelsPerUnit",get_pixelsPerUnit,null,true);
 		addMember(l,"material",get_material,set_material,true);
 		addMember(l,"minWidth",get_minWidth,null,true);

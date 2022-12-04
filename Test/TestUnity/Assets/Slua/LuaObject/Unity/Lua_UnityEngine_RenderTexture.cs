@@ -57,6 +57,28 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__DefaultFormat_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.DefaultFormat a4;
+			checkEnum(l,4,out a4);
+			o=new UnityEngine.RenderTexture(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ctor__Int32__Int32__Int32__GraphicsFormat_s(IntPtr l) {
 		try {
 			UnityEngine.RenderTexture o;
@@ -66,6 +88,28 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 			checkType(l,2,out a2);
 			System.Int32 a3;
 			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			o=new UnityEngine.RenderTexture(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__GraphicsFormat__GraphicsFormat_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a3;
+			checkEnum(l,3,out a3);
 			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
 			checkEnum(l,4,out a4);
 			o=new UnityEngine.RenderTexture(a1,a2,a3,a4);
@@ -101,6 +145,54 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__GraphicsFormat__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			o=new UnityEngine.RenderTexture(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__GraphicsFormat__GraphicsFormat__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a3;
+			checkEnum(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			o=new UnityEngine.RenderTexture(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int ctor__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite_s(IntPtr l) {
 		try {
 			UnityEngine.RenderTexture o;
@@ -114,6 +206,30 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 			checkEnum(l,4,out a4);
 			UnityEngine.RenderTextureReadWrite a5;
 			checkEnum(l,5,out a5);
+			o=new UnityEngine.RenderTexture(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,o);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int ctor__Int32__Int32__Int32__RenderTextureFormat__Int32_s(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture o;
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.RenderTextureFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
 			o=new UnityEngine.RenderTexture(a1,a2,a3,a4,a5);
 			pushValue(l,true);
 			pushValue(l,o);
@@ -160,19 +276,6 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 			System.Boolean a2;
 			checkType(l,3,out a2);
 			self.DiscardContents(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int MarkRestoreExpected(IntPtr l) {
-		try {
-			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
-			self.MarkRestoreExpected();
 			pushValue(l,true);
 			return 1;
 		}
@@ -376,6 +479,27 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__GraphicsFormat_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetTemporary__Int32__Int32__Int32__RenderTextureFormat_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -387,6 +511,29 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 			UnityEngine.RenderTextureFormat a4;
 			checkEnum(l,4,out a4);
 			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__GraphicsFormat__Int32_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -410,6 +557,31 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 			UnityEngine.RenderTextureReadWrite a5;
 			checkEnum(l,5,out a5);
 			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__GraphicsFormat__Int32__RenderTextureMemoryless_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			UnityEngine.RenderTextureMemoryless a6;
+			checkEnum(l,6,out a6);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -445,6 +617,33 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__GraphicsFormat__Int32__RenderTextureMemoryless__VRTextureUsage_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			UnityEngine.RenderTextureMemoryless a6;
+			checkEnum(l,6,out a6);
+			UnityEngine.VRTextureUsage a7;
+			checkEnum(l,7,out a7);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6,a7);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -462,6 +661,35 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 			UnityEngine.RenderTextureMemoryless a7;
 			checkEnum(l,7,out a7);
 			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6,a7);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int GetTemporary__Int32__Int32__Int32__GraphicsFormat__Int32__RenderTextureMemoryless__VRTextureUsage__Boolean_s(IntPtr l) {
+		try {
+			System.Int32 a1;
+			checkType(l,1,out a1);
+			System.Int32 a2;
+			checkType(l,2,out a2);
+			System.Int32 a3;
+			checkType(l,3,out a3);
+			UnityEngine.Experimental.Rendering.GraphicsFormat a4;
+			checkEnum(l,4,out a4);
+			System.Int32 a5;
+			checkType(l,5,out a5);
+			UnityEngine.RenderTextureMemoryless a6;
+			checkEnum(l,6,out a6);
+			UnityEngine.VRTextureUsage a7;
+			checkEnum(l,7,out a7);
+			System.Boolean a8;
+			checkType(l,8,out a8);
+			var ret=UnityEngine.RenderTexture.GetTemporary(a1,a2,a3,a4,a5,a6,a7,a8);
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
@@ -616,6 +844,34 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_graphicsFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.graphicsFormat);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_graphicsFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			UnityEngine.Experimental.Rendering.GraphicsFormat v;
+			checkEnum(l,2,out v);
+			self.graphicsFormat=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_useMipMap(IntPtr l) {
 		try {
 			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
@@ -650,34 +906,6 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 			pushValue(l,true);
 			pushValue(l,self.sRGB);
 			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_format(IntPtr l) {
-		try {
-			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
-			pushValue(l,true);
-			pushEnum(l,(int)self.format);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_format(IntPtr l) {
-		try {
-			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
-			UnityEngine.RenderTextureFormat v;
-			checkEnum(l,2,out v);
-			self.format=v;
-			pushValue(l,true);
-			return 1;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -732,6 +960,90 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 			UnityEngine.RenderTextureMemoryless v;
 			checkEnum(l,2,out v);
 			self.memorylessMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_format(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.format);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_format(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			UnityEngine.RenderTextureFormat v;
+			checkEnum(l,2,out v);
+			self.format=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_stencilFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.stencilFormat);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_stencilFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			UnityEngine.Experimental.Rendering.GraphicsFormat v;
+			checkEnum(l,2,out v);
+			self.stencilFormat=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_depthStencilFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.depthStencilFormat);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_depthStencilFormat(IntPtr l) {
+		try {
+			UnityEngine.RenderTexture self=(UnityEngine.RenderTexture)checkSelf(l);
+			UnityEngine.Experimental.Rendering.GraphicsFormat v;
+			checkEnum(l,2,out v);
+			self.depthStencilFormat=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -1049,13 +1361,17 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 		addMember(l,ctor__RenderTextureDescriptor_s);
 		addMember(l,ctor__RenderTexture_s);
 		addMember(l,ctor__Int32__Int32__Int32_s);
+		addMember(l,ctor__Int32__Int32__Int32__DefaultFormat_s);
 		addMember(l,ctor__Int32__Int32__Int32__GraphicsFormat_s);
+		addMember(l,ctor__Int32__Int32__GraphicsFormat__GraphicsFormat_s);
 		addMember(l,ctor__Int32__Int32__Int32__RenderTextureFormat_s);
+		addMember(l,ctor__Int32__Int32__Int32__GraphicsFormat__Int32_s);
+		addMember(l,ctor__Int32__Int32__GraphicsFormat__GraphicsFormat__Int32_s);
 		addMember(l,ctor__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite_s);
+		addMember(l,ctor__Int32__Int32__Int32__RenderTextureFormat__Int32_s);
 		addMember(l,GetNativeDepthBufferPtr);
 		addMember(l,DiscardContents);
 		addMember(l,DiscardContents__Boolean__Boolean);
-		addMember(l,MarkRestoreExpected);
 		addMember(l,ResolveAntiAliasedSurface);
 		addMember(l,ResolveAntiAliasedSurface__RenderTexture);
 		addMember(l,SetGlobalShaderProperty);
@@ -1069,20 +1385,28 @@ public class Lua_UnityEngine_RenderTexture : LuaObject {
 		addMember(l,GetTemporary__RenderTextureDescriptor_s);
 		addMember(l,GetTemporary__Int32__Int32_s);
 		addMember(l,GetTemporary__Int32__Int32__Int32_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__GraphicsFormat_s);
 		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__GraphicsFormat__Int32_s);
 		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__GraphicsFormat__Int32__RenderTextureMemoryless_s);
 		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__GraphicsFormat__Int32__RenderTextureMemoryless__VRTextureUsage_s);
 		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless_s);
+		addMember(l,GetTemporary__Int32__Int32__Int32__GraphicsFormat__Int32__RenderTextureMemoryless__VRTextureUsage__Boolean_s);
 		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless__VRTextureUsage_s);
 		addMember(l,GetTemporary__Int32__Int32__Int32__RenderTextureFormat__RenderTextureReadWrite__Int32__RenderTextureMemoryless__VRTextureUsage__Boolean_s);
 		addMember(l,"width",get_width,set_width,true);
 		addMember(l,"height",get_height,set_height,true);
 		addMember(l,"dimension",get_dimension,set_dimension,true);
+		addMember(l,"graphicsFormat",get_graphicsFormat,set_graphicsFormat,true);
 		addMember(l,"useMipMap",get_useMipMap,set_useMipMap,true);
 		addMember(l,"sRGB",get_sRGB,null,true);
-		addMember(l,"format",get_format,set_format,true);
 		addMember(l,"vrUsage",get_vrUsage,set_vrUsage,true);
 		addMember(l,"memorylessMode",get_memorylessMode,set_memorylessMode,true);
+		addMember(l,"format",get_format,set_format,true);
+		addMember(l,"stencilFormat",get_stencilFormat,set_stencilFormat,true);
+		addMember(l,"depthStencilFormat",get_depthStencilFormat,set_depthStencilFormat,true);
 		addMember(l,"autoGenerateMips",get_autoGenerateMips,set_autoGenerateMips,true);
 		addMember(l,"volumeDepth",get_volumeDepth,set_volumeDepth,true);
 		addMember(l,"antiAliasing",get_antiAliasing,set_antiAliasing,true);

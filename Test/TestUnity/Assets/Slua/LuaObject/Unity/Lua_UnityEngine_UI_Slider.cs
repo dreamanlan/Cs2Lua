@@ -5,6 +5,21 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_Slider : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetValueWithoutNotify(IntPtr l) {
+		try {
+			UnityEngine.UI.Slider self=(UnityEngine.UI.Slider)checkSelf(l);
+			System.Single a1;
+			checkType(l,2,out a1);
+			self.SetValueWithoutNotify(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Rebuild(IntPtr l) {
 		try {
 			UnityEngine.UI.Slider self=(UnityEngine.UI.Slider)checkSelf(l);
@@ -432,6 +447,7 @@ public class Lua_UnityEngine_UI_Slider : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.Slider");
+		addMember(l,SetValueWithoutNotify);
 		addMember(l,Rebuild);
 		addMember(l,LayoutComplete);
 		addMember(l,GraphicUpdateComplete);

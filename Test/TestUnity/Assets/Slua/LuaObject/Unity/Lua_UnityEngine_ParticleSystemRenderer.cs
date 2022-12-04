@@ -53,12 +53,28 @@ public class Lua_UnityEngine_ParticleSystemRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int SetActiveVertexStreams(IntPtr l) {
+	static public int GetMeshWeightings(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.ParticleSystemVertexStream> a1;
-			checkType(l,2,out a1);
-			self.SetActiveVertexStreams(a1);
+			System.Single[] a1;
+			checkArray(l,2,out a1);
+			var ret=self.GetMeshWeightings(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int SetMeshWeightings__A_Single(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			System.Single[] a1;
+			checkArray(l,2,out a1);
+			self.SetMeshWeightings(a1);
 			pushValue(l,true);
 			return 1;
 		}
@@ -68,12 +84,14 @@ public class Lua_UnityEngine_ParticleSystemRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetActiveVertexStreams(IntPtr l) {
+	static public int SetMeshWeightings__A_Single__Int32(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.ParticleSystemVertexStream> a1;
-			checkType(l,2,out a1);
-			self.GetActiveVertexStreams(a1);
+			System.Single[] a1;
+			checkArray(l,2,out a1);
+			System.Int32 a2;
+			checkType(l,3,out a2);
+			self.SetMeshWeightings(a1,a2);
 			pushValue(l,true);
 			return 1;
 		}
@@ -155,60 +173,6 @@ public class Lua_UnityEngine_ParticleSystemRenderer : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_mesh(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.mesh);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_mesh(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
-			UnityEngine.Mesh v;
-			checkType(l,2,out v);
-			self.mesh=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_meshCount(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.meshCount);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_activeVertexStreamsCount(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.activeVertexStreamsCount);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_alignment(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
@@ -256,6 +220,34 @@ public class Lua_UnityEngine_ParticleSystemRenderer : LuaObject {
 			UnityEngine.ParticleSystemRenderMode v;
 			checkEnum(l,2,out v);
 			self.renderMode=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_meshDistribution(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.meshDistribution);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_meshDistribution(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			UnityEngine.ParticleSystemMeshDistribution v;
+			checkEnum(l,2,out v);
+			self.meshDistribution=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -683,23 +675,145 @@ public class Lua_UnityEngine_ParticleSystemRenderer : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_freeformStretching(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.freeformStretching);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_freeformStretching(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.freeformStretching=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_rotateWithStretchDirection(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.rotateWithStretchDirection);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_rotateWithStretchDirection(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.rotateWithStretchDirection=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_mesh(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.mesh);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_mesh(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			UnityEngine.Mesh v;
+			checkType(l,2,out v);
+			self.mesh=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_meshCount(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.meshCount);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_activeVertexStreamsCount(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.activeVertexStreamsCount);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_supportsMeshInstancing(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystemRenderer self=(UnityEngine.ParticleSystemRenderer)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.supportsMeshInstancing);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystemRenderer");
 		addMember(l,GetMeshes);
 		addMember(l,SetMeshes__A_Mesh);
 		addMember(l,SetMeshes__A_Mesh__Int32);
-		addMember(l,SetActiveVertexStreams);
-		addMember(l,GetActiveVertexStreams);
+		addMember(l,GetMeshWeightings);
+		addMember(l,SetMeshWeightings__A_Single);
+		addMember(l,SetMeshWeightings__A_Single__Int32);
 		addMember(l,BakeMesh__Mesh__Boolean);
 		addMember(l,BakeMesh__Mesh__Camera__Boolean);
 		addMember(l,BakeTrailsMesh__Mesh__Boolean);
 		addMember(l,BakeTrailsMesh__Mesh__Camera__Boolean);
-		addMember(l,"mesh",get_mesh,set_mesh,true);
-		addMember(l,"meshCount",get_meshCount,null,true);
-		addMember(l,"activeVertexStreamsCount",get_activeVertexStreamsCount,null,true);
 		addMember(l,"alignment",get_alignment,set_alignment,true);
 		addMember(l,"renderMode",get_renderMode,set_renderMode,true);
+		addMember(l,"meshDistribution",get_meshDistribution,set_meshDistribution,true);
 		addMember(l,"sortMode",get_sortMode,set_sortMode,true);
 		addMember(l,"lengthScale",get_lengthScale,set_lengthScale,true);
 		addMember(l,"velocityScale",get_velocityScale,set_velocityScale,true);
@@ -715,6 +829,12 @@ public class Lua_UnityEngine_ParticleSystemRenderer : LuaObject {
 		addMember(l,"trailMaterial",get_trailMaterial,set_trailMaterial,true);
 		addMember(l,"enableGPUInstancing",get_enableGPUInstancing,set_enableGPUInstancing,true);
 		addMember(l,"allowRoll",get_allowRoll,set_allowRoll,true);
+		addMember(l,"freeformStretching",get_freeformStretching,set_freeformStretching,true);
+		addMember(l,"rotateWithStretchDirection",get_rotateWithStretchDirection,set_rotateWithStretchDirection,true);
+		addMember(l,"mesh",get_mesh,set_mesh,true);
+		addMember(l,"meshCount",get_meshCount,null,true);
+		addMember(l,"activeVertexStreamsCount",get_activeVertexStreamsCount,null,true);
+		addMember(l,"supportsMeshInstancing",get_supportsMeshInstancing,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystemRenderer),typeof(UnityEngine.Renderer));
 	}
 }

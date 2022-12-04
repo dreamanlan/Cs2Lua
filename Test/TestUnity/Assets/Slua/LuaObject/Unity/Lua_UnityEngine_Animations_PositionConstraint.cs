@@ -5,36 +5,6 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Animations_PositionConstraint : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int GetSources(IntPtr l) {
-		try {
-			UnityEngine.Animations.PositionConstraint self=(UnityEngine.Animations.PositionConstraint)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.Animations.ConstraintSource> a1;
-			checkType(l,2,out a1);
-			self.GetSources(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int SetSources(IntPtr l) {
-		try {
-			UnityEngine.Animations.PositionConstraint self=(UnityEngine.Animations.PositionConstraint)checkSelf(l);
-			System.Collections.Generic.List<UnityEngine.Animations.ConstraintSource> a1;
-			checkType(l,2,out a1);
-			self.SetSources(a1);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int AddSource(IntPtr l) {
 		try {
 			UnityEngine.Animations.PositionConstraint self=(UnityEngine.Animations.PositionConstraint)checkSelf(l);
@@ -281,8 +251,6 @@ public class Lua_UnityEngine_Animations_PositionConstraint : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Animations.PositionConstraint");
-		addMember(l,GetSources);
-		addMember(l,SetSources);
 		addMember(l,AddSource);
 		addMember(l,RemoveSource);
 		addMember(l,GetSource);

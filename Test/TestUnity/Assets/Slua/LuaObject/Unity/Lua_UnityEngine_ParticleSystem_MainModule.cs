@@ -19,6 +19,37 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_emitterVelocity(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MainModule self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushValue(l,self.emitterVelocity);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_emitterVelocity(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MainModule self;
+			checkValueType(l,1,out self);
+			UnityEngine.Vector3 v;
+			checkType(l,2,out v);
+			self.emitterVelocity=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_duration(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.MainModule self;
@@ -1259,37 +1290,6 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int get_cullingMode(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.MainModule self;
-			checkValueType(l,1,out self);
-			pushValue(l,true);
-			pushEnum(l,(int)self.cullingMode);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_cullingMode(IntPtr l) {
-		try {
-			UnityEngine.ParticleSystem.MainModule self;
-			checkValueType(l,1,out self);
-			UnityEngine.ParticleSystemCullingMode v;
-			checkEnum(l,2,out v);
-			self.cullingMode=v;
-			setBack(l,(object)self);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int get_ringBufferMode(IntPtr l) {
 		try {
 			UnityEngine.ParticleSystem.MainModule self;
@@ -1350,10 +1350,42 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 			return error(l,e);
 		}
 	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_cullingMode(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MainModule self;
+			checkValueType(l,1,out self);
+			pushValue(l,true);
+			pushEnum(l,(int)self.cullingMode);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_cullingMode(IntPtr l) {
+		try {
+			UnityEngine.ParticleSystem.MainModule self;
+			checkValueType(l,1,out self);
+			UnityEngine.ParticleSystemCullingMode v;
+			checkEnum(l,2,out v);
+			self.cullingMode=v;
+			setBack(l,(object)self);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.ParticleSystem.MainModule");
 		addMember(l,ctor_s);
+		addMember(l,"emitterVelocity",get_emitterVelocity,set_emitterVelocity,true);
 		addMember(l,"duration",get_duration,set_duration,true);
 		addMember(l,"loop",get_loop,set_loop,true);
 		addMember(l,"prewarm",get_prewarm,set_prewarm,true);
@@ -1394,9 +1426,9 @@ public class Lua_UnityEngine_ParticleSystem_MainModule : LuaObject {
 		addMember(l,"maxParticles",get_maxParticles,set_maxParticles,true);
 		addMember(l,"emitterVelocityMode",get_emitterVelocityMode,set_emitterVelocityMode,true);
 		addMember(l,"stopAction",get_stopAction,set_stopAction,true);
-		addMember(l,"cullingMode",get_cullingMode,set_cullingMode,true);
 		addMember(l,"ringBufferMode",get_ringBufferMode,set_ringBufferMode,true);
 		addMember(l,"ringBufferLoopRange",get_ringBufferLoopRange,set_ringBufferLoopRange,true);
+		addMember(l,"cullingMode",get_cullingMode,set_cullingMode,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.ParticleSystem.MainModule),typeof(System.ValueType));
 	}
 }

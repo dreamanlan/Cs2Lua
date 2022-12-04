@@ -5,20 +5,6 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_Random : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
-	static public int ctor_s(IntPtr l) {
-		try {
-			UnityEngine.Random o;
-			o=new UnityEngine.Random();
-			pushValue(l,true);
-			pushValue(l,o);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
 	static public int InitState_s(IntPtr l) {
 		try {
 			System.Int32 a1;
@@ -271,7 +257,6 @@ public class Lua_UnityEngine_Random : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Random");
-		addMember(l,ctor_s);
 		addMember(l,InitState_s);
 		addMember(l,Range__Int32__Int32_s);
 		addMember(l,Range__Single__Single_s);

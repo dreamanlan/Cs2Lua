@@ -233,6 +233,57 @@ public class Lua_System_TimeSpan : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int Multiply(IntPtr l) {
+		try {
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			System.Double a1;
+			checkType(l,2,out a1);
+			var ret=self.Multiply(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Divide__TimeSpan(IntPtr l) {
+		try {
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			System.TimeSpan a1;
+			checkValueType(l,2,out a1);
+			var ret=self.Divide(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Divide__Double(IntPtr l) {
+		try {
+			System.TimeSpan self;
+			checkValueType(l,1,out self);
+			System.Double a1;
+			checkType(l,2,out a1);
+			var ret=self.Divide(a1);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static new public int ToString(IntPtr l) {
 		try {
 			System.TimeSpan self;
@@ -708,6 +759,74 @@ public class Lua_System_TimeSpan : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int op_Multiply__TimeSpan__Double_s(IntPtr l) {
+		try {
+			System.TimeSpan a1;
+			checkValueType(l,1,out a1);
+			System.Double a2;
+			checkType(l,2,out a2);
+			var ret=a1*a2;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Multiply__Double__TimeSpan_s(IntPtr l) {
+		try {
+			System.Double a1;
+			checkType(l,1,out a1);
+			System.TimeSpan a2;
+			checkValueType(l,2,out a2);
+			var ret=a1*a2;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Division__TimeSpan__TimeSpan_s(IntPtr l) {
+		try {
+			System.TimeSpan a1;
+			checkValueType(l,1,out a1);
+			System.TimeSpan a2;
+			checkValueType(l,2,out a2);
+			var ret=a1/a2;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int op_Division__TimeSpan__Double_s(IntPtr l) {
+		try {
+			System.TimeSpan a1;
+			checkValueType(l,1,out a1);
+			System.Double a2;
+			checkType(l,2,out a2);
+			var ret=a1/a2;
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int op_Equality_s(IntPtr l) {
 		try {
 			System.TimeSpan a1;
@@ -1074,6 +1193,9 @@ public class Lua_System_TimeSpan : LuaObject {
 		addMember(l,Equals__TimeSpan);
 		addMember(l,Negate);
 		addMember(l,Subtract);
+		addMember(l,Multiply);
+		addMember(l,Divide__TimeSpan);
+		addMember(l,Divide__Double);
 		addMember(l,ToString);
 		addMember(l,ToString__String);
 		addMember(l,ToString__String__IFormatProvider);
@@ -1101,6 +1223,10 @@ public class Lua_System_TimeSpan : LuaObject {
 		addMember(l,op_Subtraction_s);
 		addMember(l,op_UnaryPlus_s);
 		addMember(l,op_Addition_s);
+		addMember(l,op_Multiply__TimeSpan__Double_s);
+		addMember(l,op_Multiply__Double__TimeSpan_s);
+		addMember(l,op_Division__TimeSpan__TimeSpan_s);
+		addMember(l,op_Division__TimeSpan__Double_s);
 		addMember(l,op_Equality_s);
 		addMember(l,op_Inequality_s);
 		addMember(l,op_LessThan_s);

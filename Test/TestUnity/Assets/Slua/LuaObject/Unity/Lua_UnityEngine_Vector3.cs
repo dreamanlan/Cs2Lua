@@ -176,6 +176,25 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.Vector3 self;
+			checkType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Slerp_s(IntPtr l) {
 		try {
 			UnityEngine.Vector3 a1;
@@ -1113,6 +1132,7 @@ public class Lua_UnityEngine_Vector3 : LuaObject {
 		addMember(l,Normalize);
 		addMember(l,ToString);
 		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,Slerp_s);
 		addMember(l,SlerpUnclamped_s);
 		addMember(l,OrthoNormalize__R_Vector3__R_Vector3_s);

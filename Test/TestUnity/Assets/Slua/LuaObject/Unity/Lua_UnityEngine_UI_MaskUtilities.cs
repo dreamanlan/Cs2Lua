@@ -109,22 +109,6 @@ public class Lua_UnityEngine_UI_MaskUtilities : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int GetRectMasksForClip_s(IntPtr l) {
-		try {
-			UnityEngine.UI.RectMask2D a1;
-			checkType(l,1,out a1);
-			System.Collections.Generic.List<UnityEngine.UI.RectMask2D> a2;
-			checkType(l,2,out a2);
-			UnityEngine.UI.MaskUtilities.GetRectMasksForClip(a1,a2);
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.MaskUtilities");
@@ -135,7 +119,6 @@ public class Lua_UnityEngine_UI_MaskUtilities : LuaObject {
 		addMember(l,GetStencilDepth_s);
 		addMember(l,IsDescendantOrSelf_s);
 		addMember(l,GetRectMaskForClippable_s);
-		addMember(l,GetRectMasksForClip_s);
 		createTypeMetatable(l,null, typeof(UnityEngine.UI.MaskUtilities));
 	}
 }

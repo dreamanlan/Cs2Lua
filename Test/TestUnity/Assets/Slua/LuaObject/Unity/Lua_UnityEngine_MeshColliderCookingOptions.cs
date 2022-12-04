@@ -10,6 +10,7 @@ public class Lua_UnityEngine_MeshColliderCookingOptions : LuaObject {
 		addMember(l,2,"CookForFasterSimulation");
 		addMember(l,4,"EnableMeshCleaning");
 		addMember(l,8,"WeldColocatedVertices");
+		addMember(l,16,"UseFastMidphase");
 		LuaDLL.lua_pop(l, 1);
 	}
 }

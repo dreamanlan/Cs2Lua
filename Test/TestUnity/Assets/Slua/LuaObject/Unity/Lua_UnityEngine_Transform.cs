@@ -54,6 +54,23 @@ public class Lua_UnityEngine_Transform : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetLocalPositionAndRotation(IntPtr l) {
+		try {
+			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
+			UnityEngine.Vector3 a1;
+			checkType(l,2,out a1);
+			UnityEngine.Quaternion a2;
+			checkType(l,3,out a2);
+			self.SetLocalPositionAndRotation(a1,a2);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Translate__Vector3(IntPtr l) {
 		try {
 			UnityEngine.Transform self=(UnityEngine.Transform)checkSelf(l);
@@ -1147,6 +1164,7 @@ public class Lua_UnityEngine_Transform : LuaObject {
 		addMember(l,SetParent__Transform);
 		addMember(l,SetParent__Transform__Boolean);
 		addMember(l,SetPositionAndRotation);
+		addMember(l,SetLocalPositionAndRotation);
 		addMember(l,Translate__Vector3);
 		addMember(l,Translate__Vector3__Space);
 		addMember(l,Translate__Vector3__Transform);

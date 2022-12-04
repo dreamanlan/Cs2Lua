@@ -157,6 +157,19 @@ public class Lua_UnityEngine_Video_VideoClip : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_sRGB(IntPtr l) {
+		try {
+			UnityEngine.Video.VideoClip self=(UnityEngine.Video.VideoClip)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.sRGB);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_audioTrackCount(IntPtr l) {
 		try {
 			UnityEngine.Video.VideoClip self=(UnityEngine.Video.VideoClip)checkSelf(l);
@@ -182,6 +195,7 @@ public class Lua_UnityEngine_Video_VideoClip : LuaObject {
 		addMember(l,"height",get_height,null,true);
 		addMember(l,"pixelAspectRatioNumerator",get_pixelAspectRatioNumerator,null,true);
 		addMember(l,"pixelAspectRatioDenominator",get_pixelAspectRatioDenominator,null,true);
+		addMember(l,"sRGB",get_sRGB,null,true);
 		addMember(l,"audioTrackCount",get_audioTrackCount,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Video.VideoClip),typeof(UnityEngine.Object));
 	}

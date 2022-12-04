@@ -213,6 +213,34 @@ public class Lua_UnityEngine_Light : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_shape(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushEnum(l,(int)self.shape);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_shape(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.LightShape v;
+			checkEnum(l,2,out v);
+			self.shape=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_spotAngle(IntPtr l) {
 		try {
 			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
@@ -232,6 +260,34 @@ public class Lua_UnityEngine_Light : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.spotAngle=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_innerSpotAngle(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.innerSpotAngle);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_innerSpotAngle(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			float v;
+			checkType(l,2,out v);
+			self.innerSpotAngle=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -297,6 +353,34 @@ public class Lua_UnityEngine_Light : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_useColorTemperature(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.useColorTemperature);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_useColorTemperature(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.useColorTemperature=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_intensity(IntPtr l) {
 		try {
 			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
@@ -344,6 +428,90 @@ public class Lua_UnityEngine_Light : LuaObject {
 			float v;
 			checkType(l,2,out v);
 			self.bounceIntensity=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_useBoundingSphereOverride(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.useBoundingSphereOverride);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_useBoundingSphereOverride(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.useBoundingSphereOverride=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_boundingSphereOverride(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.boundingSphereOverride);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_boundingSphereOverride(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.Vector4 v;
+			checkType(l,2,out v);
+			self.boundingSphereOverride=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_useViewFrustumForShadowCasterCull(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.useViewFrustumForShadowCasterCull);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_useViewFrustumForShadowCasterCull(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.useViewFrustumForShadowCasterCull=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -465,6 +633,62 @@ public class Lua_UnityEngine_Light : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_useShadowMatrixOverride(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.useShadowMatrixOverride);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_useShadowMatrixOverride(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.useShadowMatrixOverride=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_shadowMatrixOverride(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.shadowMatrixOverride);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_shadowMatrixOverride(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			UnityEngine.Matrix4x4 v;
+			checkValueType(l,2,out v);
+			self.shadowMatrixOverride=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_range(IntPtr l) {
 		try {
 			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
@@ -568,6 +792,34 @@ public class Lua_UnityEngine_Light : LuaObject {
 			int v;
 			checkType(l,2,out v);
 			self.cullingMask=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_renderingLayerMask(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.renderingLayerMask);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_renderingLayerMask(IntPtr l) {
+		try {
+			UnityEngine.Light self=(UnityEngine.Light)checkSelf(l);
+			int v;
+			checkType(l,2,out v);
+			self.renderingLayerMask=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -911,19 +1163,28 @@ public class Lua_UnityEngine_Light : LuaObject {
 		addMember(l,GetCommandBuffers);
 		addMember(l,GetLights_s);
 		addMember(l,"type",get_type,set_type,true);
+		addMember(l,"shape",get_shape,set_shape,true);
 		addMember(l,"spotAngle",get_spotAngle,set_spotAngle,true);
+		addMember(l,"innerSpotAngle",get_innerSpotAngle,set_innerSpotAngle,true);
 		addMember(l,"color",get_color,set_color,true);
 		addMember(l,"colorTemperature",get_colorTemperature,set_colorTemperature,true);
+		addMember(l,"useColorTemperature",get_useColorTemperature,set_useColorTemperature,true);
 		addMember(l,"intensity",get_intensity,set_intensity,true);
 		addMember(l,"bounceIntensity",get_bounceIntensity,set_bounceIntensity,true);
+		addMember(l,"useBoundingSphereOverride",get_useBoundingSphereOverride,set_useBoundingSphereOverride,true);
+		addMember(l,"boundingSphereOverride",get_boundingSphereOverride,set_boundingSphereOverride,true);
+		addMember(l,"useViewFrustumForShadowCasterCull",get_useViewFrustumForShadowCasterCull,set_useViewFrustumForShadowCasterCull,true);
 		addMember(l,"shadowCustomResolution",get_shadowCustomResolution,set_shadowCustomResolution,true);
 		addMember(l,"shadowBias",get_shadowBias,set_shadowBias,true);
 		addMember(l,"shadowNormalBias",get_shadowNormalBias,set_shadowNormalBias,true);
 		addMember(l,"shadowNearPlane",get_shadowNearPlane,set_shadowNearPlane,true);
+		addMember(l,"useShadowMatrixOverride",get_useShadowMatrixOverride,set_useShadowMatrixOverride,true);
+		addMember(l,"shadowMatrixOverride",get_shadowMatrixOverride,set_shadowMatrixOverride,true);
 		addMember(l,"range",get_range,set_range,true);
 		addMember(l,"flare",get_flare,set_flare,true);
 		addMember(l,"bakingOutput",get_bakingOutput,set_bakingOutput,true);
 		addMember(l,"cullingMask",get_cullingMask,set_cullingMask,true);
+		addMember(l,"renderingLayerMask",get_renderingLayerMask,set_renderingLayerMask,true);
 		addMember(l,"lightShadowCasterMode",get_lightShadowCasterMode,set_lightShadowCasterMode,true);
 		addMember(l,"shadowRadius",get_shadowRadius,set_shadowRadius,true);
 		addMember(l,"shadowAngle",get_shadowAngle,set_shadowAngle,true);

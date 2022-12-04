@@ -56,21 +56,6 @@ public class Lua_UnityEngine_AudioRenderer : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int Render_s(IntPtr l) {
-		try {
-			Unity.Collections.NativeArray<System.Single> a1;
-			checkValueType(l,1,out a1);
-			var ret=UnityEngine.AudioRenderer.Render(a1);
-			pushValue(l,true);
-			pushValue(l,ret);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.AudioRenderer");
@@ -78,7 +63,6 @@ public class Lua_UnityEngine_AudioRenderer : LuaObject {
 		addMember(l,Start_s);
 		addMember(l,Stop_s);
 		addMember(l,GetSampleCountForCaptureFrame_s);
-		addMember(l,Render_s);
 		createTypeMetatable(l,null, typeof(UnityEngine.AudioRenderer));
 	}
 }

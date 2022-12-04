@@ -5,6 +5,21 @@ using System.Collections.Generic;
 public class Lua_UnityEngine_UI_InputField : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int SetTextWithoutNotify(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			System.String a1;
+			checkType(l,2,out a1);
+			self.SetTextWithoutNotify(a1);
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int MoveTextEnd(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -319,6 +334,34 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int get_shouldActivateOnSelect(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.shouldActivateOnSelect);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_shouldActivateOnSelect(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			bool v;
+			checkType(l,2,out v);
+			self.shouldActivateOnSelect=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int get_text(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
@@ -572,9 +615,37 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 	static public int set_onEndEdit(IntPtr l) {
 		try {
 			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
-			UnityEngine.UI.InputField.SubmitEvent v;
+			UnityEngine.UI.InputField.EndEditEvent v;
 			checkType(l,2,out v);
 			self.onEndEdit=v;
+			pushValue(l,true);
+			return 1;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int get_onSubmit(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			pushValue(l,true);
+			pushValue(l,self.onSubmit);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int set_onSubmit(IntPtr l) {
+		try {
+			UnityEngine.UI.InputField self=(UnityEngine.UI.InputField)checkSelf(l);
+			UnityEngine.UI.InputField.SubmitEvent v;
+			checkType(l,2,out v);
+			self.onSubmit=v;
 			pushValue(l,true);
 			return 1;
 		}
@@ -1068,6 +1139,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.UI.InputField");
+		addMember(l,SetTextWithoutNotify);
 		addMember(l,MoveTextEnd);
 		addMember(l,MoveTextStart);
 		addMember(l,OnBeginDrag);
@@ -1089,6 +1161,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		addMember(l,CalculateLayoutInputHorizontal);
 		addMember(l,CalculateLayoutInputVertical);
 		addMember(l,"shouldHideMobileInput",get_shouldHideMobileInput,set_shouldHideMobileInput,true);
+		addMember(l,"shouldActivateOnSelect",get_shouldActivateOnSelect,set_shouldActivateOnSelect,true);
 		addMember(l,"text",get_text,set_text,true);
 		addMember(l,"isFocused",get_isFocused,null,true);
 		addMember(l,"caretBlinkRate",get_caretBlinkRate,set_caretBlinkRate,true);
@@ -1099,6 +1172,7 @@ public class Lua_UnityEngine_UI_InputField : LuaObject {
 		addMember(l,"customCaretColor",get_customCaretColor,set_customCaretColor,true);
 		addMember(l,"selectionColor",get_selectionColor,set_selectionColor,true);
 		addMember(l,"onEndEdit",get_onEndEdit,set_onEndEdit,true);
+		addMember(l,"onSubmit",get_onSubmit,set_onSubmit,true);
 		addMember(l,"onValueChanged",get_onValueChanged,set_onValueChanged,true);
 		addMember(l,"onValidateInput",null,set_onValidateInput,true);
 		addMember(l,"characterLimit",get_characterLimit,set_characterLimit,true);

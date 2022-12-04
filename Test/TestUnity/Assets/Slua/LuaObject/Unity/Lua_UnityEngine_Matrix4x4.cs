@@ -145,6 +145,21 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetPosition(IntPtr l) {
+		try {
+			UnityEngine.Matrix4x4 self;
+			checkValueType(l,1,out self);
+			var ret=self.GetPosition();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int SetColumn(IntPtr l) {
 		try {
 			UnityEngine.Matrix4x4 self;
@@ -283,6 +298,25 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int ToString__String__IFormatProvider(IntPtr l) {
+		try {
+			UnityEngine.Matrix4x4 self;
+			checkValueType(l,1,out self);
+			System.String a1;
+			checkType(l,2,out a1);
+			System.IFormatProvider a2;
+			checkType(l,3,out a2);
+			var ret=self.ToString(a1,a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Determinant_s(IntPtr l) {
 		try {
 			UnityEngine.Matrix4x4 a1;
@@ -310,6 +344,24 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 			pushValue(l,true);
 			pushValue(l,ret);
 			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
+	static public int Inverse3DAffine_s(IntPtr l) {
+		try {
+			UnityEngine.Matrix4x4 a1;
+			checkValueType(l,1,out a1);
+			UnityEngine.Matrix4x4 a2;
+			checkValueType(l,2,out a2);
+			var ret=UnityEngine.Matrix4x4.Inverse3DAffine(a1,ref a2);
+			pushValue(l,true);
+			pushValue(l,ret);
+			pushValue(l,a2);
+			return 3;
 		}
 		catch(Exception e) {
 			return error(l,e);
@@ -1227,6 +1279,7 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 		addMember(l,Equals__Matrix4x4);
 		addMember(l,GetColumn);
 		addMember(l,GetRow);
+		addMember(l,GetPosition);
 		addMember(l,SetColumn);
 		addMember(l,SetRow);
 		addMember(l,MultiplyPoint);
@@ -1235,8 +1288,10 @@ public class Lua_UnityEngine_Matrix4x4 : LuaObject {
 		addMember(l,TransformPlane);
 		addMember(l,ToString);
 		addMember(l,ToString__String);
+		addMember(l,ToString__String__IFormatProvider);
 		addMember(l,Determinant_s);
 		addMember(l,TRS_s);
+		addMember(l,Inverse3DAffine_s);
 		addMember(l,Inverse_s);
 		addMember(l,Transpose_s);
 		addMember(l,Ortho_s);

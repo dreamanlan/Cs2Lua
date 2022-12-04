@@ -5,6 +5,19 @@ using System.Collections.Generic;
 public class Lua_System_GC : LuaObject {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int GetAllocatedBytesForCurrentThread_s(IntPtr l) {
+		try {
+			var ret=System.GC.GetAllocatedBytesForCurrentThread();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int AddMemoryPressure_s(IntPtr l) {
 		try {
 			System.Int64 a1;
@@ -404,6 +417,7 @@ public class Lua_System_GC : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"System.GC");
+		addMember(l,GetAllocatedBytesForCurrentThread_s);
 		addMember(l,AddMemoryPressure_s);
 		addMember(l,RemoveMemoryPressure_s);
 		addMember(l,GetGeneration__Object_s);

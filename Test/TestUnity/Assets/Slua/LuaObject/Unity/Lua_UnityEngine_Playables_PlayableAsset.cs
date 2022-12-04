@@ -34,25 +34,11 @@ public class Lua_UnityEngine_Playables_PlayableAsset : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_outputs(IntPtr l) {
-		try {
-			UnityEngine.Playables.PlayableAsset self=(UnityEngine.Playables.PlayableAsset)checkSelf(l);
-			pushValue(l,true);
-			pushValue(l,self.outputs);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Playables.PlayableAsset");
 		addMember(l,CreatePlayable);
 		addMember(l,"duration",get_duration,null,true);
-		addMember(l,"outputs",get_outputs,null,true);
 		createTypeMetatable(l,null, typeof(UnityEngine.Playables.PlayableAsset),typeof(UnityEngine.ScriptableObject));
 	}
 }

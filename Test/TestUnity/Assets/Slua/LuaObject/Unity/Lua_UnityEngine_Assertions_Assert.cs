@@ -887,32 +887,6 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 			return error(l,e);
 		}
 	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int get_raiseExceptions(IntPtr l) {
-		try {
-			pushValue(l,true);
-			pushValue(l,UnityEngine.Assertions.Assert.raiseExceptions);
-			return 2;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	[UnityEngine.Scripting.Preserve]
-	static public int set_raiseExceptions(IntPtr l) {
-		try {
-			System.Boolean v;
-			checkType(l,2,out v);
-			UnityEngine.Assertions.Assert.raiseExceptions=v;
-			pushValue(l,true);
-			return 1;
-		}
-		catch(Exception e) {
-			return error(l,e);
-		}
-	}
 	[UnityEngine.Scripting.Preserve]
 	static public void reg(IntPtr l) {
 		getTypeTable(l,"UnityEngine.Assertions.Assert");
@@ -968,7 +942,6 @@ public class Lua_UnityEngine_Assertions_Assert : LuaObject {
 		addMember(l,AreNotEqual__UInt64__UInt64__String_s);
 		addMember(l,IsNull_s);
 		addMember(l,IsNotNull_s);
-		addMember(l,"raiseExceptions",get_raiseExceptions,set_raiseExceptions,false);
 		createTypeMetatable(l,null, typeof(UnityEngine.Assertions.Assert));
 	}
 }

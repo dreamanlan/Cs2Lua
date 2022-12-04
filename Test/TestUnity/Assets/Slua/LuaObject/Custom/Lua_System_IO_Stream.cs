@@ -177,6 +177,20 @@ public class Lua_System_IO_Stream : LuaObject {
 	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
+	static public int DisposeAsync(IntPtr l) {
+		try {
+			System.IO.Stream self=(System.IO.Stream)checkSelf(l);
+			var ret=self.DisposeAsync();
+			pushValue(l,true);
+			pushValue(l,ret);
+			return 2;
+		}
+		catch(Exception e) {
+			return error(l,e);
+		}
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	[UnityEngine.Scripting.Preserve]
 	static public int Synchronized_s(IntPtr l) {
 		try {
 			System.IO.Stream a1;
@@ -365,6 +379,7 @@ public class Lua_System_IO_Stream : LuaObject {
 		addMember(l,ReadByte);
 		addMember(l,Write);
 		addMember(l,WriteByte);
+		addMember(l,DisposeAsync);
 		addMember(l,Synchronized_s);
 		addMember(l,"Null",get_Null,null,false);
 		addMember(l,"CanRead",get_CanRead,null,true);
