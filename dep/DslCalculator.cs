@@ -5789,8 +5789,8 @@ namespace DslExpression
     }
     public sealed class DslCalculator
     {
-        public delegate bool TryGetVariableValueDelegation(string v, out CalculatorValue result);
-        public delegate bool TrySetVariableValueDelegation(string v, ref CalculatorValue result);
+        public delegate bool TryGetVariableDelegation(string v, out CalculatorValue result);
+        public delegate bool TrySetVariableDelegation(string v, ref CalculatorValue result);
         public delegate bool LoadFailbackDelegation(Dsl.ISyntaxComponent comp, DslCalculator calculator, out IExpression expression);
         public class FuncInfo
         {
@@ -5808,8 +5808,8 @@ namespace DslExpression
         }
 
         public Dsl.DslLogDelegation OnLog;
-        public TryGetVariableValueDelegation OnTryGetVariableValue;
-        public TrySetVariableValueDelegation OnTrySetVariableValue;
+        public TryGetVariableDelegation OnTryGetVariable;
+        public TrySetVariableDelegation OnTrySetVariable;
         public LoadFailbackDelegation OnLoadFailback;
 
         public bool Inited { get { return m_Inited; } }
@@ -6010,7 +6010,7 @@ namespace DslExpression
         }
         public bool TryGetGlobalVariable(string v, out CalculatorValue result)
         {
-            if (null != OnTryGetVariableValue && OnTryGetVariableValue(v, out result)) {
+            if (null != OnTryGetVariable && OnTryGetVariable(v, out result)) {
                 return true;
             }
             else if (m_NamedGlobalVariableIndexes.TryGetValue(v, out var index)) {
@@ -6030,7 +6030,7 @@ namespace DslExpression
         }
         public void SetGlobalVariable(string v, CalculatorValue val)
         {
-            if (null != OnTrySetVariableValue && OnTrySetVariableValue(v, ref val)) {
+            if (null != OnTrySetVariable && OnTrySetVariable(v, ref val)) {
 
             }
             else if (m_NamedGlobalVariableIndexes.TryGetValue(v, out var index)) {
