@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Runtime.InteropServices;
 using System.Linq;
 
+#pragma warning disable 8600,8601,8602,8603,8604,8618,8619,8620,8625
 namespace DslExpression
 {
     public static class CalculatorValueConverter
@@ -5704,13 +5705,13 @@ namespace DslExpression
         {
             CalculatorValue r = CalculatorValue.NullObject;
             if (operands.Count >= 1) {
-                var proc = operands[0].AsString;
-                if (null != proc) {
+                var func = operands[0].AsString;
+                if (null != func) {
                     var args = Calculator.NewCalculatorValueList();
                     for (int i = 1; i < operands.Count; ++i) {
                         args.Add(operands[i]);
                     }
-                    r = Calculator.Calc(proc, args);
+                    r = Calculator.Calc(func, args);
                     Calculator.RecycleCalculatorValueList(args);
                 }
             }
@@ -5788,7 +5789,10 @@ namespace DslExpression
     }
     public sealed class DslCalculator
     {
-        public class ProcInfo
+        public delegate bool TryGetVariableValueDelegation(string v, out CalculatorValue result);
+        public delegate bool TrySetVariableValueDelegation(string v, ref CalculatorValue result);
+        public delegate bool LoadFailbackDelegation(Dsl.ISyntaxComponent comp, DslCalculator calculator, out IExpression expression);
+        public class FuncInfo
         {
             public Dictionary<string, int> LocalVarIndexes = new Dictionary<string, int>();
             public List<IExpression> Codes = new List<IExpression>();
@@ -5804,6 +5808,10 @@ namespace DslExpression
         }
 
         public Dsl.DslLogDelegation OnLog;
+        public TryGetVariableValueDelegation OnTryGetVariableValue;
+        public TrySetVariableValueDelegation OnTrySetVariableValue;
+        public LoadFailbackDelegation OnLoadFailback;
+
         public bool Inited { get { return m_Inited; } }
         public void Init()
         {
@@ -5978,7 +5986,7 @@ namespace DslExpression
         }
         public void Clear()
         {
-            m_Procs.Clear();
+            m_Funcs.Clear();
             m_Stack.Clear();
             m_NamedGlobalVariableIndexes.Clear();
             m_GlobalVariables.Clear();
@@ -6002,8 +6010,10 @@ namespace DslExpression
         }
         public bool TryGetGlobalVariable(string v, out CalculatorValue result)
         {
-            int index;
-            if (m_NamedGlobalVariableIndexes.TryGetValue(v, out index)) {
+            if (null != OnTryGetVariableValue && OnTryGetVariableValue(v, out result)) {
+                return true;
+            }
+            else if (m_NamedGlobalVariableIndexes.TryGetValue(v, out var index)) {
                 result = GetGlobalVaraibleByIndex(index);
                 return true;
             }
@@ -6020,8 +6030,10 @@ namespace DslExpression
         }
         public void SetGlobalVariable(string v, CalculatorValue val)
         {
-            int index;
-            if (m_NamedGlobalVariableIndexes.TryGetValue(v, out index)) {
+            if (null != OnTrySetVariableValue && OnTrySetVariableValue(v, ref val)) {
+
+            }
+            else if (m_NamedGlobalVariableIndexes.TryGetValue(v, out var index)) {
                 SetGlobalVaraibleByIndex(index, val);
             }
             else {
@@ -6046,7 +6058,7 @@ namespace DslExpression
                 return;
             var func = info as Dsl.FunctionData;
             string id;
-            ProcInfo procInfo = null;
+            FuncInfo funcInfo = null;
             if (null != func) {
                 if (func.IsHighOrder)
                     id = func.LowerOrderFunction.GetParamId(0);
@@ -6060,11 +6072,11 @@ namespace DslExpression
                     func = statement.Second.AsFunction;
                     if (func.GetId() == "args" && func.IsHighOrder) {
                         if (func.LowerOrderFunction.GetParamNum() > 0) {
-                            procInfo = new ProcInfo();
+                            funcInfo = new FuncInfo();
                             foreach (var p in func.LowerOrderFunction.Params) {
                                 string argName = p.GetId();
-                                int ix = procInfo.LocalVarIndexes.Count;
-                                procInfo.LocalVarIndexes.Add(argName, -1 - ix);
+                                int ix = funcInfo.LocalVarIndexes.Count;
+                                funcInfo.LocalVarIndexes.Add(argName, -1 - ix);
                             }
                         }
                     }
@@ -6076,34 +6088,34 @@ namespace DslExpression
                     return;
                 }
             }
-            if (null == procInfo)
-                procInfo = new ProcInfo();
+            if (null == funcInfo)
+                funcInfo = new FuncInfo();
             foreach (Dsl.ISyntaxComponent comp in func.Params) {
                 var exp = Load(comp);
                 if (null != exp) {
-                    procInfo.Codes.Add(exp);
+                    funcInfo.Codes.Add(exp);
                 }
             }
-            m_Procs[id] = procInfo;
+            m_Funcs[id] = funcInfo;
         }
-        public void LoadDsl(string proc, Dsl.FunctionData func)
+        public void LoadDsl(string func, Dsl.FunctionData dslFunc)
         {
-            LoadDsl(proc, null, func);
+            LoadDsl(func, null, dslFunc);
         }
-        public void LoadDsl(string proc, IList<string> argNames, Dsl.FunctionData func)
+        public void LoadDsl(string func, IList<string> argNames, Dsl.FunctionData dslFunc)
         {
-            ProcInfo procInfo = null;
+            FuncInfo funcInfo = null;
             if (null != argNames && argNames.Count > 0) {
-                procInfo = new ProcInfo();
+                funcInfo = new FuncInfo();
                 foreach (var argName in argNames) {
-                    int ix = procInfo.LocalVarIndexes.Count;
-                    procInfo.LocalVarIndexes.Add(argName, -1 - ix);
+                    int ix = funcInfo.LocalVarIndexes.Count;
+                    funcInfo.LocalVarIndexes.Add(argName, -1 - ix);
                 }
             }
-            if (null == procInfo)
-                procInfo = new ProcInfo();
-            LoadDsl(func.Params, procInfo.Codes);
-            m_Procs[proc] = procInfo;
+            if (null == funcInfo)
+                funcInfo = new FuncInfo();
+            LoadDsl(dslFunc.Params, funcInfo.Codes);
+            m_Funcs[func] = funcInfo;
         }
         public void LoadDsl(IList<Dsl.ISyntaxComponent> statements, List<IExpression> exps)
         {
@@ -6123,54 +6135,54 @@ namespace DslExpression
             list.Clear();
             m_Pool.Recycle(list);
         }
-        public CalculatorValue Calc(string proc)
+        public CalculatorValue Calc(string func)
         {
             var args = NewCalculatorValueList();
-            var r = Calc(proc, args);
+            var r = Calc(func, args);
             RecycleCalculatorValueList(args);
             return r;
         }
-        public CalculatorValue Calc(string proc, CalculatorValue arg1)
+        public CalculatorValue Calc(string func, CalculatorValue arg1)
         {
             var args = NewCalculatorValueList();
             args.Add(arg1);
-            var r = Calc(proc, args);
+            var r = Calc(func, args);
             RecycleCalculatorValueList(args);
             return r;
         }
-        public CalculatorValue Calc(string proc, CalculatorValue arg1, CalculatorValue arg2)
+        public CalculatorValue Calc(string func, CalculatorValue arg1, CalculatorValue arg2)
         {
             var args = NewCalculatorValueList();
             args.Add(arg1);
             args.Add(arg2);
-            var r = Calc(proc, args);
+            var r = Calc(func, args);
             RecycleCalculatorValueList(args);
             return r;
         }
-        public CalculatorValue Calc(string proc, CalculatorValue arg1, CalculatorValue arg2, CalculatorValue arg3)
+        public CalculatorValue Calc(string func, CalculatorValue arg1, CalculatorValue arg2, CalculatorValue arg3)
         {
             var args = NewCalculatorValueList();
             args.Add(arg1);
             args.Add(arg2);
             args.Add(arg3);
-            var r = Calc(proc, args);
+            var r = Calc(func, args);
             RecycleCalculatorValueList(args);
             return r;
         }
-        public CalculatorValue Calc(string proc, List<CalculatorValue> args)
+        public CalculatorValue Calc(string func, List<CalculatorValue> args)
         {
             CalculatorValue ret = 0;
-            ProcInfo procInfo;
-            if (m_Procs.TryGetValue(proc, out procInfo)) {
-                ret = Calc<object>(args, null, procInfo);
+            FuncInfo funcInfo;
+            if (m_Funcs.TryGetValue(func, out funcInfo)) {
+                ret = Calc<object>(args, null, funcInfo);
             }
             return ret;
         }
-        ///procContext is recorded on the stack and its members can be accessed through custom apis (see parsing of no-argument variables in 'Load')  
+        ///funcContext is recorded on the stack and its members can be accessed through custom apis (see parsing of no-argument variables in 'Load')  
         ///it's like args, but with a fixed parameter name and is mainly used to invoke snippets of code.
-        public CalculatorValue Calc<T>(T procContext, ProcInfo procInfo) where T : class
+        public CalculatorValue Calc<T>(T funcContext, FuncInfo funcInfo) where T : class
         {
-            return Calc(null, procContext, procInfo);
+            return Calc(null, funcContext, funcInfo);
         }
         public CalculatorValue CalcInCurrentContext(IList<IExpression> exps)
         {
@@ -6219,11 +6231,11 @@ namespace DslExpression
             }
             return ret;
         }
-        private CalculatorValue Calc<T>(List<CalculatorValue> args, T procContext, ProcInfo procInfo) where T : class
+        private CalculatorValue Calc<T>(List<CalculatorValue> args, T funcContext, FuncInfo funcInfo) where T : class
         {
-            LocalStackPush(args, procContext, procInfo);
+            LocalStackPush(args, funcContext, funcInfo);
             try {
-                return CalcInCurrentContext(procInfo.Codes);
+                return CalcInCurrentContext(funcInfo.Codes);
             }
             finally {
                 LocalStackPop();
@@ -6249,10 +6261,10 @@ namespace DslExpression
                 OnLog(string.Format("{0}", arg));
             }
         }
-        public T GetProcContext<T>() where T : class
+        public T GetFuncContext<T>() where T : class
         {
             var stackInfo = m_Stack.Peek();
-            return stackInfo.ProcContext as T;
+            return stackInfo.FuncContext as T;
         }
         public IList<CalculatorValue> Arguments
         {
@@ -6323,7 +6335,7 @@ namespace DslExpression
                         //将无参数名字转换为无参函数调用
                         Dsl.FunctionData fd = new Dsl.FunctionData();
                         fd.Name.CopyFrom(valueData);
-                        fd.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                        fd.SetParenthesisParamClass();
                         if (!p.Load(fd, this)) {
                             //error
                             Log("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
@@ -6402,7 +6414,7 @@ namespace DslExpression
                                             newCall.Name = new Dsl.ValueData("dotnetset", Dsl.ValueData.ID_TOKEN);
                                         else
                                             newCall.Name = new Dsl.ValueData("collectionset", Dsl.ValueData.ID_TOKEN);
-                                        newCall.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                                        newCall.SetParenthesisParamClass();
                                         if (innerCall.IsHighOrder) {
                                             newCall.Params.Add(innerCall.LowerOrderFunction);
                                             newCall.Params.Add(ConvertMember(innerCall.GetParam(0), innerCall.GetParamClass()));
@@ -6458,7 +6470,7 @@ namespace DslExpression
                                         }
                                         Dsl.FunctionData newCall = new Dsl.FunctionData();
                                         newCall.Name = new Dsl.ValueData(apiName, Dsl.ValueData.ID_TOKEN);
-                                        newCall.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                                        newCall.SetParenthesisParamClass();
                                         if (innerCall.IsHighOrder) {
                                             newCall.Params.Add(innerCall.LowerOrderFunction);
                                             newCall.Params.Add(ConvertMember(innerCall.GetParam(0), innerCall.GetParamClass()));
@@ -6490,7 +6502,7 @@ namespace DslExpression
                                         newCall.Name = new Dsl.ValueData("dotnetget", Dsl.ValueData.ID_TOKEN);
                                     else
                                         newCall.Name = new Dsl.ValueData("collectionget", Dsl.ValueData.ID_TOKEN);
-                                    newCall.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                                    newCall.SetParenthesisParamClass();
                                     if (callData.IsHighOrder) {
                                         newCall.Params.Add(callData.LowerOrderFunction);
                                         newCall.Params.Add(ConvertMember(callData.GetParam(0), callData.GetParamClass()));
@@ -6551,7 +6563,7 @@ namespace DslExpression
                     Log("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
                 }
             }
-            else {
+            else if (null == OnLoadFailback || !OnLoadFailback(comp, this, out ret)) {
                 //error
                 Log("DslCalculator error, {0} line {1}", comp.ToScriptString(false), comp.GetLine());
             }
@@ -6626,13 +6638,13 @@ namespace DslExpression
             }
         }
 
-        private void LocalStackPush<T>(List<CalculatorValue> args, T procContext, ProcInfo procInfo) where T : class
+        private void LocalStackPush<T>(List<CalculatorValue> args, T funcContext, FuncInfo funcInfo) where T : class
         {
             var si = StackInfo.New();
             if (null != args) {
                 si.Args.AddRange(args);
             }
-            si.Init(procInfo, procContext);
+            si.Init(funcInfo, funcContext);
             m_Stack.Push(si);
         }
         private void LocalStackPop()
@@ -6708,7 +6720,7 @@ namespace DslExpression
         {
             get {
                 var stackInfo = m_Stack.Peek();
-                return stackInfo.ProcInfo.LocalVarIndexes;
+                return stackInfo.FuncInfo.LocalVarIndexes;
             }
         }
         private List<CalculatorValue> LocalVariables
@@ -6721,24 +6733,24 @@ namespace DslExpression
 
         private class StackInfo
         {
-            internal ProcInfo ProcInfo = null;
-            internal object ProcContext = null;
+            internal FuncInfo FuncInfo = null;
+            internal object FuncContext = null;
             internal List<CalculatorValue> Args = new List<CalculatorValue>();
             internal List<CalculatorValue> LocalVars = new List<CalculatorValue>();
 
-            internal void Init(ProcInfo procInfo, object procContext)
+            internal void Init(FuncInfo funcInfo, object funcContext)
             {
-                ProcInfo = procInfo;
-                ProcContext = procContext;
-                LocalVars.Capacity = procInfo.LocalVarIndexes.Count;
-                for (int ix = 0; ix < procInfo.LocalVarIndexes.Count; ++ix) {
+                FuncInfo = funcInfo;
+                FuncContext = funcContext;
+                LocalVars.Capacity = funcInfo.LocalVarIndexes.Count;
+                for (int ix = 0; ix < funcInfo.LocalVarIndexes.Count; ++ix) {
                     LocalVars.Add(CalculatorValue.NullObject);
                 }
             }
             internal void Recycle()
             {
-                ProcInfo = null;
-                ProcContext = null;
+                FuncInfo = null;
+                FuncContext = null;
                 Args.Clear();
                 LocalVars.Clear();
 
@@ -6753,7 +6765,7 @@ namespace DslExpression
 
         private bool m_Inited = false;
         private RunStateEnum m_RunState = RunStateEnum.Normal;
-        private Dictionary<string, ProcInfo> m_Procs = new Dictionary<string, ProcInfo>();
+        private Dictionary<string, FuncInfo> m_Funcs = new Dictionary<string, FuncInfo>();
         private Stack<StackInfo> m_Stack = new Stack<StackInfo>();
         private Dictionary<string, int> m_NamedGlobalVariableIndexes = new Dictionary<string, int>();
         private List<CalculatorValue> m_GlobalVariables = new List<CalculatorValue>();
@@ -6818,3 +6830,4 @@ namespace DslExpression
         private int m_PoolSize = 4096;
     }
 }
+#pragma warning restore 8600,8601,8602,8603,8604,8618,8619,8620,8625
