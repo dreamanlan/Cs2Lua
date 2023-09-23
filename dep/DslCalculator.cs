@@ -1040,11 +1040,11 @@ namespace DslExpression
                 case c_ULongType:
                     return Union.ULongVal.ToString();
                 case c_FloatType:
-                    return Union.FloatVal.ToString();
+                    return Union.FloatVal.ToString(s_FloatFormat);
                 case c_DoubleType:
-                    return Union.DoubleVal.ToString();
+                    return Union.DoubleVal.ToString(s_DoubleFormat);
                 case c_DecimalType:
-                    return Union.DecimalVal.ToString();
+                    return Union.DecimalVal.ToString(s_FloatFormat);
             }
             return string.Empty;
         }
@@ -1759,6 +1759,9 @@ namespace DslExpression
         }
         private static CalculatorValue s_NullObject = CalculatorValue.FromObject(null);
         private static CalculatorValue s_EmptyString = CalculatorValue.From(string.Empty);
+
+        private static string s_FloatFormat = "###########################0.00#####";
+        private static string s_DoubleFormat = "###########################0.00#############";
     }
     public class CalculatorValueListPool
     {
